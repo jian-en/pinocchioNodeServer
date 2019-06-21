@@ -4,7 +4,7 @@
   "description": "RESTful server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "./node_modules/.bin/nodemon ./server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "nodemon": "^1.19.1"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "aws-sdk": "^2.479.0"
   }
 }
