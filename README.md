@@ -1,4 +1,5 @@
-## Pinocchio server 
+# Develop in local machine
+## Pinocchio server
 
 Pinocchio server in node.js. This server will handle backend requests and serve the website for users to visit.
 
@@ -9,9 +10,28 @@ Pinocchio server in node.js. This server will handle backend requests and serve 
 
 ## Server setup
 
-Run `node server.js`. This starts the server on port 3000. 
+Run `node server.js`. This starts the server on port 3000.
 
 ## Server routes
 
 * `/` root is configured in `routes/index.js` and will currently return `hello world` on a GET request. This will eventually serve the website for visitors.
 * `/pinocchio/` pinocchio endpoint is configured in `routes/pinocchio.js`. This will eventually serve the backend requests.
+
+# Develop with docker-compose
+## Prerequisites
+
+* docker and docker-compose
+* run `docker-compose up --build`
+* aws-cli is installed
+  - aws configure
+    - Access Key ID: foo
+    - Secret Access Key: bar
+    - Default region name: local
+    - Default output format: json
+
+## Usage
+1. Create tables in the local dynamodb:
+   - Add a json file in data, eg: data/create-events-table.json
+   - Create the tables: `aws dynamodb create-table --cli-input-json file://data/create-events-table.json --endpoint-url http://localhost:8000`
+2. Demo usage: `routes/api.js`
+More to refer to DynamoDB documentation.
