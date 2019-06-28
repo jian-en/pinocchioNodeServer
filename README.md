@@ -34,4 +34,5 @@ Run `node server.js`. This starts the server on port 3000.
    - Add a json file in data, eg: data/create-events-table.json
    - Create the tables: `aws dynamodb create-table --cli-input-json file://data/create-events-table.json --endpoint-url http://localhost:8000`
 2. Demo usage: `routes/api.js`
-More to refer to DynamoDB documentation.
+More to refer to DynamoDB documentation:
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html
