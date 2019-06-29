@@ -16,7 +16,7 @@ var dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 // Add an event
 router.post('/event', (req, res, next) => {
-  const { eventType, eventName} = req.body;
+  const { eventType, eventName } = req.body;
   const params = {
     TableName: config.aws_table_name,
     Item: {
@@ -46,6 +46,36 @@ router.get('/events', (req, res, next) => {
       res.send({success: false, message: 'Server Error'});
     } else {
       res.send({success: true, message: data});
+    }
+  });
+});
+
+// register an account
+router.post('/register', (req, res, next) => {
+  // TODO ID should be unique ...
+  // TODO data verification
+  var item = {};
+  for (var key in req.body) {
+    item[key] = req.body[key].trim();
+  }
+  // TODO password
+  const params = {
+    TableName: 'usersTable',
+    Item: {
+      ...item,
+      usersId: Math.random().toString(),
+      verificationSentAt: new Date,
+      verifiedAt: null
+    }
+  };
+
+  // TODO send verification link
+  dynamoDb.put(params, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.send({success: false, message: 'Server Error'});
+    } else {
+      res.send({success: true, message: data.Items});
     }
   });
 });
