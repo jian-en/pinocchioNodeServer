@@ -1,0 +1,33 @@
+{
+    "TableDescription": {
+        "TableArn": "arn:aws:dynamodb:ddblocal:000000000000:table/usersTable",
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "usersId",
+                "AttributeType": "S"
+            }
+        ],
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "WriteCapacityUnits": 5,
+            "LastIncreaseDateTime": 0.0,
+            "ReadCapacityUnits": 5,
+            "LastDecreaseDateTime": 0.0
+        },
+        "TableSizeBytes": 0,
+        "TableName": "usersTable",
+        "BillingModeSummary": {
+            "LastUpdateToPayPerRequestDateTime": 0.0,
+            "BillingMode": "PROVISIONED"
+        },
+        "TableStatus": "ACTIVE",
+        "KeySchema": [
+            {
+                "KeyType": "HASH",
+                "AttributeName": "usersId"
+            }
+        ],
+        "ItemCount": 0,
+        "CreationDateTime": 1561772514.4
+    }
+}
