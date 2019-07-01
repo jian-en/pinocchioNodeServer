@@ -16,6 +16,8 @@ var dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 // validators
 const { check, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 
 // Add an event
 router.post('/event', (req, res, next) => {
@@ -73,6 +75,8 @@ router.post('/register', [
   for (var key in req.body) {
     item[key] = req.body[key].trim();
   }
+  // hash the password
+  item.password = bcrypt.hashSync(req.body.password, salt);
   // TODO password
   const params = {
     TableName: 'usersTable',
