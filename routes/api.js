@@ -14,6 +14,9 @@ const env = process.env.NODE_ENV || 'local';
 AWS.config.update(config[env]);
 var dynamoDb = new AWS.DynamoDB.DocumentClient();
 
+// validators
+const { check, validationResult } = require('express-validator');
+
 // Add an event
 router.post('/event', (req, res, next) => {
   const { eventType, eventName } = req.body;
@@ -51,9 +54,21 @@ router.get('/events', (req, res, next) => {
 });
 
 // register an account
-router.post('/register', (req, res, next) => {
+router.post('/register', [
+  check('email').isEmail().trim().normalizeEmail(),
+  check('password').trim().isLength({min: 8}).isAlphanumeric(),
+  check('firstname').trim().isLength({min: 1}),
+  check('lastname').trim().isLength({min: 1}),
+  check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
+  check('referral').trim()
+], (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   // TODO ID should be unique ...
-  // TODO data verification
+  // TODO should check whether email has existed or not
   var item = {};
   for (var key in req.body) {
     item[key] = req.body[key].trim();
