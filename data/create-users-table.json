@@ -5,6 +5,10 @@
             {
                 "AttributeName": "usersId",
                 "AttributeType": "S"
+            },
+            {
+                "AttributeName": "email",
+                "AttributeType": "S"
             }
         ],
         "ProvisionedThroughput": {
@@ -25,9 +29,13 @@
             {
                 "KeyType": "HASH",
                 "AttributeName": "usersId"
+            },
+            {
+                "KeyType": "RANGE",
+                "AttributeName": "email"
             }
         ],
         "ItemCount": 0,
-        "CreationDateTime": 1561772514.4
+        "CreationDateTime": 1561993056.743
     }
 }
