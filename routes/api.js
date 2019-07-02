@@ -8,11 +8,7 @@ simple example.
 var express = require('express');
 var router = express.Router();
 
-const AWS = require('aws-sdk');
-const config = require('../config.js');
-const env = process.env.NODE_ENV || 'local';
-AWS.config.update(config[env]);
-var dynamoDb = new AWS.DynamoDB.DocumentClient();
+const dynamoDb = require('../models/dynamoDbWrapper.js');
 
 // validators
 const { check, validationResult } = require('express-validator');
@@ -20,39 +16,22 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
 // Add an event
-router.post('/event', (req, res, next) => {
+router.post('/event', async (req, res, next) => {
   const { eventType, eventName } = req.body;
-  const params = {
-    TableName: config.aws_table_name,
-    Item: {
-      eventsId: (Math.random().toString()),
-      eventType: eventType,
-      eventName: eventName
-    }
-  };
 
-  dynamoDb.put(params, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.send({success: false, message: 'Server Error'});
-    } else {
-      res.send({success: true, message: data.Items});
-    }
-  });
+  const item = {
+    eventsId: dynamoDb.generateID(),
+    eventType: eventType,
+    eventName: eventName
+  };
+  const result = await dynamoDb.putData('eventsTable', item);
+  res.send(result);
 });
 
 // Get all events
-router.get('/events', (req, res, next) => {
-  const params = {
-    TableName: config.aws_table_name
-  };
-  dynamoDb.scan(params, (err, data) => {
-    if (err) {
-      res.send({success: false, message: 'Server Error'});
-    } else {
-      res.send({success: true, message: data});
-    }
-  });
+router.get('/events', async (req, res, next) => {
+  const result = await dynamoDb.scanData('eventsTable');
+  res.send(result);
 });
 
 // register an account
@@ -63,40 +42,40 @@ router.post('/register', [
   check('lastname').trim().isLength({min: 1}),
   check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
   check('referral').trim()
-], (req, res, next) => {
+], async (req, res, next) => {
+  // check whether inputs are valid
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(422).json({success: false, errors: errors.array()});
   }
 
-  // TODO ID should be unique ...
-  // TODO should check whether email has existed or not
-  var item = {};
+  // check whether the email has been used
+  const existed = await dynamoDb.emailExisted(req.body.email);
+  if (!existed.success) {
+    return res.status(500).json(existed);
+  } else if (existed.data) {
+    return res.status(200).json({success: false, message: "The email has been registered."});
+  }
+
+  // build item
+  const item = {};
   for (var key in req.body) {
-    item[key] = req.body[key].trim();
+    if (key === 'referral') continue; //TODO update when referral code has been defined
+    // hash the password
+    item[key] = req.body[key];
+    if (key === 'password') {
+      item[key] = bcrypt.hashSync(req.body[key], salt);
+    }
   }
-  // hash the password
-  item.password = bcrypt.hashSync(req.body.password, salt);
-  // TODO password
-  const params = {
-    TableName: 'usersTable',
-    Item: {
-      ...item,
-      usersId: Math.random().toString(),
-      verificationSentAt: new Date,
-      verifiedAt: null
-    }
-  };
+  item.usersId = dynamoDb.generateID();
+  item.verificationSentAt = dynamoDb.getDateString(new Date);
 
-  // TODO send verification link
-  dynamoDb.put(params, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.send({success: false, message: 'Server Error'});
-    } else {
-      res.send({success: true, message: data.Items});
-    }
-  });
+  // put into database
+  const result = await dynamoDb.putData('usersTable', item);
+  if (!result.success) res.send(result);
+
+  // TODO send verification email
+  res.send(result);
 });
 
 module.exports = router;
