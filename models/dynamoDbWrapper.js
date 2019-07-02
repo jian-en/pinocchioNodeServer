@@ -7,7 +7,7 @@ Model to communicate with database
 const AWS = require('aws-sdk');
 const config = require('../config.js');
 const env = process.env.NODE_ENV || 'local';
-AWS.config.update(config[env]);
+AWS.config.update(config[env].dynamodb);
 var dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.scanData = async (tableName) => {
