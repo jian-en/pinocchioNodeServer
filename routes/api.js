@@ -20,8 +20,10 @@ const config = require('../config.js');
 const env = process.env.NODE_ENV || 'local';
 const jwtSecret = config[env].jwtSecret;
 
+const { checkAuth } = require('../utils/auth.js');
+
 // Add an event
-router.post('/event', async (req, res, next) => {
+router.post('/event', checkAuth, async (req, res, next) => {
   const { eventType, eventName } = req.body;
 
   const item = {
