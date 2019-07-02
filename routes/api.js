@@ -78,4 +78,25 @@ router.post('/register', [
   res.send(result);
 });
 
+router.post('/login', [
+  check('email').isEmail().trim().normalizeEmail(),
+  check('password').trim().isLength({min: 8}).isAlphanumeric(),
+], async (req, res, next) => {
+  // check whether inputs are valid
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({success: false, errors: errors.array()});
+  }
+  // get the user
+  const { email, password } = req.body;
+  const ret = await dynamoDb.getUser(email);
+  if (!ret.success) return res.status(500).json(ret);
+  else if (ret.data.length == 0) return res.json({success: false, message: "The email is incorrect."});
+  // check password
+  const hashedPwd = ret.data[0].password;
+  if (!bcrypt.compareSync(password, hashedPwd))
+    return res.json({success: false, message: "The password is incorrect."});
+  return res.json(ret);
+});
+
 module.exports = router;
