@@ -50,10 +50,10 @@ router.post('/register', [
   }
 
   // check whether the email has been used
-  const existed = await dynamoDb.emailExisted(req.body.email);
+  const existed = await dynamoDb.getUser(req.body.email);
   if (!existed.success) {
     return res.status(500).json(existed);
-  } else if (existed.data) {
+  } else if (existed.data.length > 0) {
     return res.status(200).json({success: false, message: "The email has been registered."});
   }
 

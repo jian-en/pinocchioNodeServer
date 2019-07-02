@@ -49,19 +49,13 @@ module.exports.generateID = () => {
   return Math.random().toString();
 };
 
-module.exports.emailExisted = async (email) => {
+module.exports.getUser = async (email) => {
   const args = {
     IndexName: 'emailIndex',
     KeyConditionExpression: 'email= :e',
     ExpressionAttributeValues: {":e": email}
   };
-  const result = await this.queryData('usersTable', args);
-  if (!result.success) {
-    return result;
-  } else if (result.data.length > 0) {
-    return {success: true, data: true};
-  }
-  return {success: true, data: false};
+  return await this.queryData('usersTable', args);
 };
 
 
