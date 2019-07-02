@@ -1,41 +1,45 @@
 {
-    "TableDescription": {
-        "TableArn": "arn:aws:dynamodb:ddblocal:000000000000:table/usersTable",
-        "AttributeDefinitions": [
-            {
-                "AttributeName": "usersId",
-                "AttributeType": "S"
-            },
-            {
-                "AttributeName": "email",
-                "AttributeType": "S"
-            }
-        ],
-        "ProvisionedThroughput": {
-            "NumberOfDecreasesToday": 0,
-            "WriteCapacityUnits": 5,
-            "LastIncreaseDateTime": 0.0,
-            "ReadCapacityUnits": 5,
-            "LastDecreaseDateTime": 0.0
-        },
-        "TableSizeBytes": 0,
-        "TableName": "usersTable",
-        "BillingModeSummary": {
-            "LastUpdateToPayPerRequestDateTime": 0.0,
-            "BillingMode": "PROVISIONED"
-        },
-        "TableStatus": "ACTIVE",
-        "KeySchema": [
-            {
-                "KeyType": "HASH",
-                "AttributeName": "usersId"
-            },
-            {
-                "KeyType": "RANGE",
-                "AttributeName": "email"
-            }
-        ],
-        "ItemCount": 0,
-        "CreationDateTime": 1561993056.743
+  "TableName": "usersTable",
+  "KeySchema": [
+    {
+      "AttributeName": "usersId",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "email",
+      "KeyType": "RANGE"
     }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "usersId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "email",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  },
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "emailIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "email",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ]
 }
