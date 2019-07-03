@@ -107,7 +107,7 @@ router.post('/login', [
   // issue token
   const payload = {usersId: user.usersId, email: user.email};
   const token = jwt.sign(payload, jwtSecret, {expiresIn: '2h'});
-  res.json({success: true, token});
+  res.json({success: true, token, id: user.usersId, email: user.email});
 });
 
 module.exports = router;
