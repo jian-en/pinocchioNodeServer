@@ -110,4 +110,15 @@ router.post('/login', [
   res.json({success: true, token, id: user.usersId, email: user.email});
 });
 
+router.post('/getUser', async (req, res, next) => {
+  const { token } = req.body;
+  jwt.verify(token, jwtSecret, (err, payload) => {
+    if (err) {
+      res.json({success: false, ...err})
+    } else {
+      res.json({success: true, id: payload.usersId, email: payload.email})
+    }
+  });
+});
+
 module.exports = router;
