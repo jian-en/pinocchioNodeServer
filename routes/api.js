@@ -16,10 +16,7 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 // jwt
 const jwt = require('jsonwebtoken');
-const config = require('../config.js');
-const env = process.env.NODE_ENV || 'local';
-const jwtSecret = config[env].jwtSecret;
-
+const { jwtSecret } = require('../config.js');
 const { checkAuth } = require('../utils/auth.js');
 const { sendMail } = require('../utils/mailer');
 

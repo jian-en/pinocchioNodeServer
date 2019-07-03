@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config.js');
-const env = process.env.NODE_ENV || 'local';
-const jwtSecret = config[env].jwtSecret;
+const { jwtSecret } = require('../config.js');
 
 module.exports.checkAuth = (req, res, next) => {
   const token = req.body.token;

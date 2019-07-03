@@ -4,11 +4,10 @@ users.js
 Model to communicate with database
 */
 
-const AWS = require('aws-sdk');
 const config = require('../config.js');
-const env = process.env.NODE_ENV || 'local';
-AWS.config.update(config[env].dynamodb);
-var dynamoDb = new AWS.DynamoDB.DocumentClient();
+const AWS = require('aws-sdk');
+AWS.config.update(config.dynamodb);
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.scanData = async (tableName) => {
   try {
