@@ -143,8 +143,12 @@ router.post('/activateAccount', async (req, res, next) => {
     return res.status(500).json(ret);
   else if (ret.data.length == 0)
     return res.status(422).json({success: false, message: 'Invalid email'});
-  // update the user as verified
+
   const user = ret.data[0];
+  // make sure the account hasn't activated
+  if (user.verifiedAt)
+    return res.status(422).json({success: false, message: 'Account has been verified'});
+  // update the user as verified
   ret = await dynamoDb.updateVerified(user.usersId, email, datetime.getDatetimeString());
   if (!ret.success) return res.status(500).json(ret);
   res.json({success: true});
