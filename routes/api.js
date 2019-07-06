@@ -18,6 +18,9 @@ const salt = bcrypt.genSaltSync(10);
 const auth = require('../utils/auth.js');
 const { sendMail } = require('../utils/mailer');
 
+const datetime = require('../utils/datetime');
+const { reactServer } = require('../config.js');
+
 // Add an event
 router.post('/event', auth.checkAuth, async (req, res, next) => {
   const { eventType, eventName } = req.body;
@@ -54,7 +57,8 @@ router.post('/register', [
   }
 
   // check whether the email has been used
-  const existed = await dynamoDb.getUser(req.body.email);
+  const { email } = req.body;
+  const existed = await dynamoDb.getUser(email);
   if (!existed.success) {
     return res.status(500).json(existed);
   } else if (existed.data.length > 0) {
@@ -72,16 +76,19 @@ router.post('/register', [
     }
   }
   item.usersId = dynamoDb.generateID();
-  item.verificationSentAt = dynamoDb.getDateString(new Date);
+  item.verificationSentAt = datetime.getDatetimeString();
 
   // put into database
   const result = await dynamoDb.putData('usersTable', item);
   if (!result.success) return res.status(500).send(result);
 
+  const payload = {email, sentAt: datetime.getUnixTimestamp()};
+  const token = auth.generateToken(payload, '30d');
+  const url = `${reactServer}/activate-account?token=${token}`
   sendMail(
     req.body.email,
     'Pinocchio - Verification Email',
-    'Click the link to verify your account: ' //TODO: the verification link
+    `Click the link to verify your account: ${url}`
   )
   res.send(result);
 });
