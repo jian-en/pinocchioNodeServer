@@ -117,7 +117,7 @@ router.post('/login', [
   // check password
   const hashedPwd = user.password;
   if (!bcrypt.compareSync(password, hashedPwd))
-    return res.status(422).json({success: false, message: "The password is incorrect."});
+    return res.status(422).json({success: false, errors: ["The password is incorrect."]});
 
   // issue token
   const payload = {usersId: user.usersId, email: user.email};
@@ -125,7 +125,7 @@ router.post('/login', [
   if (token) {
     res.json({success: true, token, id: user.usersId, email: user.email});
   } else {
-    res.status(500).json({success: false, error: "Server error when generating token."});
+    res.status(500).json({success: false, errors: ["Server error when generating token."]});
   }
 });
 
