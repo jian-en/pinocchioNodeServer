@@ -127,6 +127,24 @@ router.post('/login', [
   }
 });
 
+router.post('/activateAccount', async (req, res, next) => {
+  const { token } = req.body;
+  const decoded = auth.decodeToken(token);
+  if (!decoded) return res.status(422).json({success: false, message: 'Invalid token'});
+  const { email, sentAt } = decoded;
+  // check whether token is valid in 7 days
+  if (!datetime.inTime(sentAt, {days:7}))
+    return res.status(422).json({success: false, message: 'Token expired'});
+  // check whether the email exists
+  const ret = await dynamoDb.getUser(email);
+  if (!ret.success)
+    return res.status(500).json(ret);
+  else if (ret.data.length == 0)
+    return res.status(422).json({success: false, message: 'Invalid email'});
+  // TODO: update the user as verified
+  res.json({success: true});
+});
+
 router.post('/getUser', async (req, res, next) => {
   const { token } = req.body;
   const decoded = auth.decodeToken(token);
