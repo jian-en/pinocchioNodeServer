@@ -41,7 +41,19 @@ module.exports.putData = async (tableName, item) => {
     console.error(err);
     return {success: false, ...err}
   }
-}
+};
+
+module.exports.updateData = async (tableName, args) => {
+  try {
+    const params = {TableName: tableName, ...args};
+    await dynamoDb.update(params).promise();
+    return {success: true};
+  } catch(err) {
+    console.error("error when updating data - ", args);
+    console.error(err);
+    return {success: false, ...err}
+  }
+};
 
 // TODO ID should be unique ...
 module.exports.generateID = () => {
