@@ -47,9 +47,10 @@ router.post('/register', [
   check('referral').trim()
 ], async (req, res, next) => {
   // check whether inputs are valid
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({success: false, errors: errors.array()});
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
+    return res.status(422).json({success: false, errors: msgs});
   }
 
   // check whether the email has been used
@@ -57,7 +58,7 @@ router.post('/register', [
   if (!existed.success) {
     return res.status(500).json(existed);
   } else if (existed.data.length > 0) {
-    return res.status(200).json({success: false, message: "The email has been registered."});
+    return res.status(422).json({success: false, errors: ["The email has been registered."]});
   }
 
   // build item
@@ -75,7 +76,7 @@ router.post('/register', [
 
   // put into database
   const result = await dynamoDb.putData('usersTable', item);
-  if (!result.success) res.send(result);
+  if (!result.success) return res.status(500).send(result);
 
   sendMail(
     req.body.email,
