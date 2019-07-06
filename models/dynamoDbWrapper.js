@@ -56,13 +56,3 @@ module.exports.getUser = async (email) => {
   };
   return await this.queryData('usersTable', args);
 };
-
-
-////// HELPERS
-module.exports.getDateString = (dateObj) => {
-  return dateObj.toISOString();
-};
-
-module.exports.getDateObj = (dateStr) => {
-  return new Date(dateStr);
-};
