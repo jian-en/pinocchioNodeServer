@@ -68,3 +68,13 @@ module.exports.getUser = async (email) => {
   };
   return await this.queryData('usersTable', args);
 };
+
+module.exports.updateVerified = async (usersId, email, datetime) => {
+  const args = {
+    Key: {usersId, email},
+    UpdateExpression: 'set verifiedAt = :d',
+    ExpressionAttributeValues: {':d': datetime},
+    ReturnValues:"UPDATED_NEW"
+  };
+  return await this.updateData('usersTable', args);
+}

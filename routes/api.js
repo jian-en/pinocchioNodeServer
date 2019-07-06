@@ -111,8 +111,10 @@ router.post('/login', [
   else if (ret.data.length == 0)
     return res.status(422).json({success: false, errors: ["The email is incorrect."]});
 
-  // check password
   const user = ret.data[0];
+  // check verified
+  if (!user.verifiedAt) return res.status(422).json({success: false, errors: ['Unverified email']});
+  // check password
   const hashedPwd = user.password;
   if (!bcrypt.compareSync(password, hashedPwd))
     return res.status(422).json({success: false, message: "The password is incorrect."});
@@ -136,12 +138,15 @@ router.post('/activateAccount', async (req, res, next) => {
   if (!datetime.inTime(sentAt, {days:7}))
     return res.status(422).json({success: false, message: 'Token expired'});
   // check whether the email exists
-  const ret = await dynamoDb.getUser(email);
+  let ret = await dynamoDb.getUser(email);
   if (!ret.success)
     return res.status(500).json(ret);
   else if (ret.data.length == 0)
     return res.status(422).json({success: false, message: 'Invalid email'});
-  // TODO: update the user as verified
+  // update the user as verified
+  const user = ret.data[0];
+  ret = await dynamoDb.updateVerified(user.usersId, email, datetime.getDatetimeString());
+  if (!ret.success) return res.status(500).json(ret);
   res.json({success: true});
 });
 
