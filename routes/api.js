@@ -122,7 +122,7 @@ router.post('/login', [
 
 router.post('/getUser', async (req, res, next) => {
   const { token } = req.body;
-  const decoded = auth.verifyToken(token);
+  const decoded = auth.decodeToken(token);
   if (decoded) {
     res.json({success: true, id: decoded.usersId, email: decoded.email});
   } else {

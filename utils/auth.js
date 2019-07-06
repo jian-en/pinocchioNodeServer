@@ -26,7 +26,7 @@ module.exports.generateToken = (payload, expiresIn='24h') => {
   }
 };
 
-module.exports.verifyToken = (token) => {
+module.exports.decodeToken = (token) => {
   try {
     return jwt.verify(token, jwtSecret);
   } catch(err) {
