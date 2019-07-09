@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config.js');
 
 module.exports.checkAuth = (req, res, next) => {
-  const token = req.body.token;
+  const token = req.body.token || req.params.token || req.query.token;
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
   } else {
