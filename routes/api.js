@@ -22,16 +22,36 @@ const datetime = require('../utils/datetime');
 const { reactServer } = require('../config.js');
 
 // Add an event
-router.post('/event', auth.checkAuth, async (req, res, next) => {
-  const { eventType, eventName } = req.body;
-
+router.post('/event', [
+  auth.checkAuth,
+  check('name').trim().isLength({min: 1}),
+  check('attendees').isInt(),
+  check('type').trim().isIn(['lecture', 'speech', 'conference']),
+  check('address').trim().isLength({min: 5}),
+  check('city').trim().isLength({min: 1}),
+  check('zipcode').trim().isInt(),
+  check('state').trim().isLength({min: 2}),
+  check('promotionUrl').trim().isURL()
+], async (req, res, next) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
+    return res.status(422).json({success: false, errors: msgs});
+  }
+  const attendees = parseInt(req.body.attendees);
+  if (!attendees || attendees < 10 || attendees > 100000)
+    res.status(422).json({success: false, errors: ["The number of attendees is invalid."]});
   const item = {
+    ...req.body,
+    attendees,
     eventsId: dynamoDb.generateID(),
-    eventType: eventType,
-    eventName: eventName
+    date: req.body.date,
+    organizerId: req.usersId
   };
   const result = await dynamoDb.putData('eventsTable', item);
-  res.send(result);
+  if (!result.success) return res.json(result);
+  res.json({success: true});
 });
 
 // Get all events
