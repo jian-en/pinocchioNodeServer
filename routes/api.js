@@ -47,7 +47,8 @@ router.post('/event', [
     attendees,
     eventsId: dynamoDb.generateID(),
     date: req.body.date,
-    organizerId: req.usersId
+    organizerId: req.usersId,
+    status: 'pending' //TODO: constanize
   };
   const result = await dynamoDb.putData('eventsTable', item);
   if (!result.success) return res.json(result);
