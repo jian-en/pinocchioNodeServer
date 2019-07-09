@@ -56,9 +56,9 @@ router.post('/event', [
 });
 
 // Get all events
-router.get('/events', async (req, res, next) => {
-  const result = await dynamoDb.scanData('eventsTable');
-  res.send(result);
+router.get('/events', auth.checkAuth, async (req, res, next) => {
+  const result = await dynamoDb.getEvents(req.usersId);
+  res.json(result)
 });
 
 // register an account
