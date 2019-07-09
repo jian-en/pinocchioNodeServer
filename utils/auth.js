@@ -12,6 +12,7 @@ module.exports.checkAuth = (req, res, next) => {
       } else {
         req.email = payload.email;
         req.usersId = payload.usersId;
+        delete req.body.token;
         next();
       }
     });
