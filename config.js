@@ -8,7 +8,11 @@ module.exports = {
       region: 'local',
       endpoint: 'http://dynamodb-container:8000',
     },
-    jwtSecret: 'pinocchioxdata61'
+    jwtSecret: 'pinocchioxdata61',
+    mailAuth: {
+      user: 'xxx@gmail.com',
+      password: 'password'
+    }
   },
   test: {
 
