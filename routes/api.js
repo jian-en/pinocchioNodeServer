@@ -21,6 +21,7 @@ const env = process.env.NODE_ENV || 'local';
 const jwtSecret = config[env].jwtSecret;
 
 const { checkAuth } = require('../utils/auth.js');
+const { sendMail } = require('../utils/mailer');
 
 // Add an event
 router.post('/event', checkAuth, async (req, res, next) => {
@@ -81,7 +82,11 @@ router.post('/register', [
   const result = await dynamoDb.putData('usersTable', item);
   if (!result.success) res.send(result);
 
-  // TODO send verification email
+  sendMail(
+    req.body.email,
+    'Pinocchio - Verification Email',
+    'Click the link to verify your account: ' //TODO: the verification link
+  )
   res.send(result);
 });
 
