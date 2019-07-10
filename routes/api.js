@@ -14,9 +14,16 @@ const dynamoDb = require('../models/dynamoDbWrapper.js');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
+// jwt
+const jwt = require('jsonwebtoken');
+const config = require('../config.js');
+const env = process.env.NODE_ENV || 'local';
+const jwtSecret = config[env].jwtSecret;
+
+const { checkAuth } = require('../utils/auth.js');
 
 // Add an event
-router.post('/event', async (req, res, next) => {
+router.post('/event', checkAuth, async (req, res, next) => {
   const { eventType, eventName } = req.body;
 
   const item = {
@@ -93,10 +100,25 @@ router.post('/login', [
   if (!ret.success) return res.status(500).json(ret);
   else if (ret.data.length == 0) return res.json({success: false, message: "The email is incorrect."});
   // check password
-  const hashedPwd = ret.data[0].password;
+  const user = ret.data[0];
+  const hashedPwd = user.password;
   if (!bcrypt.compareSync(password, hashedPwd))
     return res.json({success: false, message: "The password is incorrect."});
-  return res.json(ret);
+  // issue token
+  const payload = {usersId: user.usersId, email: user.email};
+  const token = jwt.sign(payload, jwtSecret, {expiresIn: '2h'});
+  res.json({success: true, token, id: user.usersId, email: user.email});
+});
+
+router.post('/getUser', async (req, res, next) => {
+  const { token } = req.body;
+  jwt.verify(token, jwtSecret, (err, payload) => {
+    if (err) {
+      res.json({success: false, ...err})
+    } else {
+      res.json({success: true, id: payload.usersId, email: payload.email})
+    }
+  });
 });
 
 module.exports = router;
