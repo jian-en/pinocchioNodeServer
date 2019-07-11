@@ -21,6 +21,7 @@ const env = process.env.NODE_ENV || 'local';
 const jwtSecret = config[env].jwtSecret;
 
 const { checkAuth } = require('../utils/auth.js');
+const { sendMail } = require('../utils/mailer');
 
 // Add an event
 router.post('/event', checkAuth, async (req, res, next) => {
@@ -81,7 +82,11 @@ router.post('/register', [
   const result = await dynamoDb.putData('usersTable', item);
   if (!result.success) res.send(result);
 
-  // TODO send verification email
+  sendMail(
+    req.body.email,
+    'Pinocchio - Verification Email',
+    'Click the link to verify your account: ' //TODO: the verification link
+  )
   res.send(result);
 });
 
@@ -108,6 +113,17 @@ router.post('/login', [
   const payload = {usersId: user.usersId, email: user.email};
   const token = jwt.sign(payload, jwtSecret, {expiresIn: '2h'});
   res.json({success: true, token, id: user.usersId, email: user.email});
+});
+
+router.post('/getUser', async (req, res, next) => {
+  const { token } = req.body;
+  jwt.verify(token, jwtSecret, (err, payload) => {
+    if (err) {
+      res.json({success: false, ...err})
+    } else {
+      res.json({success: true, id: payload.usersId, email: payload.email})
+    }
+  });
 });
 
 module.exports = router;
