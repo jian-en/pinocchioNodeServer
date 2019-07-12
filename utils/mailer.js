@@ -1,7 +1,4 @@
-const config = require('../config.js');
-const env = process.env.NODE_ENV || 'local';
-const { mailAuth } = config[env];
-
+const { mailAuth } = require('../config.js');
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -22,7 +19,7 @@ module.exports.sendMail = (receiver, title, content) => {
     if (error) {
       console.log(error);
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log('Email sent to ' + receiver + ': ' + info.response);
     }
   });
 };
