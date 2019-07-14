@@ -6,14 +6,8 @@ const dynamoDb = require('../models/dynamoDbWrapper.js');
 
 // validators
 const { check, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
-const salt = bcrypt.genSaltSync(10);
 // jwt
 const auth = require('../utils/auth.js');
-const { sendMail } = require('../utils/mailer');
-
-const datetime = require('../utils/datetime');
-const { reactServer } = require('../../config.js');
 
 // validate POST body contents
 exports.validate = (method) => {
