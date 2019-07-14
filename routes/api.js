@@ -15,13 +15,14 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 // jwt
-const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../config.js');
-const { checkAuth } = require('../utils/auth.js');
+const auth = require('../utils/auth.js');
 const { sendMail } = require('../utils/mailer');
 
+const datetime = require('../utils/datetime');
+const { reactServer } = require('../config.js');
+
 // Add an event
-router.post('/event', checkAuth, async (req, res, next) => {
+router.post('/event', auth.checkAuth, async (req, res, next) => {
   const { eventType, eventName } = req.body;
 
   const item = {
@@ -49,17 +50,19 @@ router.post('/register', [
   check('referral').trim()
 ], async (req, res, next) => {
   // check whether inputs are valid
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({success: false, errors: errors.array()});
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
+    return res.status(422).json({success: false, errors: msgs});
   }
 
   // check whether the email has been used
-  const existed = await dynamoDb.getUser(req.body.email);
+  const { email } = req.body;
+  const existed = await dynamoDb.getUser(email);
   if (!existed.success) {
     return res.status(500).json(existed);
   } else if (existed.data.length > 0) {
-    return res.status(200).json({success: false, message: "The email has been registered."});
+    return res.status(422).json({success: false, errors: ["The email has been registered."]});
   }
 
   // build item
@@ -73,16 +76,19 @@ router.post('/register', [
     }
   }
   item.usersId = dynamoDb.generateID();
-  item.verificationSentAt = dynamoDb.getDateString(new Date);
+  item.verificationSentAt = datetime.getDatetimeString();
 
   // put into database
   const result = await dynamoDb.putData('usersTable', item);
-  if (!result.success) res.send(result);
+  if (!result.success) return res.status(500).send(result);
 
+  const payload = {email, sentAt: datetime.getUnixTimestamp()};
+  const token = auth.generateToken(payload, '30d');
+  const url = `${reactServer}/activate-account?token=${token}`
   sendMail(
     req.body.email,
     'Pinocchio - Verification Email',
-    'Click the link to verify your account: ' //TODO: the verification link
+    `Click the link to verify your account: ${url}`
   )
   res.send(result);
 });
@@ -92,35 +98,70 @@ router.post('/login', [
   check('password').trim().isLength({min: 8}).isAlphanumeric(),
 ], async (req, res, next) => {
   // check whether inputs are valid
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({success: false, errors: errors.array()});
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
+    return res.status(422).json({success: false, errors: msgs});
   }
   // get the user
   const { email, password } = req.body;
   const ret = await dynamoDb.getUser(email);
-  if (!ret.success) return res.status(500).json(ret);
-  else if (ret.data.length == 0) return res.json({success: false, message: "The email is incorrect."});
-  // check password
+  if (!ret.success)
+    return res.status(500).json(ret);
+  else if (ret.data.length == 0)
+    return res.status(422).json({success: false, errors: ["The email is incorrect."]});
+
   const user = ret.data[0];
+  // check verified
+  if (!user.verifiedAt) return res.status(422).json({success: false, errors: ['Unverified email']});
+  // check password
   const hashedPwd = user.password;
   if (!bcrypt.compareSync(password, hashedPwd))
-    return res.json({success: false, message: "The password is incorrect."});
+    return res.status(422).json({success: false, errors: ["The password is incorrect."]});
+
   // issue token
   const payload = {usersId: user.usersId, email: user.email};
-  const token = jwt.sign(payload, jwtSecret, {expiresIn: '2h'});
-  res.json({success: true, token, id: user.usersId, email: user.email});
+  const token = auth.generateToken(payload);
+  if (token) {
+    res.json({success: true, token, id: user.usersId, email: user.email});
+  } else {
+    res.status(500).json({success: false, errors: ["Server error when generating token."]});
+  }
+});
+
+router.post('/activateAccount', async (req, res, next) => {
+  const { token } = req.body;
+  const decoded = auth.decodeToken(token);
+  if (!decoded) return res.status(422).json({success: false, message: 'Invalid token'});
+  const { email, sentAt } = decoded;
+  // check whether token is valid in 7 days
+  if (!datetime.inTime(sentAt, {days:7}))
+    return res.status(422).json({success: false, message: 'Token expired'});
+  // check whether the email exists
+  let ret = await dynamoDb.getUser(email);
+  if (!ret.success)
+    return res.status(500).json(ret);
+  else if (ret.data.length == 0)
+    return res.status(422).json({success: false, message: 'Invalid email'});
+
+  const user = ret.data[0];
+  // make sure the account hasn't activated
+  if (user.verifiedAt)
+    return res.status(422).json({success: false, message: 'Account has been verified'});
+  // update the user as verified
+  ret = await dynamoDb.updateVerified(user.usersId, email, datetime.getDatetimeString());
+  if (!ret.success) return res.status(500).json(ret);
+  res.json({success: true});
 });
 
 router.post('/getUser', async (req, res, next) => {
   const { token } = req.body;
-  jwt.verify(token, jwtSecret, (err, payload) => {
-    if (err) {
-      res.json({success: false, ...err})
-    } else {
-      res.json({success: true, id: payload.usersId, email: payload.email})
-    }
-  });
+  const decoded = auth.decodeToken(token);
+  if (decoded) {
+    res.json({success: true, id: decoded.usersId, email: decoded.email});
+  } else {
+    res.json({success: false, error: "Token is invalid."});
+  }
 });
 
 module.exports = router;

@@ -41,7 +41,19 @@ module.exports.putData = async (tableName, item) => {
     console.error(err);
     return {success: false, ...err}
   }
-}
+};
+
+module.exports.updateData = async (tableName, args) => {
+  try {
+    const params = {TableName: tableName, ...args};
+    await dynamoDb.update(params).promise();
+    return {success: true};
+  } catch(err) {
+    console.error("error when updating data - ", args);
+    console.error(err);
+    return {success: false, ...err}
+  }
+};
 
 // TODO ID should be unique ...
 module.exports.generateID = () => {
@@ -57,12 +69,12 @@ module.exports.getUser = async (email) => {
   return await this.queryData('usersTable', args);
 };
 
-
-////// HELPERS
-module.exports.getDateString = (dateObj) => {
-  return dateObj.toISOString();
-};
-
-module.exports.getDateObj = (dateStr) => {
-  return new Date(dateStr);
-};
+module.exports.updateVerified = async (usersId, email, datetime) => {
+  const args = {
+    Key: {usersId, email},
+    UpdateExpression: 'set verifiedAt = :d',
+    ExpressionAttributeValues: {':d': datetime},
+    ReturnValues:"UPDATED_NEW"
+  };
+  return await this.updateData('usersTable', args);
+}

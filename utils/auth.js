@@ -17,3 +17,19 @@ module.exports.checkAuth = (req, res, next) => {
     });
   }
 };
+
+module.exports.generateToken = (payload, expiresIn='24h') => {
+  try {
+    return jwt.sign(payload, jwtSecret, {expiresIn});
+  } catch(err) {
+    return null;
+  }
+};
+
+module.exports.decodeToken = (token) => {
+  try {
+    return jwt.verify(token, jwtSecret);
+  } catch(err) {
+    return null;
+  }
+};

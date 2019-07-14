@@ -11,7 +11,8 @@ const dev = {
  mailAuth: {
    user: 'xxx@gmail.com',
    password: 'password'
- }
+ },
+ reactServer: 'http://localhost:3000'
 };
 const test = {
  dynamodb: {
