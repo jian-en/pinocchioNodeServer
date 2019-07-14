@@ -4,16 +4,42 @@
     {
       "AttributeName": "eventsId",
       "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "organizerId",
+      "KeyType": "RANGE"
     }
   ],
   "AttributeDefinitions": [
     {
       "AttributeName": "eventsId",
       "AttributeType": "S"
+    },
+    {
+      "AttributeName": "organizerId",
+      "AttributeType": "S"
     }
   ],
   "ProvisionedThroughput": {
     "ReadCapacityUnits": 5,
     "WriteCapacityUnits": 5
-  }
+  },
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "organizerIdIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "organizerId",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ]
 }

@@ -69,6 +69,15 @@ module.exports.getUser = async (email) => {
   return await this.queryData('usersTable', args);
 };
 
+module.exports.getEvents = async (organizerId) => {
+  const args = {
+    IndexName: 'organizerIdIndex',
+    KeyConditionExpression: 'organizerId= :oid',
+    ExpressionAttributeValues: {":oid": organizerId}
+  };
+  return await this.queryData('eventsTable', args);
+};
+
 module.exports.updateVerified = async (usersId, email, datetime) => {
   const args = {
     Key: {usersId, email},
