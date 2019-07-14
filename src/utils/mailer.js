@@ -1,4 +1,4 @@
-const { mailAuth } = require('../config.js');
+const { mailAuth } = require('../../config.js');
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
