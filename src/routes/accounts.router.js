@@ -12,7 +12,7 @@ module.exports = (app) => {
     app.post('/api/accounts/activateAccount', accounts.activate);
 
     // log into an account
-    app.post('/api/accounts/login', accounts.login);
+    app.post('/api/accounts/login', accounts.validate('login'), accounts.login);
 
     // get user based on token
     app.post('/api/accounts/getUser', accounts.getUser);
