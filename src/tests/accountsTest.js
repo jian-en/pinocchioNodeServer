@@ -20,30 +20,22 @@ chai.should();
 describe("Accounts", () => {
   fs.readFile('./src/tests/testData/register-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
-    jquerycsv.toArrays(csv, {}, function (err, csvData) {
+    jquerycsv.toObjects(csv, {}, function (err, csvData) {
       if (err) { console.log(err); }
-      var csvHeaders = csvData[0];
-      // remove headers
-      csvData.shift();
       async.each(csvData, function(csvRow, callback){
         describe("POST /api/accounts/register", () =>{
           it("register unit tests", (done) => {
             console.log(csvRow);
-            var firstname = csvRow[csvHeaders.indexOf('firstname')];
-            var lastname = csvRow[csvHeaders.indexOf('lastname')];
-            var email = csvRow[csvHeaders.indexOf('email')];
-            var password = csvRow[csvHeaders.indexOf('password')];
-            var phone = csvRow[csvHeaders.indexOf('phone')];
-            var status = parseInt(csvRow[csvHeaders.indexOf('status')]);
+            var status = parseInt(csvRow.status);
             chai.request(app)
             .post('/api/accounts/register')
             .set('content-type', 'application/x-www-form-urlencoded')
             .type('form')
-            .send('firstname=' + firstname)
-            .send('lastname=' + lastname)
-            .send('email=' + email)
-            .send('password=' + password)
-            .send('phone=' + phone)
+            .send('firstname=' + csvRow.firstname)
+            .send('lastname=' + csvRow.lastname)
+            .send('email=' + csvRow.email)
+            .send('password=' + csvRow.password)
+            .send('phone=' + csvRow.phone)
             .end(function(err, res, body) {
               if(err) done(err);
               else {
