@@ -145,6 +145,7 @@ describe("Accounts", () => {
                   res.body['id'].should.equal(csvRow.id);
                   res.body['email'].should.equal(csvRow.email);
                   getUserTests(res.body['token'], res.body['id'], res.body['email']);
+                  createEventsTests(res.body['token']);
                 }
                 else{
                   res.body['success'].should.be.false;
@@ -191,6 +192,75 @@ describe("Accounts", () => {
         });
       }) //it
     }); //describe
+  }
+
+  // create event unit tests
+  // loads eventsCreate-unit.csv that has combinations of valid/invalid tests
+  // this csv file was created using ACTS.
+  // im putting this here to piggyback off a valid token
+  function createEventsTests(validToken){
+    describe('events unit tests', function() {
+      fs.readFile('./src/tests/testData/csvs/eventsCreate-unit.csv', 'UTF-8', function(err, csv){
+        console.log('readCSV');
+        if(err) console.log(err);
+        console.log(validToken);
+        jquerycsv.toObjects(csv, {}, function (err, csvData) {
+          console.log('jquery');
+          if (err) { console.log(err); }
+          // async to get each csvRow and reuse the describe/it
+          async.each(csvData, function(csvRow, callback){
+            describe("POST /api/events", () =>{
+              it("create event unit tests", (done) => {
+                // current test request body
+                if(DEBUG) console.log(csvRow);
+                var status = parseInt(csvRow.status);
+                var token = validToken;
+                if(!csvRow.token){
+                  token = '';
+                }
+  
+                // send the request 
+                chai.request(app)
+                .post('/api/events')
+                .set('content-type', 'application/x-www-form-urlencoded')
+                .type('form')
+                .send('name=' + csvRow.name)
+                .send('attendees=' + csvRow.attendees)
+                .send('type=' + csvRow.type)
+                .send('address=' + csvRow.address)
+                .send('city=' + csvRow.city)
+                .send('zipcode=' + csvRow.zipcode)
+                .send('state=' + csvRow.state)
+                .send('promotionUrl=' + csvRow.promotionUrl)
+                .send('token=' + token)
+                .end(function(err, res, body) {
+                  if(err) done(err);
+                  else {
+                    if(DEBUG){
+                      // current test response; console logs for debugging
+                      console.log("POST /api/events response: " + res.text);
+                      console.log(res.status + ' ' + status);
+                      console.log(res.body);
+                    }
+  
+                    // assertions
+                    res.should.have.status(status);
+                    res.body.should.be.a('object');
+                    if(status == 200){
+                      res.body['success'].should.be.true;
+                    }
+                    else{
+                      res.body['success'].should.be.false;
+                    }
+                  }
+                  done();
+                });
+              }) //it
+            }); //describe
+          });
+        });
+      }); //fs
+    });
   }
 
   // getUser tests

@@ -2,7 +2,7 @@
 export NPM_TEST="http://localhost:8020"
 
 # unncomment for debug messages in tests
-# export DEBUG="true"
+export DEBUG="true"
 
 # start test instance
 docker-compose -f docker-test.yml up -d

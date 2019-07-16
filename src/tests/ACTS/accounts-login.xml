@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System name="accounts-login">
+  <Parameters>
+    <Parameter id="0" name="email" type="1">
+      <values>
+        <value>bwan2@andrew.cmu.edu</value>
+        <value>red@pallet.com</value>
+        <value>blue@pallet.com</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+      </invalidValues>
+    </Parameter>
+    <Parameter id="1" name="password" type="1">
+      <values>
+        <value>password</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+      </invalidValues>
+    </Parameter>
+    <Parameter id="2" name="id" type="1">
+      <values>
+        <value>0.586753295452144</value>
+        <value>0.586753295452001</value>
+        <value>0.586753295452002</value>
+      </values>
+      <basechoices />
+      <invalidValues />
+    </Parameter>
+  </Parameters>
+  <OutputParameters />
+  <Relations />
+  <Constraints>
+    <Constraint text="(email = &quot;bwan2@andrew.cmu.edu&quot;) =&gt; (id = &quot;0.586753295452144&quot;)">
+      <Parameters>
+        <Parameter name="email" />
+        <Parameter name="id" />
+      </Parameters>
+    </Constraint>
+    <Constraint text="(email = &quot;red@pallet.com&quot;) =&gt; (id = &quot;0.586753295452001&quot;)">
+      <Parameters>
+        <Parameter name="email" />
+        <Parameter name="id" />
+      </Parameters>
+    </Constraint>
+    <Constraint text="(email = &quot;blue@pallet.com&quot;) =&gt; (id = &quot;0.586753295452002&quot;)">
+      <Parameters>
+        <Parameter name="email" />
+        <Parameter name="id" />
+      </Parameters>
+    </Constraint>
+  </Constraints>
+  <Testset doi="2">
+    <Testcase TCNo="0">
+      <Value>1</Value>
+      <Value>bwan2@andrew.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>0.586753295452144</Value>
+    </Testcase>
+    <Testcase TCNo="1">
+      <Value>2</Value>
+      <Value>red@pallet.com</Value>
+      <Value>password</Value>
+      <Value>0.586753295452001</Value>
+    </Testcase>
+    <Testcase TCNo="2">
+      <Value>3</Value>
+      <Value>blue@pallet.com</Value>
+      <Value>password</Value>
+      <Value>0.586753295452002</Value>
+    </Testcase>
+    <Testcase TCNo="3">
+      <Value>4</Value>
+      <Value>bwan2@andrew.cmu.edu</Value>
+      <Value>null</Value>
+      <Value>0.586753295452144</Value>
+    </Testcase>
+    <Testcase TCNo="4">
+      <Value>5</Value>
+      <Value>red@pallet.com</Value>
+      <Value>null</Value>
+      <Value>0.586753295452001</Value>
+    </Testcase>
+    <Testcase TCNo="5">
+      <Value>6</Value>
+      <Value>blue@pallet.com</Value>
+      <Value>null</Value>
+      <Value>0.586753295452002</Value>
+    </Testcase>
+    <Testcase TCNo="6">
+      <Value>7</Value>
+      <Value>null</Value>
+      <Value>password</Value>
+      <Value>0.586753295452144</Value>
+    </Testcase>
+    <Testcase TCNo="7">
+      <Value>8</Value>
+      <Value>null</Value>
+      <Value>password</Value>
+      <Value>0.586753295452001</Value>
+    </Testcase>
+    <Testcase TCNo="8">
+      <Value>9</Value>
+      <Value>null</Value>
+      <Value>password</Value>
+      <Value>0.586753295452002</Value>
+    </Testcase>
+  </Testset>
+  <Header>
+    <Value />
+    <Value>EMAIL</Value>
+    <Value>PASSWORD</Value>
+    <Value>ID</Value>
+  </Header>
+  <Stat-Data>
+    <ExecutionTime>0.021</ExecutionTime>
+    <MaxDomainSize>3</MaxDomainSize>
+    <MinDomainSize>1</MinDomainSize>
+    <TotalNoOfCombination>19</TotalNoOfCombination>
+    <TotalNoOfTests>9</TotalNoOfTests>
+    <Algorithm>IPOG</Algorithm>
+  </Stat-Data>
+</System>
+
