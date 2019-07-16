@@ -1,0 +1,10 @@
+firstname,lastname,email,password,phone,status
+Brian,Wan,bwan2@andrew.cmu.edu,password,6261234567,200
+Brian,Wan,bwan2@andrew.cmu.edu,null,6261234567,422
+Brian,Wan,bwan2@andrew.cmu.edu,123,6261234567,422
+Brian,Wan,bwan2@andrew.cmu.edu,password,null,422
+Brian,Wan,bwan2@andrew.cmu.edu,password,123,422
+Brian,Wan,bwan2@andrew.cmu.edu,password,12345678901,422
+null,Wan,bwan2@andrew.cmu.edu,password,6261234567,422
+Brian,null,bwan2@andrew.cmu.edu,password,6261234567,422
+Brian,Wan,null,password,6261234567,422
