@@ -20,12 +20,12 @@ const test = {
    accessKeyId: 'foo',
    secretAccessKey: 'bar',
    region: 'local',
-   endpoint: 'http://dynamodb-test-container:8000',
+   endpoint: process.env.NPM_TEST || 'http://dynamodb-dev-container:8000',
  },
  dynamoPublicEndpoint: 'http://localhost:8020',
  jwtSecret: 'pinocchioxdata61InTest',
  mailAuth: {
-   user: 'xxx@gmail.com',
+   user: 'xxx@gmail.coma',
    password: 'password'
  }
 };

@@ -1,7 +1,7 @@
 /**
- * accounts_test.js
+ * accountsTest.js
  * 
- * the hello world of mocha testing
+ * Testing all /api/accounts endpoints
  */
 
 const chai = require('chai');
@@ -19,7 +19,7 @@ chai.should();
 
 describe("Accounts", () => {
 
-  ///api/accounts/register unit tests
+  // register unit tests
   fs.readFile('./src/tests/testData/csvs/register-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
@@ -46,9 +46,9 @@ describe("Accounts", () => {
               if(err) done(err);
               else {
                 // current test response; console logs for debugging
-                // console.log("POST /api/accounts/register response: " + res.text);
-                // console.log(res.status + ' ' + status);
-                // console.log(res.body);
+                console.log("POST /api/accounts/register response: " + res.text);
+                console.log(res.status + ' ' + status);
+                console.log(res.body);
 
                 // assertions
                 res.should.have.status(status);
@@ -68,7 +68,7 @@ describe("Accounts", () => {
     });
   }); //fs
 
-  // /api/accounts/activateAccount tests
+  // activateAccount tests
   describe("POST /api/accounts/activateAccount", () =>{
     it("invalid token - input string", (done) => {
       // send the request 
@@ -94,5 +94,82 @@ describe("Accounts", () => {
       });
     }) //it
   }); //describe
+
+  // login unit tests
+  fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv){
+    if(err) console.log(err);
+    jquerycsv.toObjects(csv, {}, function (err, csvData) {
+      if (err) { console.log(err); }
+      // async to get each csvRow and reuse the describe/it
+      async.each(csvData, function(csvRow, callback){
+        describe("POST /api/accounts/login", () =>{
+          it("login unit tests", (done) => {
+            // current test request body
+            console.log(csvRow);
+            var status = parseInt(csvRow.status);
+            var password = csvRow.password;
+
+            // send the request 
+            chai.request(app)
+            .post('/api/accounts/login')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .type('form')
+            .send('email=' + csvRow.email)
+            .send('password=' + csvRow.password)
+            .end(function(err, res, body) {
+              if(err) done(err);
+              else {
+                //current test response; console logs for debugging
+                console.log("POST /api/accounts/login response: " + res.text);
+                console.log(res.status + ' ' + status);
+                console.log(res.body);
+
+                // assertions
+                res.should.have.status(status);
+                res.body.should.be.a('object');
+                if(status == 200){
+                  res.body['success'].should.be.true;
+                  res.body['id'].should.equal(csvRow.id);
+                  res.body['email'].should.equal(csvRow.email);
+                }
+                else{
+                  res.body['success'].should.be.false;
+                }
+              }
+              done();
+            });
+          }) //it
+        }); //describe
+      });
+    });
+  }); //fs
+
+  // login and getUser tests
+  // describe("POST /api/accounts/login ; POST /api/accounts/getUser", () =>{
+  //   it("valid login and valid getUser token", (done) => {
+  //     // send the request 
+  //     chai.request(app)
+  //     .post('/api/accounts/login')
+  //     .set('content-type', 'application/x-www-form-urlencoded')
+  //     .type('form')
+  //     .send('email=red@pallet.com')
+  //     .send('password=password')
+  //     .end(function(err, res, body) {
+  //       if(err) done(err);
+  //       else {
+  //         // current test response; console logs for debugging
+  //         console.log("POST /api/accounts/login response: " + res.text);
+  //         console.log(res.status);
+  //         console.log(res.body);
+
+  //         // assertions
+  //         res.should.have.status(200);
+  //         res.body.should.be.a('object');
+  //         res.body['success'].should.be.true;
+  //       }
+  //       done();
+  //     });
+  //   }) //it
+  // }); //describe
 
 }); //accounts

@@ -4,7 +4,7 @@ services:
     build: .
     depends_on:
       - "dynamodb-test-container"
-    command: npm run dev
+    command: npm run test-env
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules

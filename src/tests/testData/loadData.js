@@ -25,13 +25,12 @@ function loadData(items){
     });
 }
 
-
+// load user data; this is done by CSV for easier testing/future data manipulation
 fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
       if (err) { console.log(err); }
       for(var i = 0; i<csvData.length; i++){
-        console.log(csvData[i]);
         var params = {
             TableName: 'usersTable',
             Item: {
@@ -59,7 +58,5 @@ fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err,
     });
 });
 
-
-// load all dynamo test data
-// loadData(require('./jsons/usersTestData.json'));
-// loadData(require('./jsons/eventsTestData.json'));
+// batch load events data
+loadData(require('./jsons/eventsTestData.json'));

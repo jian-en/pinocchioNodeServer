@@ -4,10 +4,11 @@
   "description": "RESTful server",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon ./server.js",
+    "dev-env": "NODE_ENV=dev ./node_modules/.bin/nodemon ./server.js",
+    "test-env": "NODE_ENV=test ./node_modules/.bin/nodemon ./server.js",
     "create-tables": "cd src/dynamodb && node createTables.js && cd ../..",
     "delete-tables": "cd src/dynamodb && node deleteTables.js && cd ../..",
-    "test": "mocha --exit 'src/tests/*.js'"
+    "test": "source run_tests.sh"
   },
   "repository": {
     "type": "git",
