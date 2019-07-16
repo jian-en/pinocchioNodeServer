@@ -22,11 +22,15 @@ describe("Accounts", () => {
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
       if (err) { console.log(err); }
+      // async to get each csvRow and reuse the describe/it
       async.each(csvData, function(csvRow, callback){
         describe("POST /api/accounts/register", () =>{
           it("register unit tests", (done) => {
+            // current test request body
             console.log(csvRow);
             var status = parseInt(csvRow.status);
+
+            // send the request 
             chai.request(app)
             .post('/api/accounts/register')
             .set('content-type', 'application/x-www-form-urlencoded')
@@ -39,10 +43,20 @@ describe("Accounts", () => {
             .end(function(err, res, body) {
               if(err) done(err);
               else {
-                console.log("POST /api/accounts/register response: " + res.text);
-                console.log(res.status + ' ' + status);
+                // current test response; console logs for debugging
+                // console.log("POST /api/accounts/register response: " + res.text);
+                // console.log(res.status + ' ' + status);
+                // console.log(res.body);
+
+                // assertions
                 res.should.have.status(status);
                 res.body.should.be.a('object');
+                if(status == 200){
+                  res.body['success'].should.be.true;
+                }
+                else{
+                  res.body['success'].should.be.false;
+                }
               }
               done();
             });
