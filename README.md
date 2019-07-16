@@ -22,9 +22,7 @@ The development environment is using a dynamoDB local instance.
         - Secret Access Key: bar
         - Default region name: local
         - Default output format: json
-3. Start the development environment by running `docker-compose -f dev.yml up`. This will create two containers: web and dynamo. The webserver will be on port `3010` for development purposes and the dynamo database container will be available on port `8010`. Be sure that the `config.js` dynamo endpoint is using the service name with port `8000` (e.g. `http://dynamodb-dev-container:8000`), since web will communicate with dynamo through the docker network.
-
-You may run the other environments `test` and `production` with their respective yml files. Make sure that the `config.js` environment is the same as the yml file.
+3. Start the development environment by running `docker-compose up`. This will create two containers: web and dynamo. The webserver will be on port `3010` for development purposes and the dynamo database container will be available on port `8010`. Be sure that the `config.js` dynamo endpoint is using the service name with port `8000` (e.g. `http://dynamodb-dev-container:8000`), since web will communicate with dynamo through the docker network.
 
 4. Create `users` and `events` tables to dynamoDB.
     - Run `npm run create-tables`.

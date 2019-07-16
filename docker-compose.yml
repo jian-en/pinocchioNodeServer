@@ -1,22 +1,22 @@
 version: '3'
 services:
-  web-dev:
+  web:
     build: .
     depends_on:
-      - "dynamodb-dev-container"
+      - "dynamodb-container"
     command: npm run dev-env
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
     ports:
       - "3010:3000"
-  dynamodb-dev-container:
+  dynamodb-container:
     image: amazon/dynamodb-local
     command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal
     volumes:
       - dynamodb_data:/home/dynamodblocal
     ports:
-      - "8010:8000"
+      - "8000:8000"
 
 volumes:
   dynamodb_data:
