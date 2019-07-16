@@ -11,6 +11,9 @@ const jquerycsv = require('jquery-csv');
 const fs = require('fs');
 const async = require('async');
 
+// debug print statements
+const DEBUG = process.env.DEBUG || false;
+
 // configure chai
 chai.use(chaiHttp);
 
@@ -20,6 +23,8 @@ chai.should();
 describe("Accounts", () => {
 
   // register unit tests
+  // loads register-unit.csv that has combinations of valid/invalid tests
+  // this csv file was created using ACTS.
   fs.readFile('./src/tests/testData/csvs/register-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
@@ -29,7 +34,7 @@ describe("Accounts", () => {
         describe("POST /api/accounts/register", () =>{
           it("register unit tests", (done) => {
             // current test request body
-            console.log(csvRow);
+            if(DEBUG) console.log(csvRow);
             var status = parseInt(csvRow.status);
 
             // send the request 
@@ -45,10 +50,12 @@ describe("Accounts", () => {
             .end(function(err, res, body) {
               if(err) done(err);
               else {
-                // current test response; console logs for debugging
-                console.log("POST /api/accounts/register response: " + res.text);
-                console.log(res.status + ' ' + status);
-                console.log(res.body);
+                if(DEBUG){
+                  // current test response; console logs for debugging
+                  console.log("POST /api/accounts/register response: " + res.text);
+                  console.log(res.status + ' ' + status);
+                  console.log(res.body);
+                }
 
                 // assertions
                 res.should.have.status(status);
@@ -69,6 +76,7 @@ describe("Accounts", () => {
   }); //fs
 
   // activateAccount tests
+  // a very basic test to test an invalid token. 
   describe("POST /api/accounts/activateAccount", () =>{
     it("invalid token - input string", (done) => {
       // send the request 
@@ -80,10 +88,12 @@ describe("Accounts", () => {
       .end(function(err, res, body) {
         if(err) done(err);
         else {
-          // current test response; console logs for debugging
-          console.log("POST /api/accounts/activateAccount response: " + res.text);
-          console.log(res.status);
-          console.log(res.body);
+          if(DEBUG){
+            // current test response; console logs for debugging
+            console.log("POST /api/accounts/activateAccount response: " + res.text);
+            console.log(res.status);
+            console.log(res.body);
+          }
 
           // assertions
           res.should.have.status(422);
@@ -96,6 +106,8 @@ describe("Accounts", () => {
   }); //describe
 
   // login unit tests
+  // loads login-unit.csv that has combinations of valid/invalid tests
+  // this csv file was created using ACTS.
   fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
@@ -105,9 +117,8 @@ describe("Accounts", () => {
         describe("POST /api/accounts/login", () =>{
           it("login unit tests", (done) => {
             // current test request body
-            console.log(csvRow);
+            if(DEBUG) console.log(csvRow);
             var status = parseInt(csvRow.status);
-            var password = csvRow.password;
 
             // send the request 
             chai.request(app)
@@ -119,10 +130,12 @@ describe("Accounts", () => {
             .end(function(err, res, body) {
               if(err) done(err);
               else {
-                //current test response; console logs for debugging
-                console.log("POST /api/accounts/login response: " + res.text);
-                console.log(res.status + ' ' + status);
-                console.log(res.body);
+                if(DEBUG){
+                  //current test response; console logs for debugging
+                  console.log("POST /api/accounts/login response: " + res.text);
+                  console.log(res.status + ' ' + status);
+                  console.log(res.body);
+                }
 
                 // assertions
                 res.should.have.status(status);
@@ -131,6 +144,7 @@ describe("Accounts", () => {
                   res.body['success'].should.be.true;
                   res.body['id'].should.equal(csvRow.id);
                   res.body['email'].should.equal(csvRow.email);
+                  getUserTests(res.body['token'], res.body['id'], res.body['email']);
                 }
                 else{
                   res.body['success'].should.be.false;
@@ -144,32 +158,69 @@ describe("Accounts", () => {
     });
   }); //fs
 
-  // login and getUser tests
-  // describe("POST /api/accounts/login ; POST /api/accounts/getUser", () =>{
-  //   it("valid login and valid getUser token", (done) => {
-  //     // send the request 
-  //     chai.request(app)
-  //     .post('/api/accounts/login')
-  //     .set('content-type', 'application/x-www-form-urlencoded')
-  //     .type('form')
-  //     .send('email=red@pallet.com')
-  //     .send('password=password')
-  //     .end(function(err, res, body) {
-  //       if(err) done(err);
-  //       else {
-  //         // current test response; console logs for debugging
-  //         console.log("POST /api/accounts/login response: " + res.text);
-  //         console.log(res.status);
-  //         console.log(res.body);
+  // function for getUserTests
+  // this is called when a valid user has been logged in; This will piggyback on that
+  // valid token to test.
+  function getUserTests(userToken, userId, userEmail){
+    // login and getUser tests
+    describe("POST /api/accounts/getUser", () =>{
+      it("valid getUser token", (done) => {
+        // send the request 
+        chai.request(app)
+        .post('/api/accounts/getUser')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .type('form')
+        .send('token='+userToken)
+        .end(function(err, res, body) {
+          if(err) done(err);
+          else {
+            if(DEBUG){
+              // current test response; console logs for debugging
+              console.log("POST /api/accounts/getUser response: " + res.text);
+              console.log(res.status);
+              console.log(res.body);
+            }
 
-  //         // assertions
-  //         res.should.have.status(200);
-  //         res.body.should.be.a('object');
-  //         res.body['success'].should.be.true;
-  //       }
-  //       done();
-  //     });
-  //   }) //it
-  // }); //describe
+            // assertions
+            res.should.have.status(200);
+            res.body['success'].should.be.true;
+            res.body['id'].should.equal(userId);
+            res.body['email'].should.equal(userEmail);
+          }
+          done();
+        });
+      }) //it
+    }); //describe
+  }
+
+  // getUser tests
+  // a very basic test to test an invalid token. 
+  describe("POST /api/accounts/getUser", () =>{
+    it("invalid token - input string", (done) => {
+      // send the request 
+      chai.request(app)
+      .post('/api/accounts/getUser')
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .type('form')
+      .send('token=')
+      .end(function(err, res, body) {
+        if(err) done(err);
+        else {
+          if(DEBUG){
+            // current test response; console logs for debugging
+            console.log("POST /api/accounts/getUser response: " + res.text);
+            console.log(res.status);
+            console.log(res.body);
+          }
+
+          // assertions
+          res.should.have.status(422);
+          res.body.should.be.a('object');
+          res.body['success'].should.be.false;
+        }
+        done();
+      });
+    }) //it
+  }); //describe
 
 }); //accounts

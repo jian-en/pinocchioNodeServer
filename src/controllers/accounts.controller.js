@@ -150,6 +150,6 @@ exports.getUser = async (req, res, next) => {
     if (decoded) {
       res.json({success: true, id: decoded.usersId, email: decoded.email});
     } else {
-      res.json({success: false, error: "Token is invalid."});
+      res.status(422).json({success: false, error: "Token is invalid."});
     }
 };
