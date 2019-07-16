@@ -18,6 +18,8 @@ chai.use(chaiHttp);
 chai.should();
 
 describe("Accounts", () => {
+
+  /api/accounts/register unit tests
   fs.readFile('./src/tests/testData/register-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
@@ -64,8 +66,36 @@ describe("Accounts", () => {
         }); //describe
       });
     });
-  });
-});
+  }); //fs
+
+  // /api/accounts/activateAccount tests
+  describe("POST /api/accounts/activateAccount", () =>{
+    it("invalid token - input string", (done) => {
+      // send the request 
+      chai.request(app)
+      .post('/api/accounts/activateAccount')
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .type('form')
+      .send('token=')
+      .end(function(err, res, body) {
+        if(err) done(err);
+        else {
+          // current test response; console logs for debugging
+          console.log("POST /api/accounts/activateAccount response: " + res.text);
+          console.log(res.status);
+          console.log(res.body);
+
+          // assertions
+          res.should.have.status(422);
+          res.body.should.be.a('object');
+          res.body['success'].should.be.false;
+        }
+        done();
+      });
+    }) //it
+  }); //describe
+
+}); //accounts
 
 describe("helloworld", () => {
   describe("GET /", () =>{
