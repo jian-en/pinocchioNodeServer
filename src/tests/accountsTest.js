@@ -96,21 +96,3 @@ describe("Accounts", () => {
   }); //describe
 
 }); //accounts
-
-describe("helloworld", () => {
-  describe("GET /", () =>{
-    // test successful register
-    it("HALLOOOO", (done) => {
-      chai.request(app)
-        .get('/')
-        .end(function(err, res, body) {
-          if(err) done(err);
-          else {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            done();
-          }
-        });
-    });
-  });
-});
