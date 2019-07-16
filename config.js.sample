@@ -5,7 +5,7 @@ const dev = {
    accessKeyId: 'foo',
    secretAccessKey: 'bar',
    region: 'local',
-   endpoint: 'http://dynamodb-container:8000',
+   endpoint: 'http://dynamodb-dev-container:8000',
  },
  jwtSecret: 'pinocchioxdata61',
  mailAuth: {
@@ -19,7 +19,7 @@ const test = {
    accessKeyId: 'foo',
    secretAccessKey: 'bar',
    region: 'local',
-   endpoint: 'http://dynamodb-container:8000',
+   endpoint: 'http://dynamodb-test-container:8000',
  },
  jwtSecret: 'pinocchioxdata61InTest',
  mailAuth: {
