@@ -7,6 +7,7 @@ const dev = {
    region: 'local',
    endpoint: 'http://dynamodb-dev-container:8000',
  },
+ dynamoPublicEndpoint: 'http://localhost:8010',
  jwtSecret: 'pinocchioxdata61',
  mailAuth: {
    user: 'xxx@gmail.com',
@@ -21,6 +22,7 @@ const test = {
    region: 'local',
    endpoint: 'http://dynamodb-test-container:8000',
  },
+ dynamoPublicEndpoint: 'http://localhost:8020',
  jwtSecret: 'pinocchioxdata61InTest',
  mailAuth: {
    user: 'xxx@gmail.com',

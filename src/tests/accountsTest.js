@@ -20,7 +20,7 @@ chai.should();
 describe("Accounts", () => {
 
   ///api/accounts/register unit tests
-  fs.readFile('./src/tests/testData/register-unit.csv', 'UTF-8', function(err, csv){
+  fs.readFile('./src/tests/testData/csvs/register-unit.csv', 'UTF-8', function(err, csv){
     if(err) console.log(err);
     jquerycsv.toObjects(csv, {}, function (err, csvData) {
       if (err) { console.log(err); }

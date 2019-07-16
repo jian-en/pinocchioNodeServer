@@ -1,0 +1,93 @@
+{
+    "RequestItems": {
+        "usersTable": [
+            {
+                "PutRequest": {
+                    "Item": {
+                        "firstname": {
+                            "S": "brian"
+                        },
+                        "password": {
+                            "S": "$2a$10$GQRrG834oJqrafJm1wzvWef329Bwmv/6jCg1J2R60K4ZP43EhQNWy"
+                        },
+                        "phone": {
+                            "S": "6267654321"
+                        },
+                        "usersId": {
+                            "S": "0.586753295452144"
+                        },
+                        "verifiedAt": {
+                            "S": "2019-07-16 13:11:03"
+                        },
+                        "verificationSentAt": {
+                            "S": "2019-07-16 13:09:08"
+                        },
+                        "email": {
+                            "S": "bwan2@andrew.cmu.edu"
+                        },
+                        "lastname": {
+                            "S": "wan"
+                        }
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "firstname": {
+                            "S": "Ash"
+                        },
+                        "password": {
+                            "S": "$2a$10$GQRrG834oJqrafJm1wzvWef329Bwmv/6jCg1J2R60K4ZP43EhQNWy"
+                        },
+                        "phone": {
+                            "S": "6267654321"
+                        },
+                        "usersId": {
+                            "S": "0.586753295452001"
+                        },
+                        "verifiedAt": {
+                            "S": "2019-07-16 13:11:03"
+                        },
+                        "verificationSentAt": {
+                            "S": "2019-07-16 13:09:08"
+                        },
+                        "email": {
+                            "S": "red@pallet.com"
+                        },
+                        "lastname": {
+                            "S": "Ketchum"
+                        }
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "firstname": {
+                            "S": "Gary"
+                        },
+                        "password": {
+                            "S": "$2a$10$GQRrG834oJqrafJm1wzvWef329Bwmv/6jCg1J2R60K4ZP43EhQNWy"
+                        },
+                        "phone": {
+                            "S": "6267654321"
+                        },
+                        "usersId": {
+                            "S": "0.586753295452002"
+                        },
+                        "verificationSentAt": {
+                            "S": "2019-07-16 13:09:08"
+                        },
+                        "email": {
+                            "S": "blue@pallet.com"
+                        },
+                        "lastname": {
+                            "S": "Oak"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

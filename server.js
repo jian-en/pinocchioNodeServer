@@ -24,7 +24,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API endpoints to handle Pinocchio system routes',
   },
-  host: 'localhost:'+3010,//portNumber,
+  host: 'localhost:'+ port,
   basePath: '/',
   securityDefinitions: {
     token: {

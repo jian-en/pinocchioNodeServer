@@ -7,6 +7,9 @@ Delete all tables in dynamodb instance found in config.js.
 const config = require('../../config.js');
 const AWS = require('aws-sdk');
 
+// communicate directly with dynamo rather than docker routing
+config['dynamodb']['endpoint'] = config['dynamoPublicEndpoint'];
+
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB();
 
