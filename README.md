@@ -29,4 +29,4 @@ The application is now ready to accept requests.
 
 ## Server routes
 
-* refer to swagger docs
+* refer to swagger docs `localhost:3000/api-docs`
