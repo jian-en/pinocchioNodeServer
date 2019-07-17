@@ -10,12 +10,12 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 // load app config
-const { reactServer } = require('./config.js');
+const {reactServer} = require('./config.js');
 
 // create express app
-var app = express();
-var portNumber = 3000;
-var port = process.env.PORT || portNumber;
+const app = express();
+const portNumber = 3000;
+const port = process.env.PORT || portNumber;
 
 // swagger definition
 const swaggerDefinition = {
@@ -24,7 +24,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API endpoints to handle Pinocchio system routes',
   },
-  host: 'localhost:'+3010,//portNumber,
+  host: 'localhost:'+3010, // portNumber,
   basePath: '/',
   securityDefinitions: {
     token: {
@@ -56,12 +56,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(bodyParser.json());
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // allow cross origin requests (CORS)
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", reactServer);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', reactServer);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
