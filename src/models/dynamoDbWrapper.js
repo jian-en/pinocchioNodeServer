@@ -4,7 +4,7 @@ users.js
 Model to communicate with database
 */
 
-const config = require('../config.js');
+const config = require('../../config.js');
 const AWS = require('aws-sdk');
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB.DocumentClient();

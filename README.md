@@ -5,34 +5,28 @@ Pinocchio server in node.js. This server will handle backend requests and serve 
 
 ## Prerequisites
 
-* node
-* run `npm install` for dependencies
+* docker
+* docker-compose
+* aws-cli
 
-## Server setup
+# Development environment
 
-Run `node server.js`. This starts the server on port 3000.
+The development environment is using a dynamoDB local instance. 
+
+1. Configure `config.js` for the node server to use. **Note:** `mailAuth` requires using less secure access for gmail accounts (https://myaccount.google.com/lesssecureapps). Please ask Brian for email credentials.
+2. Set up `aws-cli` with teh following configuration:
+    - aws configure
+        - Access Key ID: foo
+        - Secret Access Key: bar
+        - Default region name: local
+        - Default output format: json
+3. Run `docker-compose up --build`. This will create two containers: web and dynamo. The webserver will be on port `3010` for development purposes and the dynamo database container will be available on port `8000`. These are default ports defined in `config.js` and `docker-compose.yml`.
+4. Create `users` and `events` tables to dynamoDB.
+    - Run `aws dynamodb create-table --cli-input-json file://src/data/create-users-table.json --endpoint-url http://localhost:8000`
+    - Run `aws dynamodb create-table --cli-input-json file://src/data/create-events-table.json --endpoint-url http://localhost:8000`
+
+The application is now ready to accept requests.
 
 ## Server routes
 
-* `/` root is configured in `routes/index.js` and will currently return `hello world` on a GET request. This will eventually serve the website for visitors.
-* `/pinocchio/` pinocchio endpoint is configured in `routes/pinocchio.js`. This will eventually serve the backend requests.
-
-# Develop with docker-compose
-## Prerequisites
-
-* docker and docker-compose
-* run `docker-compose up --build`
-* aws-cli is installed
-  - aws configure
-    - Access Key ID: foo
-    - Secret Access Key: bar
-    - Default region name: local
-    - Default output format: json
-
-## Usage
-1. Create tables in the local dynamodb:
-   - Add a json file in data, eg: data/create-events-table.json
-   - Create the tables: `aws dynamodb create-table --cli-input-json file://data/create-events-table.json --endpoint-url http://localhost:8000`
-2. Demo usage: `routes/api.js`
-More to refer to DynamoDB documentation:
-https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html
+* refer to swagger docs
