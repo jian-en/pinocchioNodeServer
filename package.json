@@ -38,6 +38,7 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "ethereumjs-tx": "^2.1.0",
     "express": "^4.17.1",
     "express-validator": "^6.1.0",
     "jquery-csv": "^1.0.3",
@@ -46,7 +47,8 @@
     "moment": "^2.24.0",
     "nodemailer": "^6.2.1",
     "swagger-jsdoc": "^3.3.0",
-    "swagger-ui-express": "^4.0.7"
+    "swagger-ui-express": "^4.0.7",
+    "web3": "^1.0.0-beta.55"
   },
   "husky": {
     "hooks": {
