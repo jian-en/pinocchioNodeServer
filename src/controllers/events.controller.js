@@ -9,6 +9,9 @@ const { check, validationResult } = require('express-validator');
 // jwt
 const auth = require('../utils/auth.js');
 
+const responseMsg = require('../utils/responseMsg');
+const errorMsg = require('../utils/errorMsg');
+
 // validate POST body contents
 exports.validate = (method) => {
     switch(method) {
@@ -43,11 +46,11 @@ exports.create = async (req, res, next) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
-      return res.status(422).json({success: false, errors: msgs});
+      return res.status(422).json(responseMsg.validationError422(validation.errors));
     }
     const attendees = parseInt(req.body.attendees);
     if (!attendees || attendees < 10 || attendees > 100000)
-      res.status(422).json({success: false, errors: ["The number of attendees is invalid."]});
+      res.status(422).json(responseMsg.error(errorMsg.ATTENDEES, errorMsg.ATTENDEE_COUNT_INVALID));
     const item = {
       ...req.body,
       attendees,
