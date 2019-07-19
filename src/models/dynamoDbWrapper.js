@@ -14,9 +14,9 @@ module.exports.scanData = async (tableName) => {
     const params = {TableName: tableName};
     const data = await dynamoDb.scan(params).promise();
     return {success: true, data: data.Items};
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    return {success: false, ...err}
+    return {success: false, ...err};
   }
 };
 
@@ -25,9 +25,9 @@ module.exports.queryData = async (tableName, args) => {
     const params = {TableName: tableName, ...args};
     const data = await dynamoDb.query(params).promise();
     return {success: true, data: data.Items};
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    return {success: false, ...err}
+    return {success: false, ...err};
   }
 };
 
@@ -36,10 +36,10 @@ module.exports.putData = async (tableName, item) => {
     const params = {TableName: tableName, Item: item};
     await dynamoDb.put(params).promise();
     return {success: true};
-  } catch(err) {
-    console.error("error when putting data - ", item);
+  } catch (err) {
+    console.error('error when putting data - ', item);
     console.error(err);
-    return {success: false, ...err}
+    return {success: false, ...err};
   }
 };
 
@@ -48,10 +48,10 @@ module.exports.updateData = async (tableName, args) => {
     const params = {TableName: tableName, ...args};
     await dynamoDb.update(params).promise();
     return {success: true};
-  } catch(err) {
-    console.error("error when updating data - ", args);
+  } catch (err) {
+    console.error('error when updating data - ', args);
     console.error(err);
-    return {success: false, ...err}
+    return {success: false, ...err};
   }
 };
 
@@ -64,7 +64,7 @@ module.exports.getUser = async (email) => {
   const args = {
     IndexName: 'emailIndex',
     KeyConditionExpression: 'email= :e',
-    ExpressionAttributeValues: {":e": email}
+    ExpressionAttributeValues: {':e': email},
   };
   return await this.queryData('usersTable', args);
 };
@@ -73,7 +73,7 @@ module.exports.getEvents = async (organizerId) => {
   const args = {
     IndexName: 'organizerIdIndex',
     KeyConditionExpression: 'organizerId= :oid',
-    ExpressionAttributeValues: {":oid": organizerId}
+    ExpressionAttributeValues: {':oid': organizerId},
   };
   return await this.queryData('eventsTable', args);
 };
@@ -83,7 +83,7 @@ module.exports.updateVerified = async (usersId, email, datetime) => {
     Key: {usersId, email},
     UpdateExpression: 'set verifiedAt = :d',
     ExpressionAttributeValues: {':d': datetime},
-    ReturnValues:"UPDATED_NEW"
+    ReturnValues: 'UPDATED_NEW',
   };
   return await this.updateData('usersTable', args);
-}
+};

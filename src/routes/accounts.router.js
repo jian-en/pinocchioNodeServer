@@ -3,9 +3,9 @@
 */
 
 module.exports = (app) => {
-    const accounts = require('../controllers/accounts.controller.js');
+  const accounts = require('../controllers/accounts.controller.js');
 
-    /**
+  /**
      * @swagger
      * /api/accounts/register:
      *  post:
@@ -50,11 +50,11 @@ module.exports = (app) => {
      *              description: invalid or missing body elements
      *          '500':
      *              description: user already exists
-     *        
+     *
      */
-    app.post('/api/accounts/register', accounts.validate('register'), accounts.register);
+  app.post('/api/accounts/register', accounts.validate('register'), accounts.register);
 
-    /**
+  /**
      * @swagger
      * /api/accounts/activateAccount:
      *  post:
@@ -77,11 +77,11 @@ module.exports = (app) => {
      *              description: invalid token/email; token expired; account already verified
      *          '500':
      *              description: error with database communication
-     *        
+     *
      */
-    app.post('/api/accounts/activateAccount', accounts.activate);
+  app.post('/api/accounts/activateAccount', accounts.activate);
 
-    /**
+  /**
      * @swagger
      * /api/accounts/login:
      *  post:
@@ -110,11 +110,11 @@ module.exports = (app) => {
      *              description: invalid body elements or unverified account
      *          '500':
      *              description: error generating session token
-     *        
+     *
      */
-    app.post('/api/accounts/login', accounts.validate('login'), accounts.login);
+  app.post('/api/accounts/login', accounts.validate('login'), accounts.login);
 
-    /**
+  /**
      * @swagger
      * /api/accounts/getUser:
      *  post:
@@ -136,7 +136,7 @@ module.exports = (app) => {
      *              description: valid token; returns userId/email
      *          '422':
      *              description: invalid token
-     *        
+     *
      */
-    app.post('/api/accounts/getUser', accounts.getUser);
-}
+  app.post('/api/accounts/getUser', accounts.getUser);
+};
