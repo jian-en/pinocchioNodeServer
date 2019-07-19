@@ -37,7 +37,7 @@ exports.validate = (method) => {
 // get all events based on current userId
 exports.findAll = async (req, res, next) => {
     const result = await dynamoDb.getEvents(req.usersId);
-    res.json(result)
+ res.json(result)
 };
 
 // create an event
