@@ -21,9 +21,12 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('Accounts', () => {
-  // register unit tests
-  // loads register-unit.csv that has combinations of valid/invalid tests
-  // this csv file was created using ACTS.
+
+  /**
+   * register unit tests
+   * loads register-unit.csv that has combinations of valid/invalid tests
+   * this csv file was created using ACTS.
+   */
   function accountRegistrationTest() {
     fs.readFile('./src/tests/testData/csvs/register-unit.csv', 'UTF-8', function(err, csv) {
       if (err) console.log(err);
@@ -77,8 +80,10 @@ describe('Accounts', () => {
     }); // fs
   }
 
-  // activateAccount tests
-  // a very basic test to test an invalid token.
+  /** 
+   * activateAccount tests
+   * a very basic test to test an invalid token.
+   */ 
   function accountActivationTest() {
     describe('POST /api/accounts/activateAccount', () =>{
       it('invalid token - input string', (done) => {
@@ -109,9 +114,11 @@ describe('Accounts', () => {
     }); // describe
   }
 
-  // login unit tests
-  // loads login-unit.csv that has combinations of valid/invalid tests
-  // this csv file was created using ACTS.
+  /**
+   * login unit tests
+   * loads login-unit.csv that has combinations of valid/invalid tests
+   * this csv file was created using ACTS. 
+   */
   function accountLoginAndGetUserTest() {
     fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv) {
       if (err) console.log(err);
@@ -165,9 +172,11 @@ describe('Accounts', () => {
     }); // fs
   }
 
-  // helper function for getUserTests
-  // this is called when a valid user has been logged in; This will piggyback on that
-  // valid token to test.
+  /** 
+   * helper function for getUserTests
+   * this is called when a valid user has been logged in; This will piggyback on that
+   * valid token to test.
+   */
   function getUserTests(userToken, userId, userEmail) {
     // login and getUser tests
     describe('POST /api/accounts/getUser', () =>{
@@ -200,8 +209,10 @@ describe('Accounts', () => {
     }); // describe
   }
 
-  // getUser tests
-  // a very basic test to test an invalid token.
+  /**
+   * getUser tests
+   * a very basic test to test an invalid token.  
+   */
   function accountGetUserInvalidTokenTest() {
     describe('POST /api/accounts/getUser', () =>{
       it('invalid token - input string', (done) => {

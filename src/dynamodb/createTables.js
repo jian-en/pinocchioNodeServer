@@ -13,8 +13,12 @@ config['dynamodb']['endpoint'] = config['dynamoPublicEndpoint'];
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB();
 
-function createTable(table_json) {
-  dynamoDb.createTable(table_json, function(err, data) {
+/**
+ * Create tables in DynamoDB.
+ * @param { string } tableJson filepath to table JSON create rules.
+ */
+function createTable(tableJson) {
+  dynamoDb.createTable(tableJson, function(err, data) {
     if (err) {
       console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
     } else {

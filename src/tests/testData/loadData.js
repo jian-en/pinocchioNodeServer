@@ -15,17 +15,9 @@ config['dynamodb']['endpoint'] = config['dynamoPublicEndpoint'];
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB();
 
-function loadData(items) {
-  dynamoDb.batchWriteItem(items, function(err, data) {
-    if (err) {
-      console.error('Unable to load data. Error JSON: ', JSON.stringify(err, null, 2));
-    } else {
-      console.log('Successfully loaded data: ', JSON.stringify(data, null, 2));
-    }
-  });
-}
-
-// load user data; this is done by CSV for easier testing/future data manipulation
+/**
+ * load user data; this is done by CSV for easier testing/future data manipulation 
+ * */ 
 fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err, csv) {
   if (err) console.log(err);
   jquerycsv.toObjects(csv, {}, function(err, csvData) {
@@ -60,7 +52,9 @@ fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err,
   });
 });
 
-// load events data
+/**
+ * load events data
+ *  */
 fs.readFile('./src/tests/testData/csvs/eventTestData.csv', 'UTF-8', function(err, csv) {
   if (err) console.log(err);
   jquerycsv.toObjects(csv, {}, function(err, csvData) {

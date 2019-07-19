@@ -21,8 +21,11 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('Events', () => {
-  // events tests
-  // a very basic test to test an invalid token.
+
+  /** 
+   * events tests
+   * a very basic test to test an invalid token.
+   */
   function getEventsInvalidTokenTest() {
     describe('GET /api/events', () =>{
       it('invalid token - input string', (done) => {
@@ -53,10 +56,12 @@ describe('Events', () => {
     }); // describe
   }
 
-  // login unit tests
-  // loads login-unit.csv that has combinations of valid/invalid tests
-  // this csv file was created using ACTS.
-  // this is repeated to get a valid token for events tests
+  /** 
+   * login unit tests
+   * loads login-unit.csv that has combinations of valid/invalid tests
+   * this csv file was created using ACTS.
+   * this is repeated to get a valid token for events tests
+   */
   function createEventsAndGetEventsTest() {
     fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv) {
       if (err) console.log(err);
@@ -111,9 +116,11 @@ describe('Events', () => {
     }); // fs
   }
 
-  // create event unit tests
-  // loads eventsCreate-unit.csv that has combinations of valid/invalid tests
-  // this csv file was created using ACTS.
+  /**
+   * create event unit tests
+   * loads eventsCreate-unit.csv that has combinations of valid/invalid tests
+   * this csv file was created using ACTS. 
+   * */
   function createEventsTests(validToken) {
     describe('events unit tests', function() {
       fs.readFile('./src/tests/testData/csvs/eventsCreate-unit.csv', 'UTF-8', function(err, csv) {
@@ -178,8 +185,10 @@ describe('Events', () => {
   }
 
 
-  // get event tests
-  // loads eventTestData.csv to get valid events
+  /**
+   * get event tests
+   * loads eventTestData.csv to get valid events 
+   * */ 
   function getEventsTests(validToken, organizerId) {
     describe('get event tests', function() {
       const getEventsData = require('./testData/jsons/getEventsTestData.json')[organizerId];
