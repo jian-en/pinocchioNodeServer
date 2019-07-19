@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../../config.js');
+const {jwtSecret} = require('../../config.js');
 
 module.exports.checkAuth = (req, res, next) => {
   const token = req.body.token || req.params.token || req.query.token || req.headers.token;
@@ -22,7 +22,7 @@ module.exports.checkAuth = (req, res, next) => {
 module.exports.generateToken = (payload, expiresIn='24h') => {
   try {
     return jwt.sign(payload, jwtSecret, {expiresIn});
-  } catch(err) {
+  } catch (err) {
     return null;
   }
 };
@@ -30,7 +30,7 @@ module.exports.generateToken = (payload, expiresIn='24h') => {
 module.exports.decodeToken = (token) => {
   try {
     return jwt.verify(token, jwtSecret);
-  } catch(err) {
+  } catch (err) {
     return null;
   }
 };
