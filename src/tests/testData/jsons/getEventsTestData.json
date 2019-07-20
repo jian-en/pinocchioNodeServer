@@ -1,0 +1,58 @@
+{
+    "0.586753295452001": {
+        "0.5472598822772003": {
+            "zipcode": "02626",
+            "promotionUrl": "https://bulbapedia.bulbagarden.net/wiki/Vermilion_Gym",
+            "eventsId": "0.5472598822772003",
+            "address": "Vermilion Gym",
+            "organizerId": "0.586753295452001",
+            "city": "Vermilion City",
+            "attendees": "20",
+            "name": "Lt. Surge Battle",
+            "state": "Kanto",
+            "type": "speech",
+            "status": "pending"
+        },
+        "0.5472598822772002": {
+            "zipcode": "121121",
+            "promotionUrl": "https://bulbapedia.bulbagarden.net/wiki/Cerulean_Gym",
+            "eventsId": "0.5472598822772002",
+            "address": "Cerulean Gym",
+            "organizerId": "0.586753295452001",
+            "city": "Cerulean City",
+            "attendees": "15",
+            "name": "Misty Battle",
+            "state": "Kanto",
+            "type": "speech",
+            "status": "pending"
+        },
+        "0.5472598822772001": {
+            "zipcode": "07474",
+            "promotionUrl": "https://bulbapedia.bulbagarden.net/wiki/Pewter_Gym",
+            "eventsId": "0.5472598822772001",
+            "address": "Pewter Gym",
+            "organizerId": "0.586753295452001",
+            "city": "Pewter City",
+            "attendees": "12",
+            "name": "Brock Battle",
+            "state": "Kanto",
+            "type": "speech",
+            "status": "pending"
+        }
+    },
+    "0.586753295452144": {
+        "0.1442598822772001": {
+            "eventsId": "0.1442598822772001",
+            "zipcode": "15213",
+            "promotionUrl": "https://mse.isri.cmu.edu",
+            "organizerId": "0.586753295452144",
+            "address": "300 S. Craig Street",
+            "city": "Pittsburgh",
+            "attendees": "35",
+            "name": "MSELi Event",
+            "state": "Pennsylvania",
+            "type": "speech",
+            "status": "pending"
+        }
+    }
+}

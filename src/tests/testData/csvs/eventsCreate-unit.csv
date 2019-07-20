@@ -1,0 +1,42 @@
+name,attendees,type,address,city,zipcode,state,token,promotionUrl,status
+Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,100000,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,10,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+Bass speech,10,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,9,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,9,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,9,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,0,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,0,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,0,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,-1,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,-1,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,-1,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100001,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100001,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100001,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,lecture,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,speech,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,conference,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,lecture,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,speech,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,conference,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422

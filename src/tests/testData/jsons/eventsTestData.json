@@ -1,0 +1,162 @@
+{
+    "RequestItems": {
+        "eventsTable": [
+            {
+                "PutRequest": {
+                    "Item": {
+                        "zipcode": {
+                            "S": "07474"
+                        },
+                        "promotionUrl": {
+                            "S": "https://bulbapedia.bulbagarden.net/wiki/Pewter_Gym"
+                        },
+                        "eventsId": {
+                            "S": "0.5472598822772001"
+                        },
+                        "address": {
+                            "S": "Pewter Gym"
+                        },
+                        "organizerId": {
+                            "S": "0.586753295452001"
+                        },
+                        "city": {
+                            "S": "Pewter City"
+                        },
+                        "attendees": {
+                            "N": "12"
+                        },
+                        "name": {
+                            "S": "Brock Battle"
+                        },
+                        "state": {
+                            "S": "Kanto"
+                        },
+                        "type": {
+                            "S": "speech"
+                        },
+                        "status": {
+                            "S": "pending"
+                        }
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "zipcode": {
+                            "S": "121121"
+                        },
+                        "promotionUrl": {
+                            "S": "https://bulbapedia.bulbagarden.net/wiki/Cerulean_Gym"
+                        },
+                        "eventsId": {
+                            "S": "0.5472598822772002"
+                        },
+                        "address": {
+                            "S": "Cerulean Gym"
+                        },
+                        "organizerId": {
+                            "S": "0.586753295452001"
+                        },
+                        "city": {
+                            "S": "Cerulean City"
+                        },
+                        "attendees": {
+                            "N": "15"
+                        },
+                        "name": {
+                            "S": "Misty Battle"
+                        },
+                        "state": {
+                            "S": "Kanto"
+                        },
+                        "type": {
+                            "S": "speech"
+                        },
+                        "status": {
+                            "S": "pending"
+                        }
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "zipcode": {
+                            "S": "02626"
+                        },
+                        "promotionUrl": {
+                            "S": "https://bulbapedia.bulbagarden.net/wiki/Vermilion_Gym"
+                        },
+                        "eventsId": {
+                            "S": "0.5472598822772003"
+                        },
+                        "address": {
+                            "S": "Vermilion Gym"
+                        },
+                        "organizerId": {
+                            "S": "0.586753295452001"
+                        },
+                        "city": {
+                            "S": "Vermilion City"
+                        },
+                        "attendees": {
+                            "N": "20"
+                        },
+                        "name": {
+                            "S": "Lt. Surge Battle"
+                        },
+                        "state": {
+                            "S": "Kanto"
+                        },
+                        "type": {
+                            "S": "speech"
+                        },
+                        "status": {
+                            "S": "pending"
+                        }
+                    }
+                }
+            },
+            {
+                "PutRequest": {
+                    "Item": {
+                        "zipcode": {
+                            "S": "15213"
+                        },
+                        "promotionUrl": {
+                            "S": "https://mse.isri.cmu.edu"
+                        },
+                        "eventsId": {
+                            "S": "0.1442598822772001"
+                        },
+                        "address": {
+                            "S": "300 S. Craig Street"
+                        },
+                        "organizerId": {
+                            "S": "0.586753295452144"
+                        },
+                        "city": {
+                            "S": "Pittsburgh"
+                        },
+                        "attendees": {
+                            "N": "35"
+                        },
+                        "name": {
+                            "S": "MSELi Event"
+                        },
+                        "state": {
+                            "S": "Pennsylvania"
+                        },
+                        "type": {
+                            "S": "speech"
+                        },
+                        "status": {
+                            "S": "pending"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}
