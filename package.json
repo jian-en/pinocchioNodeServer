@@ -52,7 +52,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,json}": [
-      "./node_modules/.bin/eslint src --fix",
+      "./node_modules/.bin/eslint --ext .json --ext .js src --fix",
       "git add"
     ],
     "server.js": [
