@@ -10,6 +10,9 @@ docker-compose -f docker-test.yml up -d --build --remove-orphans
 # create/delete tables in test db
 npm run create-tables
 
+# load initial data
+npm run load-initial-data
+
 # load test data
 npm run load-test-data
 

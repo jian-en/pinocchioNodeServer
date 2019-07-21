@@ -6,9 +6,10 @@
   "scripts": {
     "dev-env": "NODE_ENV=dev ./node_modules/.bin/nodemon ./server.js",
     "test-env": "NODE_ENV=test ./node_modules/.bin/nodemon ./server.js",
-    "create-tables": "cd src/dynamodb && node createTables.js && cd ../..",
+    "create-tables": "node src/dynamodb/createTables.js",
+    "load-initial-data": "node src/dynamodb/loadValidDomains.js",
     "load-test-data": "node src/tests/testData/loadData.js",
-    "delete-tables": "cd src/dynamodb && node deleteTables.js && cd ../..",
+    "delete-tables": "node src/dynamodb/deleteTables.js",
     "test": "NODE_ENV=test source run_tests.sh"
   },
   "repository": {
