@@ -45,12 +45,11 @@ exports.create = async (req, res, next) => {
     // check whether inputs are valid
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
-      const msgs = validation.errors.map(err => `The ${err.param} has incorrect format.`)
       return res.status(422).json(responseMsg.validationError422(validation.errors));
     }
     const attendees = parseInt(req.body.attendees);
     if (!attendees || attendees < 10 || attendees > 100000)
-      res.status(422).json(responseMsg.error(errorMsg.ATTENDEES, errorMsg.ATTENDEE_COUNT_INVALID));
+      res.status(422).json(responseMsg.error(errorMsg.params.ATTENDEES, errorMsg.messages.ATTENDEE_COUNT_INVALID));
     const item = {
       ...req.body,
       attendees,
