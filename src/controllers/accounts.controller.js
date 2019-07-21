@@ -65,6 +65,16 @@ exports.register = async (req, res, next) => {
             return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
                 errorMsg.messages.EMAIL_REGISTERED));
           }
+          // check if the domain is valid
+          const validDomains = await dynamoDb.getValidDomains();
+          const requestDomain = email.split('@').pop();
+          if (!validDomains.success) {
+            return res.status(500).json(validDomains);
+          } else if (!validDomains.data.some((e) => e.email == requestDomain)) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.Email,
+                errorMsg.messages.EMAIL_INVALID_DOMAIN));
+          }
+
           item[key] = req.body[key];
           break;
         case 'password':
