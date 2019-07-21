@@ -1,5 +1,5 @@
 {
-  "TableName": "usersTable",
+    "TableName": "usersTable",
   "KeySchema": [
     {
       "AttributeName": "usersId",
