@@ -5,12 +5,12 @@ controller for accounts
 const dynamoDb = require('../models/dynamoDbWrapper.js');
 
 // validators
-const { check, validationResult } = require('express-validator');
+const {check, validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 // jwt
 const auth = require('../utils/auth.js');
-const { sendMail } = require('../utils/mailer');
+const {sendMail} = require('../utils/mailer');
 
 const datetime = require('../utils/datetime');
 const { reactServer } = require('../../config.js');
@@ -19,25 +19,25 @@ const errorMsg = require('../utils/errorMsg');
 
 // validate POST body contents
 exports.validate = (method) => {
-    switch(method) {
-        case 'register': {
-            return [
-                check('email').isEmail().trim().normalizeEmail(),
-                check('password').trim().isLength({min: 8}).isAlphanumeric(),
-                check('firstname').trim().isLength({min: 1}),
-                check('lastname').trim().isLength({min: 1}),
-                check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
-                check('referral').trim()
-            ]
-        }
-        case 'login': {
-            return [
-                check('email').isEmail().trim().normalizeEmail(),
-                check('password').trim().isLength({min: 8}).isAlphanumeric(),
-            ]
-        }
+  switch (method) {
+    case 'register': {
+      return [
+        check('email').isEmail().trim().normalizeEmail(),
+        check('password').trim().isLength({min: 8}).isAlphanumeric(),
+        check('firstname').trim().isLength({min: 1}),
+        check('lastname').trim().isLength({min: 1}),
+        check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
+        check('referral').trim(),
+      ];
     }
-}
+    case 'login': {
+      return [
+        check('email').isEmail().trim().normalizeEmail(),
+        check('password').trim().isLength({min: 8}).isAlphanumeric(),
+      ];
+    }
+  }
+};
 
 // create a new account
 exports.register = async (req, res, next) => {
@@ -66,22 +66,23 @@ exports.register = async (req, res, next) => {
         item[key] = bcrypt.hashSync(req.body[key], salt);
       }
     }
-    item.usersId = dynamoDb.generateID();
-    item.verificationSentAt = datetime.getDatetimeString();
-  
-    // put into database
-    const result = await dynamoDb.putData('usersTable', item);
-    if (!result.success) return res.status(500).send(result);
-  
-    const payload = {email, sentAt: datetime.getUnixTimestamp()};
-    const token = auth.generateToken(payload, '30d');
-    const url = `${reactServer}/activate-account?token=${token}`
-    sendMail(
+  }
+  item.usersId = dynamoDb.generateID();
+  item.verificationSentAt = datetime.getDatetimeString();
+
+  // put into database
+  const result = await dynamoDb.putData('usersTable', item);
+  if (!result.success) return res.status(500).send(result);
+
+  const payload = {email, sentAt: datetime.getUnixTimestamp()};
+  const token = auth.generateToken(payload, '30d');
+  const url = `${reactServer}/activate-account?token=${token}`;
+  sendMail(
       req.body.email,
       'Pinocchio - Verification Email',
       `Click the link to verify your account: ${url}`
-    )
-    res.send(result);
+  );
+  res.send(result);
 };
 
 // activate a newly created account

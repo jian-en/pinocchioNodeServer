@@ -22,6 +22,10 @@
   },
   "homepage": "https://github.com/pinocchio61/pinocchioNodeServer#readme",
   "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
+    "husky": "^3.0.0",
+    "lint-staged": "^9.2.0",
     "nodemon": "^1.19.1"
   },
   "dependencies": {
@@ -39,5 +43,20 @@
     "nodemailer": "^6.2.1",
     "swagger-jsdoc": "^3.3.0",
     "swagger-ui-express": "^4.0.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,md}": [
+      "./node_modules/.bin/eslint src --fix",
+      "git add"
+    ],
+    "server.js": [
+      "./node_modules/.bin/eslint server.js --fix",
+      "git add"
+    ]
   }
 }

@@ -31,8 +31,8 @@ const test = {
 };
 
 const config = {
- dev,
- test
+  dev,
+  test,
 };
 
 module.exports = config[env];

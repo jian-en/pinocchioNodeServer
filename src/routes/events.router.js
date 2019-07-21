@@ -3,9 +3,9 @@
 */
 
 module.exports = (app) => {
-    const events = require('../controllers/events.controller.js');
+  const events = require('../controllers/events.controller.js');
 
-    /**
+  /**
      * @swagger
      * /api/events:
      *  post:
@@ -55,12 +55,12 @@ module.exports = (app) => {
      *              description: unauthorized, token is invalid or not provided
      *          '422':
      *              description: invalid or missing body elements
-     *        
+     *
      */
 
-    app.post('/api/events', events.validate('create'), events.create);
+  app.post('/api/events', events.validate('create'), events.create);
 
-    /**
+  /**
      * @swagger
      * /api/events:
      *  get:
@@ -79,8 +79,8 @@ module.exports = (app) => {
      *              description: get all events available to user token
      *          '401':
      *              description: unauthorized, token is invalid or not provided
-     *        
+     *
      */
 
-    app.get('/api/events', events.validate('auth'), events.findAll);
-}
+  app.get('/api/events', events.validate('auth'), events.findAll);
+};

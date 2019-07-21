@@ -5,7 +5,7 @@ controller for events
 const dynamoDb = require('../models/dynamoDbWrapper.js');
 
 // validators
-const { check, validationResult } = require('express-validator');
+const {check, validationResult} = require('express-validator');
 // jwt
 const auth = require('../utils/auth.js');
 
@@ -14,30 +14,30 @@ const errorMsg = require('../utils/errorMsg');
 
 // validate POST body contents
 exports.validate = (method) => {
-    switch(method) {
-        case 'create': {
-            return [
-                auth.checkAuth,
-                check('name').trim().isLength({min: 1}),
-                check('attendees').isInt(),
-                check('type').trim().isIn(['lecture', 'speech', 'conference']),
-                check('address').trim().isLength({min: 5}),
-                check('city').trim().isLength({min: 1}),
-                check('zipcode').trim().isInt(),
-                check('state').trim().isLength({min: 2}),
-                check('promotionUrl').trim().isURL()
-            ]
-        }
-        case 'auth': {
-            return auth.checkAuth;       
-        }
+  switch (method) {
+    case 'create': {
+      return [
+        auth.checkAuth,
+        check('name').trim().isLength({min: 1}),
+        check('attendees').isInt(),
+        check('type').trim().isIn(['lecture', 'speech', 'conference']),
+        check('address').trim().isLength({min: 5}),
+        check('city').trim().isLength({min: 1}),
+        check('zipcode').trim().isInt(),
+        check('state').trim().isLength({min: 2}),
+        check('promotionUrl').trim().isURL(),
+      ];
     }
-}
+    case 'auth': {
+      return auth.checkAuth;
+    }
+  }
+};
 
 // get all events based on current userId
 exports.findAll = async (req, res, next) => {
-    const result = await dynamoDb.getEvents(req.usersId);
- res.json(result)
+  const result = await dynamoDb.getEvents(req.usersId);
+  res.json(result);
 };
 
 // create an event
