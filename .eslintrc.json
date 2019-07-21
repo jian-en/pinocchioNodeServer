@@ -13,7 +13,8 @@
     "ecmaVersion": 2018
   },
   "plugins": [
-    "json"
+    "json",
+    "markdown"
   ],
   "rules": {
     "max-len": ["error",
