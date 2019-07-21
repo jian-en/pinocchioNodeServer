@@ -60,11 +60,20 @@ module.exports.generateID = () => {
   return Math.random().toString();
 };
 
-module.exports.getUser = async (email) => {
+module.exports.getUserEmails = async (email) => {
   const args = {
     IndexName: 'emailIndex',
     KeyConditionExpression: 'email= :e',
     ExpressionAttributeValues: {':e': email},
+  };
+  return await this.queryData('usersTable', args);
+};
+
+module.exports.getUserPublicKeys = async (publicKey) => {
+  const args = {
+    IndexName: 'publicKeyIndex',
+    KeyConditionExpression: 'publicKey= :pk',
+    ExpressionAttributeValues: {':pk': publicKey},
   };
   return await this.queryData('usersTable', args);
 };

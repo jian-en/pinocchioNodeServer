@@ -28,6 +28,8 @@ exports.validate = (method) => {
         check('lastname').trim().isLength({min: 1}),
         check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
         check('referral').trim(),
+        // TODO: check if public key is valid ETH key
+        check('publicKey').trim().isLength({min: 1}),
       ];
     }
     case 'login': {
@@ -47,24 +49,43 @@ exports.register = async (req, res, next) => {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
 
-  // check whether the email has been used
   const {email} = req.body;
-  const existed = await dynamoDb.getUser(email);
-  if (!existed.success) {
-    return res.status(500).json(existed);
-  } else if (existed.data.length > 0) {
-    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
-        errorMsg.messages.EMAIL_REGISTERED));
-  }
 
   // build item
   const item = {};
   for (const key in req.body) {
-    if (key === 'referral') continue; // TODO update when referral code has been defined
-    // hash the password
-    item[key] = req.body[key];
-    if (key === 'password') {
-      item[key] = bcrypt.hashSync(req.body[key], salt);
+    if (req.body.hasOwnProperty(key)) {
+      switch (key) {
+        case 'email':
+          // check whether the email has been used
+          const emailExists = await dynamoDb.getUserEmails(email);
+          if (!emailExists.success) {
+            return res.status(500).json(emailExists);
+          } else if (emailExists.data.length > 0) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+                errorMsg.messages.EMAIL_REGISTERED));
+          }
+          item[key] = req.body[key];
+          break;
+        case 'password':
+          item[key] = bcrypt.hashSync(req.body[key], salt);
+          break;
+        case 'publicKey':
+          // check whether the publicKey has been used
+          const publicKeyExists = await dynamoDb.getUserPublicKeys(req.body[key]);
+          if (!publicKeyExists.success) {
+            return res.status(500).json(publicKeyExists);
+          } else if (publicKeyExists.data.length > 0) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.PUBLICKEY,
+                errorMsg.messages.PUBLICKEY_REGISTERED));
+          }
+          item[key] = req.body[key];
+          break;
+        case 'referral':
+          continue; // TODO update when referral code has been defined
+        default:
+          item[key] = req.body[key];
+      }
     }
   }
   item.usersId = dynamoDb.generateID();
@@ -100,7 +121,7 @@ exports.activate = async (req, res, next) => {
         errorMsg.messages.TOKEN_EXPIRED));
   }
   // check whether the email exists
-  let ret = await dynamoDb.getUser(email);
+  let ret = await dynamoDb.getUserEmails(email);
   if (!ret.success) {
     return res.status(500).json(ret);
   } else if (ret.data.length == 0) {
@@ -129,7 +150,7 @@ exports.login = async (req, res, next) => {
   }
   // get the user
   const {email, password} = req.body;
-  const ret = await dynamoDb.getUser(email);
+  const ret = await dynamoDb.getUserEmails(email);
   if (!ret.success) {
     return res.status(500).json(ret);
   } else if (ret.data.length == 0) {
