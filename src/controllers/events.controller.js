@@ -42,23 +42,25 @@ exports.findAll = async (req, res, next) => {
 
 // create an event
 exports.create = async (req, res, next) => {
-    // check whether inputs are valid
-    const validation = validationResult(req);
-    if (!validation.isEmpty()) {
-      return res.status(422).json(responseMsg.validationError422(validation.errors));
-    }
-    const attendees = parseInt(req.body.attendees);
-    if (!attendees || attendees < 10 || attendees > 100000)
-      res.status(422).json(responseMsg.error(errorMsg.params.ATTENDEES, errorMsg.messages.ATTENDEE_COUNT_INVALID));
-    const item = {
-      ...req.body,
-      attendees,
-      eventsId: dynamoDb.generateID(),
-      date: req.body.date,
-      organizerId: req.usersId,
-      status: 'pending' //TODO: constanize
-    };
-    const result = await dynamoDb.putData('eventsTable', item);
-    if (!result.success) return res.json(result);
-    res.json({success: true});
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+  const attendees = parseInt(req.body.attendees);
+  if (!attendees || attendees < 10 || attendees > 100000) {
+    res.status(422).json(responseMsg.error(errorMsg.params.ATTENDEES,
+        errorMsg.messages.ATTENDEE_COUNT_INVALID));
+  }
+  const item = {
+    ...req.body,
+    attendees,
+    eventsId: dynamoDb.generateID(),
+    date: req.body.date,
+    organizerId: req.usersId,
+    status: 'pending', // TODO: constanize
+  };
+  const result = await dynamoDb.putData('eventsTable', item);
+  if (!result.success) return res.json(result);
+  res.json({success: true});
 };
