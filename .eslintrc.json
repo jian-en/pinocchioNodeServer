@@ -12,6 +12,9 @@
   "parserOptions": {
     "ecmaVersion": 2018
   },
+  "plugins": [
+    "json"
+  ],
   "rules": {
     "max-len": ["error",
       {"ignoreComments": true},
