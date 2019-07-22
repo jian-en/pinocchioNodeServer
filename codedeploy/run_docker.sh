@@ -16,7 +16,7 @@ if [ "$(docker ps -q -f name=serverContainer)" ]; then
 fi
 
 # start new server container
-docker run --rm -d\
+docker run --rm \
            -v /server:/user/app \
            -v /server/node_modules \
            -p 3010:3000 \
