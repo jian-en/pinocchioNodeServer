@@ -26,6 +26,7 @@
       <basechoices />
       <invalidValues>
         <invalidValue>null</invalidValue>
+        <invalidValue>briankwan@us.ibm.com</invalidValue>
       </invalidValues>
     </Parameter>
     <Parameter id="3" name="password" type="1">
@@ -62,5 +63,123 @@
   <OutputParameters />
   <Relations />
   <Constraints />
+  <Testset doi="2">
+    <Testcase TCNo="0">
+      <Value>1</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="1">
+      <Value>2</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>null</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="2">
+      <Value>3</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>briankwan@us.ibm.com</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="3">
+      <Value>4</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>null</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="4">
+      <Value>5</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>123</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="5">
+      <Value>6</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>12345678901</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="6">
+      <Value>7</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>null</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="7">
+      <Value>8</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>123</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="8">
+      <Value>9</Value>
+      <Value>null</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="9">
+      <Value>10</Value>
+      <Value>Brian</Value>
+      <Value>null</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A</Value>
+    </Testcase>
+    <Testcase TCNo="10">
+      <Value>11</Value>
+      <Value>Brian</Value>
+      <Value>Wan</Value>
+      <Value>bwan2@cs.cmu.edu</Value>
+      <Value>password</Value>
+      <Value>6261234567</Value>
+      <Value>null</Value>
+    </Testcase>
+  </Testset>
+  <Header>
+    <Value />
+    <Value>FIRSTNAME</Value>
+    <Value>LASTNAME</Value>
+    <Value>EMAIL</Value>
+    <Value>PASSWORD</Value>
+    <Value>PHONE</Value>
+    <Value>PUBLICKEY</Value>
+  </Header>
+  <Stat-Data>
+    <ExecutionTime>0.33</ExecutionTime>
+    <MaxDomainSize>1</MaxDomainSize>
+    <MinDomainSize>1</MinDomainSize>
+    <TotalNoOfCombination>65</TotalNoOfCombination>
+    <TotalNoOfTests>11</TotalNoOfTests>
+    <Algorithm>IPOG</Algorithm>
+  </Stat-Data>
 </System>
 
