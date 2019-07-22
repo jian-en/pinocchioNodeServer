@@ -15,6 +15,7 @@ exports.params = {
   STATE: 'state',
   PROMOTIONURL: 'promotionUrl',
   PUBLICKEY: 'publicKey',
+  REFERRALCODE: 'referralCode',
 };
 
 // error messages
@@ -31,4 +32,5 @@ exports.messages = {
   ACCOUNT_VERIFIED: 'The account has already been verified',
   ATTENDEE_COUNT_INVALID: 'The number of attendees provided is invalid',
   PUBLICKEY_REGISTERED: 'The publicKey provided is already registered.',
+  REFERRALCODE_GENERATE_ERROR: 'Error in generating the referral code',
 };

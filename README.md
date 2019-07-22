@@ -1,4 +1,3 @@
-# Develop in local machine
 ## Pinocchio server
 
 Pinocchio server in node.js. This server will handle backend requests and serve the website for users to visit.
@@ -23,7 +22,9 @@ The development environment is using a dynamoDB local instance.
     This is for local dyanamodb development environment.
 3. Start the development environment by running `docker-compose -f docker-dev.yml up --build`. This will create two containers: web and dynamo. The webserver will be on port `3010` for development purposes and the dynamo database container will be available on port `8000`. Be sure that the `config.js` dynamo endpoint is using the service name with port `8000` (e.g. `http://dynamodb-dev-container:8000`), since web will communicate with dynamo through the docker network.
 4. Create `users` and `events` tables to dynamoDB.
-    - Run `npm run create-tables`.
+    - Run `npm run create-tables`
+5. Load initial data (such as valid domains) into dynamoDB.
+    - Run `npm run load-initial-data`
 
 The application is now ready to accept requests (default port `3010`).
 
@@ -36,3 +37,8 @@ These tests run boundary unit tests created from CSV files from ACTS tool. This 
 ## Server routes
 
 * refer to swagger docs `localhost:3010/api-docs`
+
+## Notes
+
+* Registering requires an unused public key.
+* The email used for registration must be a valid domain. The list of valid domains can be found in `src/dynamodb/csvs/validDomains.csv`.

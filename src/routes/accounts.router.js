@@ -142,4 +142,5 @@ module.exports = (app) => {
      *
      */
   app.post('/api/accounts/getUser', accounts.getUser);
+  app.post('/api/accounts/getReferral', accounts.getReferral);
 };

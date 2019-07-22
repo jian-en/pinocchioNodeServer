@@ -60,6 +60,37 @@ module.exports.generateID = () => {
   return Math.random().toString();
 };
 
+// generates random alphanumeric string with length 7
+module.exports.generateReferral = () => {
+  return Math.random().toString(36).substring(7);
+};
+
+module.exports.getUserReferralCode = async (usersId) => {
+  const args = {
+    KeyConditionExpression: 'usersId = :usersid',
+    ExpressionAttributeValues: {':usersid': usersId},
+    ProjectionExpression: 'referral',
+  };
+  return await this.queryData('usersTable', args);
+};
+
+// create referral code
+module.exports.updateReferral = async (usersId, email, referralCode, referralToken) => {
+  const args = {
+    Key: {usersId, email},
+    UpdateExpression: 'set referral = :r',
+    ExpressionAttributeValues: {
+      ':r': {
+        referralCode: referralCode,
+        referralToken: referralToken,
+      },
+    },
+    ReturnValues: 'UPDATED_NEW',
+  };
+  return await this.updateData('usersTable', args);
+};
+
+
 module.exports.getUserEmails = async (email) => {
   const args = {
     IndexName: 'emailIndex',
