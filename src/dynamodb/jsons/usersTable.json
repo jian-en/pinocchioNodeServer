@@ -18,6 +18,10 @@
     {
       "AttributeName": "email",
       "AttributeType": "S"
+    },
+    {
+      "AttributeName": "publicKey",
+      "AttributeType": "S"
     }
   ],
   "ProvisionedThroughput": {
@@ -30,6 +34,22 @@
       "KeySchema": [
         {
           "AttributeName": "email",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    },
+    {
+      "IndexName": "publicKeyIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "publicKey",
           "KeyType": "HASH"
         }
       ],

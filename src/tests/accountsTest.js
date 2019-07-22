@@ -51,6 +51,7 @@ describe('Accounts', () => {
                   .send('email=' + csvRow.email)
                   .send('password=' + csvRow.password)
                   .send('phone=' + csvRow.phone)
+                  .send('publicKey=' + csvRow.publicKey)
                   .end(function(err, res, body) {
                     if (err) done(err);
                     else {

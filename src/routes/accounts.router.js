@@ -43,6 +43,9 @@ module.exports = (app) => {
      *          - name: referral
      *            type: string
      *            in: formData
+     *          - name: publicKey
+     *            type: string
+     *            in: formData
      *      responses:
      *          '200':
      *              description: account sucessfully created
