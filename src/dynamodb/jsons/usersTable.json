@@ -22,6 +22,10 @@
     {
       "AttributeName": "publicKey",
       "AttributeType": "S"
+    },
+    {
+      "AttributeName": "referralCode",
+      "AttributeType": "S"
     }
   ],
   "ProvisionedThroughput": {
@@ -50,6 +54,22 @@
       "KeySchema": [
         {
           "AttributeName": "publicKey",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    },
+    {
+      "IndexName": "referralCodeIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "referralCode",
           "KeyType": "HASH"
         }
       ],

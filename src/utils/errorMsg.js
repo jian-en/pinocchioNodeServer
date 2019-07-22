@@ -33,4 +33,5 @@ exports.messages = {
   ATTENDEE_COUNT_INVALID: 'The number of attendees provided is invalid',
   PUBLICKEY_REGISTERED: 'The publicKey provided is already registered.',
   REFERRALCODE_GENERATE_ERROR: 'Error in generating the referral code',
+  REFERRALCODE_INVALID: 'The referral code provided is invalid or expired.',
 };

@@ -13,7 +13,7 @@ const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
 
 /**
- * generates random alphanumeric string with length 7
+ * generates random alphanumeric string with length 6
  * @return {string}
  */
 function generateReferralCode() {
@@ -32,15 +32,14 @@ exports.getReferral = async (usersId, email) => {
     response.data = referralExists;
     return response;
   }
-  console.log(referralExists);
   if (Object.keys(referralExists.data[0]).length == 0) {
     // no referral code exists
     // generate a referral code
     return await generateReferral(usersId, email, response);
   } else {
     // check if referralCode is still valid
-    const referralToken = referralExists.data[0]['referral']['referralToken'];
-    const referralCode = referralExists.data[0]['referral']['referralCode'];
+    const referralToken = referralExists.data[0]['referralToken'];
+    const referralCode = referralExists.data[0]['referralCode'];
     const decodeToken = auth.decodeToken(referralToken);
     if (decodeToken) {
       // token still valid
@@ -67,14 +66,26 @@ async function generateReferral(usersId, email, response) {
   // referralToken based on JWT
   const referralToken = auth.generateToken(payload);
   if (referralToken) {
-    // store new referral code in db
-    const ret = await dynamoDb.updateReferral(usersId, email, referralCode, referralToken);
-    if (!ret.success) {
+    // store new referralCode in db
+    const referralCodeRet = await dynamoDb.updateReferralCode(usersId,
+        email, referralCode);
+    if (!referralCodeRet.success) {
       // unsuccessful db call
       response.status = 500;
-      response.data = ret;
+      response.data = referralCodeRet;
       return response;
     }
+
+    // store new referralToken in db
+    const referralTokenRet = await dynamoDb.updateReferralToken(usersId,
+        email, referralToken);
+    if (!referralTokenRet.success) {
+      // unsuccessful db call
+      response.status = 500;
+      response.data = referralTokenRet;
+      return response;
+    }
+
     // successfully stored in db
     response.data = {usersId: usersId, referralCode: referralCode, referralToken: referralToken};
     return response;

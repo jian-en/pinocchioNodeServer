@@ -35,6 +35,8 @@ fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err,
           'verificationSentAt': {S: csvData[i]['verificationSentAt']},
           'email': {S: csvData[i]['email']},
           'lastname': {S: csvData[i]['lastname']},
+          'referralCode': {S: csvData[i]['referralCode']},
+          'referralToken': {S: csvData[i]['referralToken']},
         },
       };
       if (csvData[i]['verifiedAt']) {
