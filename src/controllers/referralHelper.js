@@ -13,11 +13,18 @@ const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
 
 /**
- * generates random alphanumeric string with length 6
+ * generates random alphanumeric string with length
+ * @param {integer} length - specifies string length
  * @return {string}
  */
-function generateReferralCode() {
-  return Math.random().toString(36).substring(7);
+function generateReferralCode(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };
 
 // get referral code
@@ -60,7 +67,7 @@ exports.getReferral = async (usersId, email) => {
  * @param {dict} response
  */
 async function generateReferral(usersId, email, response) {
-  const referralCode = generateReferralCode();
+  const referralCode = generateReferralCode(6);
   const payload = {usersId: usersId, referralCode: referralCode};
 
   // referralToken based on JWT
