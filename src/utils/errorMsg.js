@@ -23,6 +23,7 @@ exports.messages = {
   EMAIL_NOT_REGISTERED: 'The email provided is not registered.',
   EMAIL_NOT_VERIFIED: 'The email provided is not verified.',
   EMAIL_INVALID: 'The email provided is invalid.',
+  EMAIL_INVALID_DOMAIN: 'The email provided is not a recognized trusted domain.',
   TOKEN_INVALID: 'The provided token is invalid.',
   TOKEN_EXPIRED: 'The provided token is expired.',
   TOKEN_SERVER_ERROR: 'A server error has occurred when generating the token',

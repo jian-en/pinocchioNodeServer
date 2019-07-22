@@ -69,6 +69,15 @@ module.exports.getUserEmails = async (email) => {
   return await this.queryData('usersTable', args);
 };
 
+module.exports.getValidDomains = async () => {
+  const args = {
+    KeyConditionExpression: 'usersId = :usersid',
+    ExpressionAttributeValues: {':usersid': 'validDomains'},
+    ProjectionExpression: 'email',
+  };
+  return await this.queryData('usersTable', args);
+};
+
 module.exports.getUserPublicKeys = async (publicKey) => {
   const args = {
     IndexName: 'publicKeyIndex',
