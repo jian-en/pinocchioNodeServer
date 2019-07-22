@@ -28,7 +28,6 @@ exports.validate = (method) => {
         check('firstname').trim().isLength({min: 1}),
         check('lastname').trim().isLength({min: 1}),
         check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
-        // check('referral').trim(),
         // TODO: check if public key is valid ETH key
         check('publicKey').trim().isLength({min: 1}),
       ];
@@ -100,6 +99,10 @@ exports.register = async (req, res, next) => {
           const referredBy = referralsExists.data[0].usersId;
           const validToken = auth.decodeToken(referralToken);
           if (!validToken) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
+                errorMsg.messages.REFERRALCODE_INVALID));
+          }
+          if (validToken.referralCode != req.body[key]) {
             return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
                 errorMsg.messages.REFERRALCODE_INVALID));
           }
