@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: .
+    destination: /server
+hooks:
+  BeforeInstall:
+    - location: codedeploy/before_install.sh
+      timeout: 180
+      runas: root
+  AfterInstall:
+    - location: codedeploy/build_docker.sh
+      timeout: 360
+      runas: root
+  ApplicationStart:
+    - location: codedeploy/run_docker.sh
+      timeout: 30
+      runas: root

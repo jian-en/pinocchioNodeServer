@@ -4,7 +4,8 @@
   "description": "RESTful server",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon ./server.js"
+    "dev": "./node_modules/.bin/nodemon ./server.js",
+    "test": "node server.js"
   },
   "repository": {
     "type": "git",
