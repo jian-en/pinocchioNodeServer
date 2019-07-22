@@ -16,6 +16,7 @@ const datetime = require('../utils/datetime');
 const {reactServer} = require('../../config.js');
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
+const referralHelper = require('./referralHelper');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -197,71 +198,15 @@ exports.getUser = async (req, res, next) => {
   const {token} = req.body;
   const decoded = auth.decodeToken(token);
   if (decoded) {
-    res.json(responseMsg.success({id: decoded.usersId, email: decoded.email}));
-  } else {
-    res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
-        errorMsg.messages.TOKEN_INVALID));
-  }
-};
-
-// get referral code
-exports.getReferral = async (req, res, next) => {
-  const {token} = req.body;
-  const decoded = auth.decodeToken(token);
-  const usersId = decoded.usersId;
-  const email = decoded.email;
-  if (decoded) {
-    const referralExists = await dynamoDb.getUserReferralCode(usersId);
-    if (!referralExists.success) {
-      return res.status(500).json(referralExists);
+    const response = await referralHelper.getReferral(decoded.usersId, decoded.email);
+    if (response.status != 200) {
+      res.status(response.status).json(response.data);
     }
-    console.log(referralExists);
-    if (Object.keys(referralExists.data[0]).length == 0) {
-      // no referral code exists
-      // generate a referral code
-      const referralCode = dynamoDb.generateReferral();
-      const payload = {usersId: usersId, referralCode: referralCode};
-
-      // referralToken based on JWT
-      const referralToken = auth.generateToken(payload);
-      if (referralToken) {
-        // store new referral code in db
-        ret = await dynamoDb.updateReferral(usersId, email, referralCode, referralToken);
-        if (!ret.success) return res.status(500).json(ret);
-        res.status(200).json(responseMsg.success(
-            {usersId: usersId, referralCode: referralCode, referralToken: referralToken}));
-      } else {
-        res.status(500).json(responseMsg.error(errorMsg.params.REFERRALCODE,
-            errorMsg.messages.REFERRALCODE_GENERATE_ERROR));
-      }
-    } else {
-      // check if referralCode is still valid
-      let referralToken = referralExists.data[0]['referral']['referralToken'];
-      let referralCode = referralExists.data[0]['referral']['referralCode'];
-      const decodeToken = auth.decodeToken(referralToken);
-      if (decodeToken) {
-        // token still valid
-        res.status(200).json(responseMsg.success(
-            {usersId: usersId, referralCode: referralCode, referralToken: referralToken}));
-      } else {
-        // token is invalid; generate a new one
-        referralCode = dynamoDb.generateReferral();
-        const payload = {usersId: usersId, referralCode: referralCode};
-
-        // referralToken based on JWT
-        referralToken = auth.generateToken(payload);
-        if (referralToken) {
-          // store new referral code in db
-          ret = await dynamoDb.updateReferral(usersId, email, referralCode, referralToken);
-          if (!ret.success) return res.status(500).json(ret);
-          res.status(200).json(responseMsg.success(
-              {usersId: usersId, referralCode: referralCode, referralToken: referralToken}));
-        } else {
-          res.status(500).json(responseMsg.error(errorMsg.params.REFERRALCODE,
-              errorMsg.messages.REFERRALCODE_GENERATE_ERROR));
-        }
-      }
-    }
+    res.json(responseMsg.success({
+      id: decoded.usersId,
+      email: decoded.email,
+      referralCode: response.data.referralCode,
+    }));
   } else {
     res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
         errorMsg.messages.TOKEN_INVALID));

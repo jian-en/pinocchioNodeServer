@@ -60,11 +60,6 @@ module.exports.generateID = () => {
   return Math.random().toString();
 };
 
-// generates random alphanumeric string with length 7
-module.exports.generateReferral = () => {
-  return Math.random().toString(36).substring(7);
-};
-
 module.exports.getUserReferralCode = async (usersId) => {
   const args = {
     KeyConditionExpression: 'usersId = :usersid',
