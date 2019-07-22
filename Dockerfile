@@ -7,7 +7,7 @@ WORKDIR /usr/app
 # only copy necessary code
 COPY package.json .
 COPY server.js .
-COPY src .
+COPY src src
 COPY config.js .
 
 # install packages
