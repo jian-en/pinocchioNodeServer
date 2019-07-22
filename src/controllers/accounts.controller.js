@@ -71,7 +71,7 @@ exports.register = async (req, res, next) => {
           if (!validDomains.success) {
             return res.status(500).json(validDomains);
           } else if (!validDomains.data.some((e) => e.email == requestDomain)) {
-            return res.status(422).json(responseMsg.error(errorMsg.params.Email,
+            return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
                 errorMsg.messages.EMAIL_INVALID_DOMAIN));
           }
 
