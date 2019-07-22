@@ -21,7 +21,6 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('Accounts', () => {
-
   /**
    * register unit tests
    * loads register-unit.csv that has combinations of valid/invalid tests
@@ -80,10 +79,10 @@ describe('Accounts', () => {
     }); // fs
   }
 
-  /** 
+  /**
    * activateAccount tests
    * a very basic test to test an invalid token.
-   */ 
+   */
   function accountActivationTest() {
     describe('POST /api/accounts/activateAccount', () =>{
       it('invalid token - input string', (done) => {
@@ -117,7 +116,7 @@ describe('Accounts', () => {
   /**
    * login unit tests
    * loads login-unit.csv that has combinations of valid/invalid tests
-   * this csv file was created using ACTS. 
+   * this csv file was created using ACTS.
    */
   function accountLoginAndGetUserTest() {
     fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv) {
@@ -172,10 +171,13 @@ describe('Accounts', () => {
     }); // fs
   }
 
-  /** 
+  /**
    * helper function for getUserTests
    * this is called when a valid user has been logged in; This will piggyback on that
    * valid token to test.
+   * @param {string} userToken
+   * @param {string} userId
+   * @param {string} userEmail
    */
   function getUserTests(userToken, userId, userEmail) {
     // login and getUser tests
@@ -211,7 +213,7 @@ describe('Accounts', () => {
 
   /**
    * getUser tests
-   * a very basic test to test an invalid token.  
+   * a very basic test to test an invalid token.
    */
   function accountGetUserInvalidTokenTest() {
     describe('POST /api/accounts/getUser', () =>{

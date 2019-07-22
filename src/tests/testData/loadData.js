@@ -16,8 +16,8 @@ AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB();
 
 /**
- * load user data; this is done by CSV for easier testing/future data manipulation 
- * */ 
+ * load user data; this is done by CSV for easier testing/future data manipulation
+ * */
 fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err, csv) {
   if (err) console.log(err);
   jquerycsv.toObjects(csv, {}, function(err, csvData) {

@@ -5,13 +5,13 @@ export NPM_TEST="http://localhost:8020"
 #export DEBUG="true"
 
 # start test instance
-docker-compose -f docker-test.yml up -d --build
+docker-compose -f docker-test.yml up -d --build --remove-orphans
 
 # create/delete tables in test db
 npm run create-tables
 
 # load test data
-node src/tests/testData/loadData.js
+npm run load-test-data
 
 # run tests
 mocha --timeout 10000 --exit 'src/tests/*.js'

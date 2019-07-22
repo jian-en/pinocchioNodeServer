@@ -14,6 +14,8 @@ const {sendMail} = require('../utils/mailer');
 
 const datetime = require('../utils/datetime');
 const {reactServer} = require('../../config.js');
+const responseMsg = require('../utils/responseMsg');
+const errorMsg = require('../utils/errorMsg');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -42,8 +44,7 @@ exports.register = async (req, res, next) => {
   // check whether inputs are valid
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    const msgs = validation.errors.map((err) => `The ${err.param} has incorrect format.`);
-    return res.status(422).json({success: false, errors: msgs});
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
 
   // check whether the email has been used
@@ -52,7 +53,8 @@ exports.register = async (req, res, next) => {
   if (!existed.success) {
     return res.status(500).json(existed);
   } else if (existed.data.length > 0) {
-    return res.status(422).json({success: false, errors: ['The email has been registered.']});
+    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+        errorMsg.messages.EMAIL_REGISTERED));
   }
 
   // build item
@@ -87,29 +89,35 @@ exports.register = async (req, res, next) => {
 exports.activate = async (req, res, next) => {
   const {token} = req.body;
   const decoded = auth.decodeToken(token);
-  if (!decoded) return res.status(422).json({success: false, message: 'Invalid token'});
+  if (!decoded) {
+    return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+        errorMsg.messages.TOKEN_INVALID));
+  }
   const {email, sentAt} = decoded;
   // check whether token is valid in 7 days
   if (!datetime.inTime(sentAt, {days: 7})) {
-    return res.status(422).json({success: false, message: 'Token expired'});
+    return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+        errorMsg.messages.TOKEN_EXPIRED));
   }
   // check whether the email exists
   let ret = await dynamoDb.getUser(email);
   if (!ret.success) {
     return res.status(500).json(ret);
   } else if (ret.data.length == 0) {
-    return res.status(422).json({success: false, message: 'Invalid email'});
+    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+        errorMsg.messages.EMAIL_INVALID));
   }
 
   const user = ret.data[0];
   // make sure the account hasn't activated
   if (user.verifiedAt) {
-    return res.status(422).json({success: false, message: 'Account has been verified'});
+    return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+        errorMsg.messages.ACCOUNT_VERIFIED));
   }
   // update the user as verified
   ret = await dynamoDb.updateVerified(user.usersId, email, datetime.getDatetimeString());
   if (!ret.success) return res.status(500).json(ret);
-  res.json({success: true});
+  res.json(responseMsg.success({}));
 };
 
 // log into an account
@@ -117,8 +125,7 @@ exports.login = async (req, res, next) => {
   // check whether inputs are valid
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    const msgs = validation.errors.map((err) => `The ${err.param} has incorrect format.`);
-    return res.status(422).json({success: false, errors: msgs});
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
   // get the user
   const {email, password} = req.body;
@@ -126,25 +133,31 @@ exports.login = async (req, res, next) => {
   if (!ret.success) {
     return res.status(500).json(ret);
   } else if (ret.data.length == 0) {
-    return res.status(422).json({success: false, errors: ['The email is incorrect.']});
+    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+        errorMsg.messages.EMAIL_NOT_REGISTERED));
   }
 
   const user = ret.data[0];
   // check verified
-  if (!user.verifiedAt) return res.status(422).json({success: false, errors: ['Unverified email']});
+  if (!user.verifiedAt) {
+    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+        errorMsg.messages.EMAIL_NOT_VERIFIED));
+  }
   // check password
   const hashedPwd = user.password;
   if (!bcrypt.compareSync(password, hashedPwd)) {
-    return res.status(422).json({success: false, errors: ['The password is incorrect.']});
+    return res.status(422).json(responseMsg.error(errorMsg.params.PASSWORD,
+        errorMsg.messages.PASSWORD_INCORRECT));
   }
 
   // issue token
   const payload = {usersId: user.usersId, email: user.email};
   const token = auth.generateToken(payload);
   if (token) {
-    res.json({success: true, token, id: user.usersId, email: user.email});
+    res.json(responseMsg.success({token, id: user.usersId, email: user.email}));
   } else {
-    res.status(500).json({success: false, errors: ['Server error when generating token.']});
+    res.status(500).json(responseMsg.error(errorMsg.params.TOKEN,
+        errorMsg.messages.TOKEN_SERVER_ERROR));
   }
 };
 
@@ -153,8 +166,9 @@ exports.getUser = async (req, res, next) => {
   const {token} = req.body;
   const decoded = auth.decodeToken(token);
   if (decoded) {
-    res.json({success: true, id: decoded.usersId, email: decoded.email});
+    res.json(responseMsg.success({id: decoded.usersId, email: decoded.email}));
   } else {
-    res.status(422).json({success: false, error: 'Token is invalid.'});
+    res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+        errorMsg.messages.TOKEN_INVALID));
   }
 };

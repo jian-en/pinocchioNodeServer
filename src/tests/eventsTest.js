@@ -21,8 +21,7 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('Events', () => {
-
-  /** 
+  /**
    * events tests
    * a very basic test to test an invalid token.
    */
@@ -56,7 +55,7 @@ describe('Events', () => {
     }); // describe
   }
 
-  /** 
+  /**
    * login unit tests
    * loads login-unit.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
@@ -119,8 +118,9 @@ describe('Events', () => {
   /**
    * create event unit tests
    * loads eventsCreate-unit.csv that has combinations of valid/invalid tests
-   * this csv file was created using ACTS. 
-   * */
+   * this csv file was created using ACTS.
+   * @param {string} validToken
+   */
   function createEventsTests(validToken) {
     describe('events unit tests', function() {
       fs.readFile('./src/tests/testData/csvs/eventsCreate-unit.csv', 'UTF-8', function(err, csv) {
@@ -187,8 +187,10 @@ describe('Events', () => {
 
   /**
    * get event tests
-   * loads eventTestData.csv to get valid events 
-   * */ 
+   * loads eventTestData.csv to get valid events
+   * @param {string} validToken
+   * @param {string} organizerId
+   */
   function getEventsTests(validToken, organizerId) {
     describe('get event tests', function() {
       const getEventsData = require('./testData/jsons/getEventsTestData.json')[organizerId];
@@ -216,7 +218,8 @@ describe('Events', () => {
                   const eventId = eventsList[i]['eventsId'];
                   eventsList[i]['eventsId'].should.equal(getEventsData[eventId]['eventsId']);
                   eventsList[i]['zipcode'].should.equal(getEventsData[eventId]['zipcode']);
-                  eventsList[i]['promotionUrl'].should.equal(getEventsData[eventId]['promotionUrl']);
+                  eventsList[i]['promotionUrl'].should.equal(
+                      getEventsData[eventId]['promotionUrl']);
                   eventsList[i]['organizerId'].should.equal(getEventsData[eventId]['organizerId']);
                   eventsList[i]['address'].should.equal(getEventsData[eventId]['address']);
                   eventsList[i]['city'].should.equal(getEventsData[eventId]['city']);
