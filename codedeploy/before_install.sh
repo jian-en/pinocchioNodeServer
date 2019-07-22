@@ -12,4 +12,4 @@ mkdir /server
 docker volume prune -f
 
 # remove dangling images
-docker rmi -f $(docker images -q -f dangling=true)
+docker images purge
