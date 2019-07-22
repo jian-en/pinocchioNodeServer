@@ -8,7 +8,8 @@ WORKDIR /usr/app
 COPY package.json .
 COPY server.js .
 COPY src .
-COPY config.js .
+COPY config.sample.js config.js
+COPY entrypoint.sh .
 
 # install packages
 RUN npm install
