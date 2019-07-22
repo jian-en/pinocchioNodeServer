@@ -10,7 +10,8 @@
     "load-initial-data": "node src/dynamodb/loadValidDomains.js",
     "load-test-data": "node src/tests/testData/loadData.js",
     "delete-tables": "node src/dynamodb/deleteTables.js",
-    "test": "NODE_ENV=test source run_tests.sh"
+    "test": "NODE_ENV=test source run_tests.sh",
+    "awstest": "NODE_ENV=awstest node ./server.js"
   },
   "repository": {
     "type": "git",
