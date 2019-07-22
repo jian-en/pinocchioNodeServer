@@ -14,6 +14,7 @@ exports.params = {
   ZIPCODE: 'zipcode',
   STATE: 'state',
   PROMOTIONURL: 'promotionUrl',
+  PUBLICKEY: 'publicKey',
 };
 
 // error messages
@@ -28,4 +29,5 @@ exports.messages = {
   PASSWORD_INCORRECT: 'The provided password is incorrect',
   ACCOUNT_VERIFIED: 'The account has already been verified',
   ATTENDEE_COUNT_INVALID: 'The number of attendees provided is invalid',
+  PUBLICKEY_REGISTERED: 'The publicKey provided is already registered.',
 };
