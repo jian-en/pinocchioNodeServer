@@ -24,7 +24,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API endpoints to handle Pinocchio system routes',
   },
-  host: 'localhost:'+3010, // portNumber,
+  host: 'localhost:' + port,
   basePath: '/',
   securityDefinitions: {
     token: {
@@ -73,3 +73,5 @@ require('./src/routes/events.router.js')(app);
 app.listen(port, () => {
   console.log('Server listening on port: ' + port);
 });
+
+module.exports = app;

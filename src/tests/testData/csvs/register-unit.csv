@@ -1,0 +1,10 @@
+firstname,lastname,email,password,phone,status
+Briango,Wango,bwan2@cs.cmu.edu,password,6261234567,200
+Briango,Wan,bwan2@cs.cmu.edu,,6261234567,422
+Briango,Wan,bwan2@cs.cmu.edu,123,6261234567,422
+Briango,Wan,bwan2@cs.cmu.edu,password,,422
+Briango,Wan,bwan2@cs.cmu.edu,password,123,422
+Briango,Wan,bwan2@cs.cmu.edu,password,12345678901,422
+,Wan,bwan2@cs.cmu.edu,password,6261234567,422
+Briango,,bwan2@cs.cmu.edu,password,6261234567,422
+Briango,Wan,,password,6261234567,422
