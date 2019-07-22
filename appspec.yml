@@ -14,5 +14,5 @@ hooks:
       runas: root
   ApplicationStart:
     - location: codedeploy/run_docker.sh
-      timeout: 30
+      timeout: 120
       runas: root
