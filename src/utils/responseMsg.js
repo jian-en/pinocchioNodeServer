@@ -16,6 +16,11 @@ module.exports.success = function(params) {
 
 // handles validation errors
 module.exports.validationError422 = function(params) {
+  for (let i = 0; i < params.length; i++) {
+    if (('msg' in params[i]) && ('param' in params[i])) {
+      params[i]['msg'] = 'The ' + params[i]['param'] + ' has incorrect format.';
+    }
+  }
   const response = {
     success: false,
     errors: params,
