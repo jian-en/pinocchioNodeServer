@@ -15,6 +15,7 @@ const dev = {
  },
  reactServer: 'http://localhost:3000'
 };
+
 const test = {
  dynamodb: {
    accessKeyId: 'foo',
@@ -30,9 +31,22 @@ const test = {
  }
 };
 
+const awstest = {
+    dynamodb: {
+        region: 'us-east-1',
+    },
+    dynamoPublicEndpoint: 'http://localhost:8020',
+    jwtSecret: 'pinocchioxdata61InTest',
+    mailAuth: {
+        user: 'xxx@gmail.com',
+        password: 'password'
+    },
+    reactServer: 'http://localhost:3000'
+};
 const config = {
   dev,
   test,
+  awstest
 };
 
 module.exports = config[env];

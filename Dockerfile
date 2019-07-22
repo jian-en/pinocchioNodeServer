@@ -9,7 +9,6 @@ COPY package.json .
 COPY server.js .
 COPY src src
 COPY config.sample.js config.js
-COPY entrypoint.sh .
 
 # install packages
 RUN npm install
