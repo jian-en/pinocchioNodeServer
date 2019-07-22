@@ -14,7 +14,7 @@ const dev = {
     password: 'password'
   },
   reactServer: 'http://localhost:3000',
-  swaggerURL: 'http://localhost:3000'
+  swaggerURL: 'localhost:3000'
 };
 
 const test = {
@@ -43,7 +43,7 @@ const awstest = {
     password: 'password'
   },
   reactServer: '',
-  swaggerURL: 'http://3.92.34.83:3010'
+  swaggerURL: '3.92.34.83:3010'
 };
 const config = {
   dev,
