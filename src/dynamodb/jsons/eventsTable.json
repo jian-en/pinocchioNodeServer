@@ -40,6 +40,22 @@
         "ReadCapacityUnits": 5,
         "WriteCapacityUnits": 5
       }
+    },
+    {
+      "IndexName": "eventsIdIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "eventsId",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
     }
   ]
 }

@@ -13,7 +13,11 @@ const dev = {
    user: 'xxx@gmail.com',
    password: 'password'
  },
- reactServer: 'http://localhost:3000'
+ reactServer: 'http://localhost:3000',
+ geocoder: {
+   provider: 'opencage',
+   apiKey: ''
+ }
 };
 const test = {
  dynamodb: {
@@ -27,6 +31,10 @@ const test = {
  mailAuth: {
    user: 'xxx@gmail.com',
    password: 'password'
+ },
+ geocoder: {
+   provider: 'opencage',
+   apiKey: ''
  }
 };
 

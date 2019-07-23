@@ -83,4 +83,39 @@ module.exports = (app) => {
      */
 
   app.get('/api/events', events.validate('auth'), events.findAll);
+
+  /**
+     * @swagger
+     * /api/events/verifyLocation:
+     *  get:
+     *      tags:
+     *          - Events
+     *      name: verify location
+     *      summary: Check if the user is in the event location
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventId
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *          - name: latitude
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *          - name: longitude
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: The latitude and logitude provided is at the event location
+     *          '422':
+     *              description: invalid parameters or latitude/logitude is not at the event
+     *
+     */
+
+  app.post('/api/events/verifyLocation', events.validate('verifyLocation'), events.verifyLocation);
 };
