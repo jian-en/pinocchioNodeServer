@@ -17,6 +17,7 @@ const {reactServer} = require('../../config.js');
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
 const referralHelper = require('./referralHelper');
+const {constants} = require('../utils/constants');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -83,7 +84,7 @@ exports.register = async (req, res, next) => {
           item[key] = req.body[key];
           break;
         case 'referral':
-          if (req.body[key].length != 6) {
+          if (req.body[key].length != constants.REFERRAL_LENGTH) {
             return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
                 errorMsg.messages.REFERRALCODE_INVALID));
           }

@@ -11,6 +11,7 @@ const auth = require('../utils/auth.js');
 
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
+const {constants} = require('../utils/constants');
 
 /**
  * generates random alphanumeric string with length
@@ -67,7 +68,7 @@ exports.getReferral = async (usersId, email) => {
  * @param {dict} response
  */
 async function generateReferral(usersId, email, response) {
-  const referralCode = generateReferralCode(6);
+  const referralCode = generateReferralCode(constants.REFERRAL_LENGTH);
   const payload = {usersId: usersId, referralCode: referralCode};
 
   // referralToken based on JWT
