@@ -21,4 +21,4 @@ docker run --rm -d \
            -v /server/node_modules \
            -p 3010:3000 \
            --name serverContainer \
-           --entrypoint "./entrypoint.sh" server:test
+           --entrypoint "npm" server:test run awstest

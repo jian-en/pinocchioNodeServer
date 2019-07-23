@@ -10,7 +10,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 // load app config
-const {reactServer} = require('./config.js');
+const {reactServer, swaggerURL} = require('./config.js');
 
 // create express app
 const app = express();
@@ -24,7 +24,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API endpoints to handle Pinocchio system routes',
   },
-  host: 'localhost:' + port,
+  host: swaggerURL,
   basePath: '/',
   securityDefinitions: {
     token: {
