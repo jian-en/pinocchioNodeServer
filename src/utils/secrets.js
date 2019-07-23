@@ -5,7 +5,7 @@ const client = new AWS.SecretsManager({region: region});
 module.exports.getKey = async (secretName) => {
   try {
     const data = await client.getSecretValue({SecretId: secretName}).promise();
-    return data.SecretString;
+    return JSON.parse(data.SecretString);
   } catch (e) {
     return null;
   }
