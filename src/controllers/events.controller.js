@@ -42,6 +42,7 @@ exports.validate = (method) => {
       ];
     }
     case 'get': {
+      // TODO: check whether it's attendable
       return [
         check('eventsId').trim().isLength({min: 1}),
       ];
