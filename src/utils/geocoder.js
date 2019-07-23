@@ -13,7 +13,7 @@ const geo = nodeGeocoder(geocoder);
 const RADIUS = 0.3;
 
 module.exports.getGPS = async (address) => {
-  let error = {};
+  let error = [];
   const data = await geo.geocode(address)
       .catch(function(err) {
         error = err;
