@@ -16,6 +16,8 @@ const datetime = require('../utils/datetime');
 const {reactServer} = require('../../config.js');
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
+const referralHelper = require('./referralHelper');
+const {constants} = require('../utils/constants');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -27,7 +29,7 @@ exports.validate = (method) => {
         check('firstname').trim().isLength({min: 1}),
         check('lastname').trim().isLength({min: 1}),
         check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
-        check('referral').trim(),
+        // check('referral').trim(),
         // TODO: check if public key is valid ETH key
         check('publicKey').trim().isLength({min: 1}),
       ];
@@ -65,16 +67,6 @@ exports.register = async (req, res, next) => {
             return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
                 errorMsg.messages.EMAIL_REGISTERED));
           }
-          // check if the domain is valid
-          const validDomains = await dynamoDb.getValidDomains();
-          const requestDomain = email.split('@').pop();
-          if (!validDomains.success) {
-            return res.status(500).json(validDomains);
-          } else if (!validDomains.data.some((e) => e.email == requestDomain)) {
-            return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
-                errorMsg.messages.EMAIL_INVALID_DOMAIN));
-          }
-
           item[key] = req.body[key];
           break;
         case 'password':
@@ -92,18 +84,54 @@ exports.register = async (req, res, next) => {
           item[key] = req.body[key];
           break;
         case 'referral':
-          continue; // TODO update when referral code has been defined
+          if (req.body[key].length != constants.REFERRAL_LENGTH) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
+                errorMsg.messages.REFERRALCODE_INVALID));
+          }
+          const referralsExists = await dynamoDb.getUserReferralCodes(req.body[key]);
+          if (!referralsExists.success) {
+            return res.status(500).json(referralsExists);
+          }
+          const referralToken = referralsExists.data[0].referralToken;
+          const referredBy = referralsExists.data[0].usersId;
+          const validToken = auth.decodeToken(referralToken);
+          if (!validToken) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
+                errorMsg.messages.REFERRALCODE_INVALID));
+          }
+          item['referredBy'] = referredBy;
+          break;
         default:
           item[key] = req.body[key];
       }
     }
   }
-  item.usersId = dynamoDb.generateID();
+
+  // check if the domain is valid only if there's no referral code
+  if (!('referredBy' in item)) {
+    const validDomains = await dynamoDb.getValidDomains();
+    const requestDomain = email.split('@').pop();
+    if (!validDomains.success) {
+      return res.status(500).json(validDomains);
+    } else if (!validDomains.data.some((e) => e.email == requestDomain)) {
+      return res.status(422).json(responseMsg.error(errorMsg.params.Email,
+          errorMsg.messages.EMAIL_INVALID_DOMAIN));
+    }
+  }
+
+  const usersId = dynamoDb.generateID();
+  item.usersId = usersId;
   item.verificationSentAt = datetime.getDatetimeString();
 
   // put into database
   const result = await dynamoDb.putData('usersTable', item);
   if (!result.success) return res.status(500).send(result);
+
+  // get/create referral code
+  const response = await referralHelper.getReferral(usersId, email);
+  if (response.status != 200) {
+    res.status(response.status).json(response.data);
+  }
 
   const payload = {email, sentAt: datetime.getUnixTimestamp()};
   const token = auth.generateToken(payload, '30d');
@@ -197,7 +225,16 @@ exports.getUser = async (req, res, next) => {
   const {token} = req.body;
   const decoded = auth.decodeToken(token);
   if (decoded) {
-    res.json(responseMsg.success({id: decoded.usersId, email: decoded.email}));
+    // get/create referral code
+    const response = await referralHelper.getReferral(decoded.usersId, decoded.email);
+    if (response.status != 200) {
+      res.status(response.status).json(response.data);
+    }
+    res.json(responseMsg.success({
+      id: decoded.usersId,
+      email: decoded.email,
+      referralCode: response.data.referralCode,
+    }));
   } else {
     res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
         errorMsg.messages.TOKEN_INVALID));

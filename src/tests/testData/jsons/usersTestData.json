@@ -27,6 +27,16 @@
                         },
                         "lastname": {
                             "S": "wan"
+                        },
+                        "referral": {
+                            "M": {
+                                "referralCode": {
+                                    "S": "loqlpi"
+                                },
+                                "referralToken": {
+                                    "S": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vyc0lkIjoiMC43NjIxNTkwMzYwNDI1MTQ2IiwicmVmZXJyYWxDb2RlIjoibG9xbHBpIiwiaWF0IjoxNTYzNzYzMzI3LCJleHAiOjE1NjM4NDk3Mjd9.yQie5FZC0WZJy1tMCsCE7YkI1hUn3045bhUtI4_bVDw"
+                                }
+                            }
                         }
                     }
                 }
@@ -57,6 +67,16 @@
                         },
                         "lastname": {
                             "S": "Ketchum"
+                        },
+                        "referral": {
+                            "M": {
+                                "referralCode": {
+                                    "S": "e1eezw"
+                                },
+                                "referralToken": {
+                                    "S": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vyc0lkIjoiMC41ODY3NTMyOTU0NTIxNDQiLCJyZWZlcnJhbENvZGUiOiJlMWVlenciLCJpYXQiOjE1NjM3NjMyMDAsImV4cCI6MTU2Mzg0OTYwMH0.kkSk5x6sUIEkRIKEZoJohbNkD8oRYMDIAnol8h1ritE"
+                                }
+                            }
                         }
                     }
                 }
@@ -84,6 +104,16 @@
                         },
                         "lastname": {
                             "S": "Oak"
+                        },
+                        "referral": {
+                            "M": {
+                                "referralCode": {
+                                    "S": "2gcz39"
+                                },
+                                "referralToken": {
+                                    "S": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vyc0lkIjoiMC41ODY3NTMyOTU0NTIxNDQiLCJyZWZlcnJhbENvZGUiOiIyZ2N6MzkiLCJpYXQiOjE1NjM3NjEwNzIsImV4cCI6MTU2Mzg0NzQ3Mn0.PCjZrxmKrRnZtpy5AV1qL9NzKUbF7yFfEZz61KlojwI"
+                                }
+                            }
                         }
                     }
                 }

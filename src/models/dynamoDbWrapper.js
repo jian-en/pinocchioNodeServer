@@ -9,9 +9,9 @@ const AWS = require('aws-sdk');
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.scanData = async (tableName) => {
+module.exports.scanData = async (tableName, args) => {
   try {
-    const params = {TableName: tableName};
+    const params = {TableName: tableName, ...args};
     const data = await dynamoDb.scan(params).promise();
     return {success: true, data: data.Items};
   } catch (err) {
@@ -60,6 +60,41 @@ module.exports.generateID = () => {
   return Math.random().toString();
 };
 
+module.exports.getUserReferralCode = async (usersId) => {
+  const args = {
+    KeyConditionExpression: 'usersId = :usersid',
+    ExpressionAttributeValues: {':usersid': usersId},
+    ProjectionExpression: 'referralCode, referralToken',
+  };
+  return await this.queryData('usersTable', args);
+};
+
+// create referral code
+module.exports.updateReferralCode = async (usersId, email, referralCode) => {
+  const args = {
+    Key: {usersId, email},
+    UpdateExpression: 'set referralCode = :r',
+    ExpressionAttributeValues: {
+      ':r': referralCode,
+    },
+    ReturnValues: 'UPDATED_NEW',
+  };
+  return await this.updateData('usersTable', args);
+};
+
+// create referral token
+module.exports.updateReferralToken = async (usersId, email, referralToken) => {
+  const args = {
+    Key: {usersId, email},
+    UpdateExpression: 'set referralToken = :r',
+    ExpressionAttributeValues: {
+      ':r': referralToken,
+    },
+    ReturnValues: 'UPDATED_NEW',
+  };
+  return await this.updateData('usersTable', args);
+};
+
 module.exports.getUserEmails = async (email) => {
   const args = {
     IndexName: 'emailIndex',
@@ -83,6 +118,15 @@ module.exports.getUserPublicKeys = async (publicKey) => {
     IndexName: 'publicKeyIndex',
     KeyConditionExpression: 'publicKey= :pk',
     ExpressionAttributeValues: {':pk': publicKey},
+  };
+  return await this.queryData('usersTable', args);
+};
+
+module.exports.getUserReferralCodes = async (referralCode) => {
+  const args = {
+    IndexName: 'referralCodeIndex',
+    KeyConditionExpression: 'referralCode= :rc',
+    ExpressionAttributeValues: {':rc': referralCode},
   };
   return await this.queryData('usersTable', args);
 };
