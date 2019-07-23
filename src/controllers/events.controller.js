@@ -41,6 +41,11 @@ exports.validate = (method) => {
         check('longitude').trim().isLength({min: 1}),
       ];
     }
+    case 'get': {
+      return [
+        check('eventsId').trim().isLength({min: 1}),
+      ];
+    }
   }
 };
 
@@ -141,6 +146,27 @@ exports.verifyLocation = async (req, res, next) => {
     // user is too far away from event
     return res.status(422).json(responseMsg.error(errorMsg.params.LATITUDE,
         errorMsg.messages.EVENT_NOT_AT_LOCATION));
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
+};
+
+exports.get = async (req, res) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+  const {eventsId} = req.body;
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) {
+    return res.status(500).json(eventExists);
+  } else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
+    const ret = {id: event.eventsId, name: event.name, status: event.status};
+    return res.json(responseMsg.success({event: ret}));
   } else {
     // event doesnt exist
     return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,

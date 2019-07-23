@@ -118,4 +118,31 @@ module.exports = (app) => {
      */
 
   app.post('/api/events/verifyLocation', events.validate('verifyLocation'), events.verifyLocation);
+
+  /**
+     * @swagger
+     * /api/events/verifyLocation:
+     *  get:
+     *      tags:
+     *          - Event
+     *      name: get a single event
+     *      summary: Get anevent by its id
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventsId
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: The eventsId provided is some event's id
+     *          '422':
+     *              description: invalid eventsId is given
+     *
+     */
+
+  app.get('/api/event', events.validate('get'), events.get);
 };
