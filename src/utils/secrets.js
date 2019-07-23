@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk'),
-      region = "us-east-1";
+const AWS = require('aws-sdk');
+const region = 'us-east-1';
 const client = new AWS.SecretsManager({region: region});
 
 module.exports.getKey = async (secretName) => {

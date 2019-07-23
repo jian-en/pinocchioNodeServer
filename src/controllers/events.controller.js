@@ -160,7 +160,7 @@ exports.get = async (req, res) => {
   if (!validation.isEmpty()) {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
-  const {eventsId} = req.body;
+  const {eventsId} = req.query;
   const eventExists = await dynamoDb.getEvents(eventsId);
   if (!eventExists.success) {
     return res.status(500).json(eventExists);
