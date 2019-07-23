@@ -5,12 +5,10 @@
 
 const nodeGeocoder = require('node-geocoder');
 const {geocoder} = require('../../config.js');
+const {constants} = require('./constants');
 
 // create geocoder instance
 const geo = nodeGeocoder(geocoder);
-
-// radius is in km to check from event center
-const RADIUS = 0.3;
 
 module.exports.getGPS = async (address) => {
   let error = [];
@@ -38,5 +36,5 @@ module.exports.atLocation = (userLat, userLong, eventLat, eventLong) => {
   // this treats the world as flat
   const dx = Math.abs(eventLong - userLong) * kx;
   const dy = Math.abs(eventLat - userLat) * ky;
-  return Math.sqrt(dx * dx + dy * dy) <= RADIUS;
+  return Math.sqrt(dx * dx + dy * dy) <= constants.RADIUS;
 };

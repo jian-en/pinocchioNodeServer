@@ -13,9 +13,7 @@ const geo = require('../utils/geocoder.js');
 
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
-
-// country to accept addresses
-const COUNTRY_CODE = 'us';
+const {constants} = require('../utils/constants');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -97,7 +95,7 @@ exports.create = async (req, res, next) => {
 
     // check if location matches what was given
     // add to database items
-    if ((COUNTRY_CODE == locationCountryCode) &&
+    if ((constants.COUNTRY_CODE == locationCountryCode) &&
         (requestCity == locationCity) &&
         (requestZipcode == locationZipcode)) {
       item['latitude'] = locations[i].latitude;
