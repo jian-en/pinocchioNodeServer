@@ -15,7 +15,11 @@ const dev = {
     password: 'password'
   },
   reactServer: 'http://localhost:3000',
-  swaggerURL: 'localhost:3000'
+  swaggerURL: 'localhost:3000',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
+  }
 };
 
 const test = {
@@ -30,6 +34,12 @@ const test = {
   mailAuth: {
     user: 'xxx@gmail.com',
     password: 'password'
+  },
+  reactServer: 'http://localhost:3000',
+  swaggerURL: 'localhost:3000',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
   }
 };
 

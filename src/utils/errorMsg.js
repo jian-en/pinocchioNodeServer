@@ -16,6 +16,9 @@ exports.params = {
   PROMOTIONURL: 'promotionUrl',
   PUBLICKEY: 'publicKey',
   REFERRALCODE: 'referralCode',
+  EVENTID: 'eventId',
+  LATITUDE: 'latitude',
+  LONGITUDE: 'longitude',
 };
 
 // error messages
@@ -34,4 +37,7 @@ exports.messages = {
   PUBLICKEY_REGISTERED: 'The publicKey provided is already registered.',
   REFERRALCODE_GENERATE_ERROR: 'Error in generating the referral code',
   REFERRALCODE_INVALID: 'The referral code provided is invalid or expired.',
+  ADDRESS_NOT_FOUND: 'The address given cannot be found',
+  EVENT_NOT_FOUND: 'The event given cannot be found',
+  EVENT_NOT_AT_LOCATION: 'User is too far away from event location',
 };
