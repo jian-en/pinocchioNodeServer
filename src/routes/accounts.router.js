@@ -142,4 +142,31 @@ module.exports = (app) => {
      *
      */
   app.post('/api/accounts/getUser', accounts.getUser);
+
+  /**
+     * @swagger
+     * /api/accounts/resendVerificationEmail:
+     *  post:
+     *      tags:
+     *          - Accounts
+     *      name: email verification code
+     *      summary: resend verification email
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: email
+     *            type: string
+     *            format: email
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: valid email; sent verification email
+     *          '422':
+     *              description: invalid email or email already verified
+     *
+     */
+  app.post('/api/accounts/resendVerificationEmail', accounts.validate('verification'),
+      accounts.resendVerificationEmail);
 };

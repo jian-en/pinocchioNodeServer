@@ -29,7 +29,6 @@ exports.validate = (method) => {
         check('firstname').trim().isLength({min: 1}),
         check('lastname').trim().isLength({min: 1}),
         check('phone').trim().isNumeric().isLength({min: 10, max: 10}),
-        // check('referral').trim(),
         // TODO: check if public key is valid ETH key
         check('publicKey').trim().isLength({min: 1}),
       ];
@@ -38,6 +37,11 @@ exports.validate = (method) => {
       return [
         check('email').isEmail().trim().normalizeEmail(),
         check('password').trim().isLength({min: 8}).isAlphanumeric(),
+      ];
+    }
+    case 'verification': {
+      return [
+        check('email').isEmail().trim().normalizeEmail(),
       ];
     }
   }
@@ -99,6 +103,10 @@ exports.register = async (req, res, next) => {
             return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
                 errorMsg.messages.REFERRALCODE_INVALID));
           }
+          if (validToken.referralCode != req.body[key]) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
+                errorMsg.messages.REFERRALCODE_INVALID));
+          }
           item['referredBy'] = referredBy;
           break;
         default:
@@ -114,7 +122,7 @@ exports.register = async (req, res, next) => {
     if (!validDomains.success) {
       return res.status(500).json(validDomains);
     } else if (!validDomains.data.some((e) => e.email == requestDomain)) {
-      return res.status(422).json(responseMsg.error(errorMsg.params.Email,
+      return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
           errorMsg.messages.EMAIL_INVALID_DOMAIN));
     }
   }
@@ -238,5 +246,43 @@ exports.getUser = async (req, res, next) => {
   } else {
     res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
         errorMsg.messages.TOKEN_INVALID));
+  }
+};
+
+// resend verification email
+exports.resendVerificationEmail = async (req, res, next) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+
+  const {email} = req.body;
+
+  // check whether the email has been used
+  const emailExists = await dynamoDb.getUserEmails(email);
+  if (!emailExists.success) {
+    return res.status(500).json(emailExists);
+  } else if (emailExists.data.length > 0) {
+    // email exists
+    // check if already verified
+    if ('verifiedAt' in emailExists.data[0]) {
+      return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+          errorMsg.messages.ACCOUNT_VERIFIED));
+    }
+    // not verified; resend verification email
+    const payload = {email, sentAt: datetime.getUnixTimestamp()};
+    const token = auth.generateToken(payload, '30d');
+    const url = `${reactServer}/activate-account?token=${token}`;
+    sendMail(
+        email,
+        'Pinocchio - Verification Email',
+        `Click the link to verify your account: ${url}`
+    );
+    res.json(responseMsg.success({'msg': 'Successfully resent verification email.'}));
+  } else {
+    // email does not exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
+        errorMsg.messages.EMAIL_NOT_REGISTERED));
   }
 };
