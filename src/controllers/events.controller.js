@@ -87,6 +87,12 @@ exports.create = async (req, res, next) => {
   }
   // iterate through possible locations
   for (let i = 0; i < locations.length; i++) {
+    // values can be undefined from geo
+    if ((typeof locations[i].city === 'undefined') ||
+        (typeof locations[i].zipcode === 'undefined') ||
+        (typeof locations[i].countryCode === 'undefined')) {
+      continue;
+    }
     const requestCity = req.body.city.toLowerCase();
     const requestZipcode = req.body.zipcode;
     const locationCity = locations[i].city.toLowerCase();
