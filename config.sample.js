@@ -44,7 +44,7 @@ const awstest = {
     user: 'xxx@gmail.com',
     password: 'to-be-populated'
   },
-  reactServer: '',
+  reactServer: 'http://3.92.34.83:3010',
   swaggerURL: '3.92.34.83:3010',
   secretName: 'test/pinocchioNodeServer/aws'
 };
