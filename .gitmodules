@@ -1,5 +1,5 @@
 [submodule "smart_contracts/contracts"]
 	path = smart_contracts/contracts
-	url = git@github.com:jian-en/pinocchioContract.git
+	url = https://github.com/jian-en/pinocchioContract
 	branch = master
 	fetchRecurseSubmodules = true
