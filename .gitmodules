@@ -2,3 +2,4 @@
 	path = smart_contracts/contracts
 	url = https://github.com/jian-en/pinocchioContract
 	branch = master
+	fetchRecurseSubmodules = true
