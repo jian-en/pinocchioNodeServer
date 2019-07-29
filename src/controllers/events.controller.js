@@ -141,6 +141,7 @@ exports.verifyLocation = async (req, res, next) => {
     // event exists
     const eventLat = parseFloat(eventExists.data[0].latitude);
     const eventLong = parseFloat(eventExists.data[0].longitude);
+
     if (geo.atLocation(latitude, longitude, eventLat, eventLong)) {
       return res.json(responseMsg.success({}));
     }
@@ -166,7 +167,10 @@ exports.get = async (req, res) => {
     return res.status(500).json(eventExists);
   } else if (eventExists.data.length > 0) {
     const event = eventExists.data[0];
-    const ret = {id: event.eventsId, name: event.name, status: event.status};
+    const ret = {
+      id: event.eventsId, name: event.name,
+      status: event.status, address: event.address,
+    };
     return res.json(responseMsg.success({event: ret}));
   } else {
     // event doesnt exist
