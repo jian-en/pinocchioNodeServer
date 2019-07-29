@@ -1,10 +1,10 @@
 const web3jsUtil = require("./web3-util");
+const Tx = require("ethereumjs-tx").Transaction; // Sign the transactions
 
 const web3js = web3jsUtil.web3js;
 const contract = web3jsUtil.contract;
 const myAddress = web3jsUtil.myAddress;
 const privateKey = web3jsUtil.privateKey;
-
 
 async function getBalance() {
     const balanceInWei = await web3js.eth.getBalance(myAddress);
