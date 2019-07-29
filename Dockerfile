@@ -5,12 +5,9 @@ RUN npm i npm@latest -g
 WORKDIR /usr/app
 
 # only copy necessary code
-COPY package.json .
-COPY server.js .
-COPY src src
-COPY config.js config.js
+COPY . .
 
 # install packages
-RUN npm install
+RUN npm install --only-production --silent
 
 # run commands are in the docker-compose yml files.
