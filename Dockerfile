@@ -8,7 +8,7 @@ WORKDIR /usr/app
 COPY package.json .
 COPY server.js .
 COPY src src
-COPY config.sample.js config.js
+COPY config.js config.js
 
 # install packages
 RUN npm install

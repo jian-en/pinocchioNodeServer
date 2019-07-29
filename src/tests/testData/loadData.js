@@ -16,78 +16,39 @@ AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB();
 
 /**
- * load user data; this is done by CSV for easier testing/future data manipulation
- * */
-fs.readFile('./src/tests/testData/csvs/userTestData.csv', 'UTF-8', function(err, csv) {
-  if (err) console.log(err);
-  jquerycsv.toObjects(csv, {}, function(err, csvData) {
-    if (err) {
-      console.log(err);
-    }
-    for (let i = 0; i<csvData.length; i++) {
-      const params = {
-        TableName: 'usersTable',
-        Item: {
-          'firstname': {S: csvData[i]['firstname']},
-          'password': {S: csvData[i]['password']},
-          'phone': {S: csvData[i]['phone']},
-          'usersId': {S: csvData[i]['usersId']},
-          'verificationSentAt': {S: csvData[i]['verificationSentAt']},
-          'email': {S: csvData[i]['email']},
-          'lastname': {S: csvData[i]['lastname']},
-          'referralCode': {S: csvData[i]['referralCode']},
-          'referralToken': {S: csvData[i]['referralToken']},
-        },
-      };
-      if (csvData[i]['verifiedAt']) {
-        params.Item.verifiedAt = {S: csvData[i]['verifiedAt']};
+ * Loads test data into dynamoDB
+ * @param {string} filepath to CSV test data
+ * @param {string} tableName what table to insert to in dynamodb
+ */
+function loadTestData(filepath, tableName) {
+  fs.readFile(filepath, 'UTF-8', function(err, csv) {
+    if (err) console.log(err);
+    jquerycsv.toObjects(csv, {}, function(err, csvData) {
+      if (err) {
+        console.log(err);
       }
+      for (let i = 0; i<csvData.length; i++) {
+        const params = {
+          TableName: tableName,
+          Item: {},
+        };
 
-      dynamoDb.putItem(params, function(err, data) {
-        if (err) {
-          console.log('Error putting item in db', err);
-        } else {
-          console.log('Success in inserting user data', data);
+        for (const key in csvData[i]) {
+          if (csvData[i][key] === '') continue;
+          params.Item[key] = {S: csvData[i][key]};
         }
-      });
-    }
-  });
-});
 
-/**
- * load events data
- *  */
-fs.readFile('./src/tests/testData/csvs/eventTestData.csv', 'UTF-8', function(err, csv) {
-  if (err) console.log(err);
-  jquerycsv.toObjects(csv, {}, function(err, csvData) {
-    if (err) {
-      console.log(err);
-    }
-    for (let i = 0; i<csvData.length; i++) {
-      const params = {
-        TableName: 'eventsTable',
-        Item: {
-          'name': {S: csvData[i]['name']},
-          'eventsId': {S: csvData[i]['eventsId']},
-          'organizerId': {S: csvData[i]['organizerId']},
-          'attendees': {S: csvData[i]['attendees']},
-          'type': {S: csvData[i]['type']},
-          'address': {S: csvData[i]['address']},
-          'city': {S: csvData[i]['city']},
-          'zipcode': {S: csvData[i]['zipcode']},
-          'state': {S: csvData[i]['state']},
-          'promotionUrl': {S: csvData[i]['promotionUrl']},
-          'status': {S: csvData[i]['status']},
-        },
-      };
-
-      dynamoDb.putItem(params, function(err, data) {
-        if (err) {
-          console.log('Error putting item in db', err);
-        } else {
-          console.log('Success in inserting user data', data);
-        }
-      });
-    }
+        dynamoDb.putItem(params, function(err, data) {
+          if (err) {
+            console.log(`Error putting item in ${tableName}`, err);
+          } else {
+            console.log(`Success in inserting ${tableName} data`, data);
+          }
+        });
+      }
+    });
   });
-});
+}
+
+loadTestData('./src/tests/testData/csvs/userTestData.csv', 'usersTable');
+loadTestData('./src/tests/testData/csvs/eventTestData.csv', 'eventsTable');

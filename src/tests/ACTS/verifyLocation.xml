@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System name="verifyLocation">
+  <Parameters>
+    <Parameter id="0" name="eventsId" type="1">
+      <values>
+        <value>0.1442598822772001</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+        <invalidValue>0.1442598822772123</invalidValue>
+      </invalidValues>
+    </Parameter>
+    <Parameter id="1" name="latitude" type="1">
+      <values>
+        <value>40.445609</value>
+        <value>40.445610</value>
+        <value>40.445608</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+        <invalidValue>40.345609</invalidValue>
+      </invalidValues>
+    </Parameter>
+    <Parameter id="2" name="longitude" type="1">
+      <values>
+        <value>-79.9489984</value>
+        <value>-79.9489983</value>
+        <value>-79.9489985</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>-79.8489984</invalidValue>
+        <invalidValue>null</invalidValue>
+      </invalidValues>
+    </Parameter>
+  </Parameters>
+  <OutputParameters />
+  <Relations />
+  <Constraints />
+  <Testset doi="2">
+    <Testcase TCNo="0">
+      <Value>1</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445609</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="1">
+      <Value>2</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445609</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="2">
+      <Value>3</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445609</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="3">
+      <Value>4</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445610</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="4">
+      <Value>5</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445610</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="5">
+      <Value>6</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445610</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="6">
+      <Value>7</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445608</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="7">
+      <Value>8</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445608</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="8">
+      <Value>9</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445608</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="9">
+      <Value>10</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445609</Value>
+      <Value>-79.8489984</Value>
+    </Testcase>
+    <Testcase TCNo="10">
+      <Value>11</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445609</Value>
+      <Value>null</Value>
+    </Testcase>
+    <Testcase TCNo="11">
+      <Value>12</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445610</Value>
+      <Value>-79.8489984</Value>
+    </Testcase>
+    <Testcase TCNo="12">
+      <Value>13</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445610</Value>
+      <Value>null</Value>
+    </Testcase>
+    <Testcase TCNo="13">
+      <Value>14</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445608</Value>
+      <Value>-79.8489984</Value>
+    </Testcase>
+    <Testcase TCNo="14">
+      <Value>15</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.445608</Value>
+      <Value>null</Value>
+    </Testcase>
+    <Testcase TCNo="15">
+      <Value>16</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>null</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="16">
+      <Value>17</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>null</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="17">
+      <Value>18</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>null</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="18">
+      <Value>19</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.345609</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="19">
+      <Value>20</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.345609</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="20">
+      <Value>21</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>40.345609</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="21">
+      <Value>22</Value>
+      <Value>null</Value>
+      <Value>40.445609</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="22">
+      <Value>23</Value>
+      <Value>null</Value>
+      <Value>40.445610</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="23">
+      <Value>24</Value>
+      <Value>null</Value>
+      <Value>40.445608</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+    <Testcase TCNo="24">
+      <Value>25</Value>
+      <Value>0.1442598822772123</Value>
+      <Value>40.445609</Value>
+      <Value>-79.9489984</Value>
+    </Testcase>
+    <Testcase TCNo="25">
+      <Value>26</Value>
+      <Value>0.1442598822772123</Value>
+      <Value>40.445610</Value>
+      <Value>-79.9489983</Value>
+    </Testcase>
+    <Testcase TCNo="26">
+      <Value>27</Value>
+      <Value>0.1442598822772123</Value>
+      <Value>40.445608</Value>
+      <Value>-79.9489985</Value>
+    </Testcase>
+  </Testset>
+  <Header>
+    <Value />
+    <Value>EVENTSID</Value>
+    <Value>LATITUDE</Value>
+    <Value>LONGITUDE</Value>
+  </Header>
+  <Stat-Data>
+    <ExecutionTime>0.335</ExecutionTime>
+    <MaxDomainSize>3</MaxDomainSize>
+    <MinDomainSize>1</MinDomainSize>
+    <TotalNoOfCombination>43</TotalNoOfCombination>
+    <TotalNoOfTests>27</TotalNoOfTests>
+    <Algorithm>IPOG</Algorithm>
+  </Stat-Data>
+</System>
+
