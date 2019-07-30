@@ -47,7 +47,7 @@ exports.validate = (method) => {
 // get all events based on current userId
 exports.findAll = async (req, res, next) => {
   const result = await dynamoDb.getEventsOrganizer(req.usersId);
-  res.json(result);
+  return res.json(result);
 };
 
 // create an event
@@ -61,7 +61,7 @@ exports.create = async (req, res, next) => {
   // check for attendee count
   const attendees = parseInt(req.body.attendees);
   if (!attendees || attendees < 10 || attendees > 100000) {
-    res.status(422).json(responseMsg.error(errorMsg.params.ATTENDEES,
+    return res.status(422).json(responseMsg.error(errorMsg.params.ATTENDEES,
         errorMsg.messages.ATTENDEE_COUNT_INVALID));
   }
 
@@ -129,7 +129,7 @@ exports.create = async (req, res, next) => {
 
   const result = await dynamoDb.putData('eventsTable', item);
   if (!result.success) return res.json(result);
-  res.json(responseMsg.success({}));
+  return res.json(responseMsg.success({}));
 };
 
 // verify if attendee is at the event
