@@ -23,7 +23,6 @@ chai.use(chaiHttp);
 // extends objects with should for easier assertions
 chai.should();
 
-// describe('Events', () => {
 /**
    * events tests
    * a very basic test to test an invalid token.
@@ -59,7 +58,6 @@ function getEventsInvalidTokenTest() {
 }
 
 /**
-   * login unit tests
    * loads login-unit.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    * this is repeated to get a valid token for events tests
@@ -150,7 +148,6 @@ function createEventsTestsRequest(csvRow, validToken) {
               res.body['success'].should.be.false;
             }
           })
-          // })
           .catch(function(err) {
             console.log('caught create events error');
             console.log(err);
@@ -193,7 +190,7 @@ function getEventsTests(validToken, organizerId) {
               const expectedResult = getEventsData[requestResult['eventsId']];
               for (const key in expectedResult) {
                 if (expectedResult.hasOwnProperty(key)) {
-                  equestResult[key].should.equal(expectedResult[key]);
+                  requestResult[key].should.equal(expectedResult[key]);
                 }
               }
             }
@@ -273,4 +270,3 @@ function verifyEventLocationTestsRequest(csvRow) {
 getEventsInvalidTokenTest();
 createEventsAndGetEventsTest();
 verifyEventLocationTests();
-// }); // events

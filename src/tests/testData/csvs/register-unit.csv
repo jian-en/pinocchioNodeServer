@@ -1,12 +1,12 @@
-firstname,lastname,email,password,phone,publicKey,status
-Brian,Wan,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,200
-Brian,Wan,,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,briankwan@us.ibm.com,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,password,,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,password,123,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,password,12345678901,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,123,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-,Wan,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
-Brian,Wan,bwan2@cs.cmu.edu,password,6261234567,,422
+description,firstname,lastname,email,password,phone,publicKey,status
+valid - account registration test,Brian,Wan,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,200
+invalid - empty email test,Brian,Wan,,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - email not in trusted domain test,Brian,Wan,briankwan@us.ibm.com,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - empty phone test,Brian,Wan,bwan2@cs.cmu.edu,password,,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - phone string too short test,Brian,Wan,bwan2@cs.cmu.edu,password,123,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - phone string too long test,Brian,Wan,bwan2@cs.cmu.edu,password,12345678901,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - empty password test,Brian,Wan,bwan2@cs.cmu.edu,,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - password string too short test,Brian,Wan,bwan2@cs.cmu.edu,123,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - empty firstname test,,Wan,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - empty lastname test,Brian,,bwan2@cs.cmu.edu,password,6261234567,0xD6d9ab7A21BD2fD053b0b16cba6cB33374FcE18A,422
+invalid - empty public key test,Brian,Wan,bwan2@cs.cmu.edu,password,6261234567,,422
