@@ -1,10 +1,7 @@
 description,name,attendees,type,address,city,zipcode,state,token,promotionUrl,status
 valid - lecture 10 attendees test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-valid - lecture 100000 attendees test,Bass speech,100000,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-valid - speech 10 attendees test,Bass speech,10,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
 valid - speech 100000 attendees test,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
 valid - conference 10 attendees test,Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-valid - conference 100000 attendees test,Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
 invalid - empty type test,Bass speech,10,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
 invalid - empty type test 2,Bass speech,100000,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
 invalid - 9 attendees test,Bass speech,9,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
