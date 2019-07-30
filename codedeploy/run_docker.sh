@@ -15,15 +15,8 @@ if [ "$(docker ps -q -f name=serverContainer)" ]; then
     docker rm -f serverContainer
 fi
 
-if [ ! "$(docker network -q -f name=internal)" ]; then
-    # remove old running client container
-    docker network create internal
-fi
-
-
 # start new server container
 docker run --rm -d \
-           -p 3010:3000 \
            --name serverContainer \
-           --network internal \
+           --network host \
            --entrypoint "npm" server:test run awstest

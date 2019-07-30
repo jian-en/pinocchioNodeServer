@@ -15,7 +15,7 @@ const dev = {
     password: 'password'
   },
   reactServer: 'http://localhost:3000',
-  swaggerURL: 'localhost:3000',
+  swaggerURL: 'localhost:3010',
   // SmartContract related
   providerURI: 'http://127.0.0.1:7545',
   publicKey: '0x976bcD111D081c50E70D8e51f27E1E08782E73cD',
@@ -53,7 +53,7 @@ const awstest = {
   swaggerURL: '3.92.34.83:3010',
   secretName: 'test/pinocchioNodeServer/aws',
   // SmartContract Related
-  providerURI: 'http://ganacheContainer:8545',
+  providerURI: 'http://3.92.34.83:8545',
   publicKey: '0xad9fcf012336038cf8c7202fecd939b42f900890',
   contractAddress: '0x485FBDA4D82F6b69ef4898a83761C83E24759633',
   contractAbi: './contracts/test/BallotManager.json',
