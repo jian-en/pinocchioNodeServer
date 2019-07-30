@@ -14,4 +14,4 @@ COPY package.json /app/package.json
 
 COPY . .
 
-RUN npm install --only=production --silent
+RUN npm install --silent
