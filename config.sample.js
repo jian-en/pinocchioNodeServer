@@ -49,7 +49,7 @@ const awstest = {
     user: 'xxx@gmail.com',
     password: 'to-be-populated'
   },
-  reactServer: 'http://3.92.34.83:3010',
+  reactServer: 'http://3.92.34.83:3000',
   swaggerURL: '3.92.34.83:3010',
   secretName: 'test/pinocchioNodeServer/aws',
   // SmartContract Related
