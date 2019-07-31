@@ -131,11 +131,20 @@ module.exports.getUserReferralCodes = async (referralCode) => {
   return await this.queryData('usersTable', args);
 };
 
-module.exports.getEvents = async (organizerId) => {
+module.exports.getEventsOrganizer = async (organizerId) => {
   const args = {
     IndexName: 'organizerIdIndex',
     KeyConditionExpression: 'organizerId= :oid',
     ExpressionAttributeValues: {':oid': organizerId},
+  };
+  return await this.queryData('eventsTable', args);
+};
+
+module.exports.getEvents = async (eventsId) => {
+  const args = {
+    IndexName: 'eventsIdIndex',
+    KeyConditionExpression: 'eventsId= :eid',
+    ExpressionAttributeValues: {':eid': eventsId},
   };
   return await this.queryData('eventsTable', args);
 };

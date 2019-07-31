@@ -40,3 +40,7 @@ Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipe
 Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
 Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
 Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+FTB conference,10,conference,323 S Mission Dr,San Gabriel,91776,PA,valid,https://factoryteabar.com,422
+FTB conference,10,conference,123 Fake Street,San Gabriel,91776,CA,valid,https://factoryteabar.com,422
+FTB conference,10,conference,323 S Mission Dr,Arcadia,91776,CA,valid,https://factoryteabar.com,422
+FTB conference,10,conference,323 S Mission Dr,San Gabriel,91006,CA,valid,https://factoryteabar.com,422

@@ -15,6 +15,10 @@ const dev = {
     password: 'password'
   },
   reactServer: 'http://localhost:3000',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
+  },
   swaggerURL: 'localhost:3010',
   // SmartContract related
   providerURI: 'http://127.0.0.1:7545',
@@ -36,6 +40,12 @@ const test = {
   mailAuth: {
     user: 'xxx@gmail.com',
     password: 'password'
+  },
+  reactServer: 'http://localhost:3000',
+  swaggerURL: 'localhost:3000',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
   }
 };
 
