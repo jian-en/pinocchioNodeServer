@@ -97,7 +97,7 @@ module.exports = (app) => {
      *      consumes:
      *          - application/x-www-form-urlencoded
      *      parameters:
-     *          - name: eventId
+     *          - name: eventsId
      *            type: string
      *            minLength: 1
      *            in: formData
