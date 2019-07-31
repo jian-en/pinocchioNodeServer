@@ -10,14 +10,13 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 // jwt
 const auth = require('../utils/auth.js');
-const {sendMail} = require('../utils/mailer');
 
 const datetime = require('../utils/datetime');
-const {reactServer} = require('../../config.js');
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
 const referralHelper = require('./referralHelper');
 const {constants} = require('../utils/constants');
+const {sendVerificationEmail} = require('./emailHelper');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -117,7 +116,7 @@ exports.register = async (req, res, next) => {
 
   // check if the domain is valid only if there's no referral code
   if (!('referredBy' in item)) {
-    const validDomains = await dynamoDb.getValidDomains();
+    const validDomains = await dynamoDb.getUser('validDomains');
     const requestDomain = email.split('@').pop();
     if (!validDomains.success) {
       return res.status(500).json(validDomains);
@@ -141,14 +140,7 @@ exports.register = async (req, res, next) => {
     res.status(response.status).json(response.data);
   }
 
-  const payload = {email, sentAt: datetime.getUnixTimestamp()};
-  const token = auth.generateToken(payload, '30d');
-  const url = `${reactServer}/activate-account?token=${token}`;
-  sendMail(
-      req.body.email,
-      'Pinocchio - Verification Email',
-      `Click the link to verify your account: ${url}`
-  );
+  sendVerificationEmail(email);
   res.send(result);
 };
 
@@ -270,16 +262,7 @@ exports.resendVerificationEmail = async (req, res, next) => {
       return res.status(422).json(responseMsg.error(errorMsg.params.EMAIL,
           errorMsg.messages.ACCOUNT_VERIFIED));
     }
-    // not verified; resend verification email
-    const payload = {email, sentAt: datetime.getUnixTimestamp()};
-    const token = auth.generateToken(payload, '30d');
-    const url = `${reactServer}/activate-account?token=${token}`;
-    // TODO: D.R.Y. Same as the sendMail in register API
-    sendMail(
-        email,
-        'Pinocchio - Verification Email',
-        `Click the link to verify your account: ${url}`
-    );
+    sendVerificationEmail(email);
     res.json(responseMsg.success({'msg': 'Successfully resent verification email.'}));
   } else {
     // email does not exist

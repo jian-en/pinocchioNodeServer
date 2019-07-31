@@ -19,6 +19,7 @@ exports.params = {
   EVENTID: 'eventId',
   LATITUDE: 'latitude',
   LONGITUDE: 'longitude',
+  ORGANIZERID: 'organizerId',
 };
 
 // error messages
@@ -40,4 +41,5 @@ exports.messages = {
   ADDRESS_NOT_FOUND: 'The address given cannot be found',
   EVENT_NOT_FOUND: 'The event given cannot be found',
   EVENT_NOT_AT_LOCATION: 'User is too far away from event location',
+  ORGANIZERID_NOT_FOUND: 'Organizer Id given cannot be found',
 };
