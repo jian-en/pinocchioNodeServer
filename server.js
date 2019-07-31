@@ -1,7 +1,7 @@
 /*
 server.js
 
-starts server on port 3000
+starts server on port 3010
 */
 
 const express = require('express');
@@ -14,7 +14,7 @@ const {reactServer, swaggerURL} = require('./config.js');
 
 // create express app
 const app = express();
-const portNumber = 3000;
+const portNumber = 3010;
 const port = process.env.PORT || portNumber;
 
 // swagger definition
