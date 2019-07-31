@@ -21,5 +21,6 @@ module.exports = {
     web3js: web3js,
     contract: contract,
     myAddress: myAddress,
+    contractAddress: contractAddress,
     privateKey: privateKey
 };
