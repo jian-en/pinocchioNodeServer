@@ -91,8 +91,24 @@ exports.create = async (req, res, next) => {
     return res.status(422).json(responseMsg.error(errorMsg.params.ADDRESS,
         errorMsg.messages.ADDRESS_NOT_FOUND));
   }
+
   // iterate through possible locations
   for (let i = 0; i < locations.length; i++) {
+    // values can be undefined from geo
+    if ((typeof locations[i].city === 'undefined') ||
+        (typeof locations[i].zipcode === 'undefined') ||
+        (typeof locations[i].countryCode === 'undefined') ||
+        (typeof locations[i].state === 'undefined')) {
+      continue;
+    }
+
+    // convert state to full name
+    let requestState = req.body.state.toLowerCase();
+    const locationState = locations[i].state.toLowerCase();
+    if (requestState.length == 2) {
+      requestState = constants.STATES[requestState].toLowerCase();
+    }
+
     const requestCity = req.body.city.toLowerCase();
     const requestZipcode = req.body.zipcode;
     const locationCity = locations[i].city.toLowerCase();
@@ -103,7 +119,8 @@ exports.create = async (req, res, next) => {
     // add to database items
     if ((constants.COUNTRY_CODE == locationCountryCode) &&
         (requestCity == locationCity) &&
-        (requestZipcode == locationZipcode)) {
+        (requestZipcode == locationZipcode) &&
+        (requestState == locationState)) {
       item['latitude'] = locations[i].latitude;
       item['longitude'] = locations[i].longitude;
       break;

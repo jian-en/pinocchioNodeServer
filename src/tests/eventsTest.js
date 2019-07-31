@@ -236,7 +236,66 @@ describe('Events', () => {
     }); // describe
   }
 
+  /**
+   * verify event location unit tests
+   * loads verifyLocation-unit.csv that has combinations of valid/invalid tests
+   * this csv file was created using ACTS.
+   */
+  function verifyEventLocationTests() {
+    describe('events verify location unit tests', function() {
+      fs.readFile('./src/tests/testData/csvs/verifyLocation-unit.csv', 'UTF-8', function(err, csv) {
+        if (err) console.log(err);
+        jquerycsv.toObjects(csv, {}, function(err, csvData) {
+          if (err) {
+            console.log(err);
+          }
+          // async to get each csvRow and reuse the describe/it
+          async.each(csvData, function(csvRow, callback) {
+            describe('POST /api/events/verifyLocation', () =>{
+              it('verify event location unit tests', (done) => {
+                // current test request body
+                if (DEBUG) console.log(csvRow);
+                const status = parseInt(csvRow.status);
+
+                // send the request
+                chai.request(app)
+                    .post('/api/events/verifyLocation')
+                    .set('content-type', 'application/x-www-form-urlencoded')
+                    .type('form')
+                    .send(`eventsId=${csvRow.eventsId}`)
+                    .send(`latitude=${csvRow.latitude}`)
+                    .send(`longitude=${csvRow.longitude}`)
+                    .end(function(err, res, body) {
+                      if (err) done(err);
+                      else {
+                        if (DEBUG) {
+                          // current test response; console logs for debugging
+                          console.log('POST /api/events/verifyLocation response: ' + res.text);
+                          console.log(res.status + ' ' + status);
+                          console.log(res.body);
+                        }
+
+                        // assertions
+                        res.should.have.status(status);
+                        res.body.should.be.a('object');
+                        if (status == 200) {
+                          res.body['success'].should.be.true;
+                        } else {
+                          res.body['success'].should.be.false;
+                        }
+                      }
+                      done();
+                    });
+              }); // it
+            }); // describe
+          });
+        });
+      }); // fs
+    });
+  }
+
   // run tests
   getEventsInvalidTokenTest();
   createEventsAndGetEventsTest();
+  verifyEventLocationTests();
 }); // events

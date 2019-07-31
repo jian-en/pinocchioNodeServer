@@ -1,16 +1,17 @@
+# base image
 FROM node:10-alpine
 
-RUN npm i npm@latest -g
+# set working directory
+WORKDIR /app
 
-WORKDIR /usr/app
+# install dependencies
+RUN apk add --update alpine-sdk
+RUN apk --no-cache add --virtual native-deps \
+  g++ gcc libgcc libstdc++ linux-headers make python
 
-# only copy necessary code
-COPY package.json .
-COPY server.js .
-COPY src src
-COPY config.sample.js config.js
+# install app dependencies
+COPY package.json /app/package.json
 
-# install packages
-RUN npm install
+COPY . .
 
-# run commands are in the docker-compose yml files.
+RUN npm install --silent
