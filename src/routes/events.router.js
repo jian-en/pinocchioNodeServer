@@ -97,6 +97,7 @@ module.exports = (app) => {
      *      consumes:
      *          - application/x-www-form-urlencoded
      *      parameters:
+     *          - name: eventId
      *          - name: eventsId
      *            type: string
      *            minLength: 1
@@ -121,12 +122,12 @@ module.exports = (app) => {
 
   /**
      * @swagger
-     * /api/events/verifyLocation:
+     * /api/event:
      *  get:
      *      tags:
      *          - Event
      *      name: get a single event
-     *      summary: Get anevent by its id
+     *      summary: Get an event by its id
      *      produces:
      *          - application/json
      *      consumes:
@@ -135,7 +136,7 @@ module.exports = (app) => {
      *          - name: eventsId
      *            type: string
      *            minLength: 1
-     *            in: formData
+     *            in: query
      *      responses:
      *          '200':
      *              description: The eventsId provided is some event's id
