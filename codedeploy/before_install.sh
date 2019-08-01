@@ -10,6 +10,7 @@ mkdir /server
 
 # remove unused docker volumes
 docker volume prune -f
+docker network prune -f
 
 # remove dangling images
-docker images purge
+docker image prune -af
