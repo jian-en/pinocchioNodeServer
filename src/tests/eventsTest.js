@@ -58,13 +58,13 @@ function getEventsInvalidTokenTest() {
 }
 
 /**
-   * loads login-unit.csv that has combinations of valid/invalid tests
+   * loads login-tests.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    * this is repeated to get a valid token for events tests
    */
 function createEventsAndGetEventsTest() {
   describe('createEventsAndGetEventsTest', function() {
-    const loginCsvContent = csv.loads('./src/tests/testData/csvs/login-unit.csv');
+    const loginCsvContent = csv.loads('./src/tests/testData/csvs/login-tests.csv');
     for (let i=0; i<loginCsvContent.length; i++) {
       const userRow = loginCsvContent[i];
 
@@ -85,13 +85,13 @@ function createEventsAndGetEventsTest() {
 
 /**
    * create event tests
-   * loads eventsCreate-unit.csv that has combinations of valid/invalid tests
+   * loads eventsCreate-tests.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    * @param {string} validToken
    */
 function createEventsTests(validToken) {
   describe('create events tests', () => {
-    const createEventsCsvContent = csv.loads('./src/tests/testData/csvs/eventsCreate-unit.csv');
+    const createEventsCsvContent = csv.loads('./src/tests/testData/csvs/eventsCreate-tests.csv');
 
     // run events tests
     for (let j=0; j<createEventsCsvContent.length; j++) {
@@ -206,12 +206,13 @@ function getEventsTests(validToken, organizerId) {
 
 /**
    * verify location tests
-   * loads verifyLocation-unit.csv that has combinations of valid/invalid tests
+   * loads verifyLocation-tests.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    */
 function verifyEventLocationTests() {
   describe('events verify location tests', () => {
-    const verifyLocationCsvContent = csv.loads('./src/tests/testData/csvs/verifyLocation-unit.csv');
+    const verifyLocationCsvContent = csv.loads(
+        './src/tests/testData/csvs/verifyLocation-tests.csv');
 
     // run verify location tests
     for (let i=0; i<verifyLocationCsvContent.length; i++) {
@@ -266,7 +267,69 @@ function verifyEventLocationTestsRequest(csvRow) {
   }); // describe
 }
 
+/**
+ * update event status tests
+ * loads eventStatus-tests.csv that has combinations of valid/invalid tests
+ * this csv file was created using ACTS.
+ */
+function updateEventStatusTest() {
+  describe('update event status tests', () => {
+    const eventStatusCsvContent = csv.loads('./src/tests/testData/csvs/eventStatus-tests.csv');
+
+    // run events status tests
+    for (let j=0; j<eventStatusCsvContent.length; j++) {
+      const csvRow = eventStatusCsvContent[j];
+      updateEventStatusTestRequest(csvRow);
+    }
+  });
+}
+
+/**
+   * This helper runs each update event status test
+   * @param {dictionary} csvRow req body information
+   */
+function updateEventStatusTestRequest(csvRow) {
+  describe('POST /api/events', () =>{
+    it(csvRow.description, async () => {
+      // current test request body
+      if (DEBUG) console.log(csvRow);
+      const status = parseInt(csvRow.status);
+
+      // send the request
+      return await chai.request(app)
+          .post('/api/events/status')
+          .set('content-type', 'application/x-www-form-urlencoded')
+          .type('form')
+          .send(`eventsId=${csvRow.eventsId}`)
+          .send(`eventStatus=${csvRow.eventStatus}`)
+          .then(function(res) {
+            if (DEBUG) {
+              // current test response; console logs for debugging
+              console.log('POST /api/events/status response: ' + res.text);
+              console.log(res.status + ' ' + status);
+              console.log(res.body);
+            }
+
+            // assertions
+            res.should.have.status(status);
+            res.body.should.be.a('object');
+            if (status == 200) {
+              res.body['success'].should.be.true;
+            } else {
+              res.body['success'].should.be.false;
+            }
+          })
+          .catch(function(err) {
+            console.log('caught update event status error');
+            console.log(err);
+            throw err;
+          });
+    }); // it
+  }); // describe
+}
+
 // run tests
 getEventsInvalidTokenTest();
 createEventsAndGetEventsTest();
 verifyEventLocationTests();
+updateEventStatusTest();

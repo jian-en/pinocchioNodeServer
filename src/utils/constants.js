@@ -67,7 +67,7 @@ exports.constants = {
   },
 };
 
-exports.eventStatus = {
+exports.eventStatuses = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',

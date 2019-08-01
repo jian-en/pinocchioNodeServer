@@ -13,7 +13,7 @@ const geo = require('../utils/geocoder.js');
 
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
-const {constants, eventStatus} = require('../utils/constants');
+const {constants, eventStatuses} = require('../utils/constants');
 const {sendEventStatusEmail} = require('./emailHelper');
 
 // validate POST body contents
@@ -45,7 +45,7 @@ exports.validate = (method) => {
     case 'status': {
       return [
         check('eventsId').trim().isLength({min: 1}),
-        check('status').trim().isLength({min: 1}),
+        check('eventStatus').trim().isLength({min: 1}),
       ];
     }
   }
@@ -78,11 +78,18 @@ exports.create = async (req, res, next) => {
     eventsId: dynamoDb.generateID(),
     date: req.body.date,
     organizerId: req.usersId,
-    eventStatus: eventStatus.PENDING,
+    eventStatus: eventStatuses.PENDING,
   };
 
-  // build address
-  const gpsResults = await geo.getGPS(req.body.address);
+  // build address; retry 3 times since gps can be undefined in API
+  let retries = 0;
+  let gpsResults = await geo.getGPS(req.body.address);
+  while (!gpsResults.success || gpsResults.data == 0) {
+    if (retries == 2) break;
+    gpsResults = await geo.getGPS(req.body.address);
+    retries += 1;
+  }
+
   if (!gpsResults.success) {
     // error has occurred in getting geocoder GPS
     return res.status(500).json(gpsResults);
@@ -180,11 +187,11 @@ exports.status = async (req, res, next) => {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
 
-  const {eventsId, status} = req.body;
-  const validStatuses = Object.values(eventStatus);
-  if (validStatuses.indexOf(status) == -1) {
-    return res.status(422).json(responseMsg.error(errorMsg.params.STATUS,
-        errorMsg.messages.STATUS_INVALID));
+  const {eventsId, eventStatus} = req.body;
+  const validStatuses = Object.values(eventStatuses);
+  if (validStatuses.indexOf(eventStatus) == -1) {
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTSTATUS,
+        errorMsg.messages.EVENTSTATUS_INVALID));
   }
 
   // check if event exists
@@ -201,11 +208,11 @@ exports.status = async (req, res, next) => {
       const userEmail = userExists.data[0].email;
 
       // update event status
-      const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, status);
+      const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, eventStatus);
       if (!updateEvent.success) return res.status(500).json(updateEvent);
 
       // send email to organizer
-      sendEventStatusEmail(userEmail, eventName, status);
+      sendEventStatusEmail(userEmail, eventName, eventStatus);
       return res.json(responseMsg.success({}));
     } else {
       // user doesnt exist

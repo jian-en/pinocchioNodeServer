@@ -20,7 +20,7 @@ exports.params = {
   LATITUDE: 'latitude',
   LONGITUDE: 'longitude',
   ORGANIZERID: 'organizerId',
-  STATUS: 'status',
+  EVENTSTATUS: 'eventStatus',
 };
 
 // error messages
@@ -43,5 +43,5 @@ exports.messages = {
   EVENT_NOT_FOUND: 'The event given cannot be found',
   EVENT_NOT_AT_LOCATION: 'User is too far away from event location',
   ORGANIZERID_NOT_FOUND: 'Organizer Id given cannot be found',
-  STATUS_INVALID: 'Status must be accept, reject, or pending',
+  EVENTSTATUS_INVALID: 'Event status must be approved, rejected, or pending',
 };
