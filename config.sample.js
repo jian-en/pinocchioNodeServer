@@ -53,7 +53,11 @@ const awstest = {
     password: 'password'
   },
   reactServer: '',
-  swaggerURL: '3.92.34.83:3010'
+  swaggerURL: '3.92.34.83:3010',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
+  }
 };
 const config = {
   dev,
