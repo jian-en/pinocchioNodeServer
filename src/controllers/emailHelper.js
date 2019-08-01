@@ -23,8 +23,8 @@ module.exports.sendEventStatusEmail = (email, name, status) => {
   sendMail(
       email,
       `Pinocchio - Your event is ${status}`,
-      `Your event, ${name}, status:\
-       \n ${eventMessage[status]} \
+      `Your event, ${name}, status:
+       \n ${eventMessage[status]}
        \n Best,\nPinocchio`
   );
 };

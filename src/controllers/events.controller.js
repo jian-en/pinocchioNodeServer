@@ -181,6 +181,11 @@ exports.status = async (req, res, next) => {
   }
 
   const {eventsId, status} = req.body;
+  const validStatuses = Object.values(eventStatus);
+  if (validStatuses.indexOf(status) == -1) {
+    return res.status(422).json(responseMsg.error(errorMsg.params.STATUS,
+        errorMsg.messages.STATUS_INVALID));
+  }
 
   // check if event exists
   const eventExists = await dynamoDb.getEvents(eventsId);
