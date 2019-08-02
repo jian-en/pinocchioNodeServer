@@ -226,7 +226,12 @@ exports.login = async (req, res, next) => {
   const payload = {usersId: user.usersId, email: user.email};
   const token = auth.generateToken(payload);
   if (token) {
-    res.json(responseMsg.success({token, id: user.usersId, email: user.email}));
+    res.json(responseMsg.success({
+      token,
+      id: user.usersId,
+      email: user.email,
+      referralCode: response.data.referralCode,
+    }));
   } else {
     res.status(500).json(responseMsg.error(errorMsg.params.TOKEN,
         errorMsg.messages.TOKEN_SERVER_ERROR));
