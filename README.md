@@ -1,4 +1,4 @@
-## Pinocchio server 
+## Pinocchio server
 
 Pinocchio server in node.js. This server will handle backend requests and serve the website for users to visit.
 
