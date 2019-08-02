@@ -52,8 +52,7 @@ These tests run boundary unit tests created from CSV files from ACTS tool. This 
                  by the local blockchain
     * privateKey: the contract owner's private key
     * contractAddress: get this address when you deploy the smart contract
-        - When you migrate the smart contract, you can get the address in the log
-        - Pls refer to PinocchioDapp on how to migrate the smart contract locally
+        - Migrate the smart contract using `truffle migrate --reset --network development_gui` (based on your environment), and input the address from the log into contractAddress
     * contractAbi: get the smart contract json description file, refer to the Dapp repo
         - When you compile the smart contract, it will generate the smart contract abi
         files under a folder called `local`
