@@ -230,7 +230,7 @@ exports.login = async (req, res, next) => {
       token,
       id: user.usersId,
       email: user.email,
-      referralCode: response.data.referralCode,
+      referralCode: user.referralCode,
     }));
   } else {
     res.status(500).json(responseMsg.error(errorMsg.params.TOKEN,
