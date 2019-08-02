@@ -8,6 +8,7 @@ const config = require('../../../config.js');
 const AWS = require('aws-sdk');
 const jquerycsv = require('jquery-csv');
 const fs = require('fs');
+const ballots = require('../../../smart_contracts/ballots');
 
 // talk directly to the database rather than docker routing.
 config['dynamodb']['endpoint'] = config['dynamoPublicEndpoint'];
@@ -35,6 +36,18 @@ function loadTestData(filepath, tableName) {
 
         for (const key in csvData[i]) {
           if (csvData[i][key] === '') continue;
+          // load into smart contract
+          if (key == 'publicKey') {
+            ballots.addOrganizer(csvData[i][key])
+                .then((res) =>{
+                  console.log('successfully added organizer');
+                })
+                .catch((err) => {
+                  console.log(csvData[i][key]);
+                  console.log(err.message);
+                });
+          }
+          // build dynamo
           params.Item[key] = {S: csvData[i][key]};
         }
 

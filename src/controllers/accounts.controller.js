@@ -10,6 +10,8 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 // jwt
 const auth = require('../utils/auth.js');
+// smart contract
+const ballots = require('../../smart_contracts/ballots');
 
 const datetime = require('../utils/datetime');
 const responseMsg = require('../utils/responseMsg');
@@ -181,7 +183,14 @@ exports.activate = async (req, res, next) => {
   // update the user as verified
   ret = await dynamoDb.updateVerified(user.usersId, email, datetime.getDatetimeString());
   if (!ret.success) return res.status(500).json(ret);
-  res.json(responseMsg.success({}));
+
+  // add organizer to smart contract
+  ballots.addOrganizer(user.usersId)
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+
+  return res.json(responseMsg.success({}));
 };
 
 // log into an account
@@ -218,9 +227,9 @@ exports.login = async (req, res, next) => {
   const payload = {usersId: user.usersId, email: user.email};
   const token = auth.generateToken(payload);
   if (token) {
-    res.json(responseMsg.success({token, id: user.usersId, email: user.email}));
+    return res.json(responseMsg.success({token, id: user.usersId, email: user.email}));
   } else {
-    res.status(500).json(responseMsg.error(errorMsg.params.TOKEN,
+    return res.status(500).json(responseMsg.error(errorMsg.params.TOKEN,
         errorMsg.messages.TOKEN_SERVER_ERROR));
   }
 };

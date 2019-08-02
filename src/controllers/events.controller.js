@@ -10,6 +10,8 @@ const {check, validationResult} = require('express-validator');
 const auth = require('../utils/auth.js');
 // geocoder
 const geo = require('../utils/geocoder.js');
+// smart contract
+const ballots = require('../../smart_contracts/ballots');
 
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
@@ -46,7 +48,7 @@ exports.validate = (method) => {
       return [
         check('eventsId').trim().isLength({min: 1}),
         check('eventStatus').trim().isLength({min: 1}),
-       ];
+      ];
     }
     case 'get': {
       // TODO: check whether it's attendable
@@ -187,28 +189,28 @@ exports.verifyLocation = async (req, res, next) => {
 };
 
 exports.get = async (req, res) => {
-    // check whether inputs are valid
-    const validation = validationResult(req);
-    if (!validation.isEmpty()) {
-      return res.status(422).json(responseMsg.validationError422(validation.errors));
-    }
-    const {eventsId} = req.query;
-    const eventExists = await dynamoDb.getEvents(eventsId);
-    if (!eventExists.success) {
-      return res.status(500).json(eventExists);
-    } else if (eventExists.data.length > 0) {
-      const event = eventExists.data[0];
-      const ret = {
-        id: event.eventsId, name: event.name,
-        status: event.status, address: event.address,
-      };
-      return res.json(responseMsg.success({event: ret}));
-    } else {
-      // event doesnt exist
-      return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
-          errorMsg.messages.EVENT_NOT_FOUND));
-    }
-  };
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+  const {eventsId} = req.query;
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) {
+    return res.status(500).json(eventExists);
+  } else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
+    const ret = {
+      id: event.eventsId, name: event.name,
+      status: event.status, address: event.address,
+    };
+    return res.json(responseMsg.success({event: ret}));
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
+};
 
 // update event status
 exports.status = async (req, res, next) => {
@@ -217,7 +219,7 @@ exports.status = async (req, res, next) => {
   if (!validation.isEmpty()) {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
-  
+
   const {eventsId, eventStatus} = req.body;
   const validStatuses = Object.values(eventStatuses);
   if (validStatuses.indexOf(eventStatus) == -1) {
@@ -237,10 +239,19 @@ exports.status = async (req, res, next) => {
     else if (userExists.data.length > 0) {
       // user exists
       const userEmail = userExists.data[0].email;
+      const userPublicKey = userExists.data[0].publicKey;
 
       // update event status
       const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, eventStatus);
       if (!updateEvent.success) return res.status(500).json(updateEvent);
+
+      if (eventStatus == eventStatuses.APPROVED) {
+        // add approved event to smart contract
+        ballots.approveEvent(userPublicKey, eventsId)
+            .catch((err) => {
+              return res.status(500).json(err);
+            });
+      }
 
       // send email to organizer
       sendEventStatusEmail(userEmail, eventName, eventStatus);
