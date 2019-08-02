@@ -145,7 +145,7 @@ module.exports = (app) => {
      *
      */
 
-    app.get('/api/event', events.validate('get'), events.get);
+  app.get('/api/event', events.validate('get'), events.get);
 
   /**
      * @swagger
