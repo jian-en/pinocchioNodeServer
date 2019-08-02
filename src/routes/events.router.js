@@ -97,6 +97,7 @@ module.exports = (app) => {
      *      consumes:
      *          - application/x-www-form-urlencoded
      *      parameters:
+     *          - name: eventId
      *          - name: eventsId
      *            type: string
      *            minLength: 1
@@ -118,6 +119,33 @@ module.exports = (app) => {
      */
 
   app.post('/api/events/verifyLocation', events.validate('verifyLocation'), events.verifyLocation);
+
+  /**
+     * @swagger
+     * /api/event:
+     *  get:
+     *      tags:
+     *          - Event
+     *      name: get a single event
+     *      summary: Get an event by its id
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventsId
+     *            type: string
+     *            minLength: 1
+     *            in: query
+     *      responses:
+     *          '200':
+     *              description: The eventsId provided is some event's id
+     *          '422':
+     *              description: invalid eventsId is given
+     *
+     */
+
+    app.get('/api/event', events.validate('get'), events.get);
 
   /**
      * @swagger

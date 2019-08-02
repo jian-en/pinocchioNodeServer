@@ -95,6 +95,11 @@ exports.register = async (req, res, next) => {
           if (!referralsExists.success) {
             return res.status(500).json(referralsExists);
           }
+          // referral code does not exist
+          if (referralsExists.data.length == 0) {
+            return res.status(422).json(responseMsg.error(errorMsg.params.REFERRALCODE,
+                errorMsg.messages.REFERRALCODE_INVALID));
+          }
           const referralToken = referralsExists.data[0].referralToken;
           const referredBy = referralsExists.data[0].usersId;
           const validToken = auth.decodeToken(referralToken);

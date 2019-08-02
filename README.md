@@ -42,3 +42,22 @@ These tests run boundary unit tests created from CSV files from ACTS tool. This 
 
 * Registering requires an unused public key.
 * The email used for registration must be a valid domain. The list of valid domains can be found in `src/dynamodb/csvs/validDomains.csv`.
+
+## How to integrate with smart contract
+1. Config: 
+   Based on your dev env, change the fields in your config.js accordingly:
+    * providerURI
+        - the blockchain service URI, eg: http://127.0.0.1:8545 for local ganache-cli
+    * publicKey: the contract owner's public address, eg: the first address provided
+                 by the local blockchain
+    * privateKey: the contract owner's private key
+    * contractAddress: get this address when you deploy the smart contract
+        - Migrate the smart contract using `truffle migrate --reset --network development_gui` (based on your environment), and input the address from the log into contractAddress
+    * contractAbi: get the smart contract json description file, refer to the Dapp repo
+        - When you compile the smart contract, it will generate the smart contract abi
+        files under a folder called `local`
+        - Copy the the folder to `smart_contracts/contracts`
+        - Config it as: `./contracts/[smartcontractname].json`
+
+2. Integrate:
+    * All the functions are located under `smart_contracts`. Read the files for further usage.

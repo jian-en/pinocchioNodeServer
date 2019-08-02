@@ -17,8 +17,6 @@ fi
 
 # start new server container
 docker run --rm -d \
-           -v /server:/user/app \
-           -v /server/node_modules \
-           -p 3010:3000 \
            --name serverContainer \
+           --network host \
            --entrypoint "npm" server:test run awstest

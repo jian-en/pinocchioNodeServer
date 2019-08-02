@@ -9,7 +9,7 @@ services:
       - .:/usr/app/
       - /usr/app/node_modules
     ports:
-      - "3020:3000"
+      - "3020:3010"
   dynamodb-test-container:
     image: amazon/dynamodb-local
     command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal
