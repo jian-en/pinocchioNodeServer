@@ -148,7 +148,7 @@ exports.register = async (req, res, next) => {
 
   const payload = {email, sentAt: datetime.getUnixTimestamp()};
   const token = auth.generateToken(payload, '30d');
-  const url = `${reactServer}/activate-account?token=${token}`;
+  const url = `${reactServer}/activate-account?email=${email}&token=${token}`;
   sendMail(
       req.body.email,
       'Pinocchio - Verification Email',
@@ -283,7 +283,7 @@ exports.resendVerificationEmail = async (req, res, next) => {
     // not verified; resend verification email
     const payload = {email, sentAt: datetime.getUnixTimestamp()};
     const token = auth.generateToken(payload, '30d');
-    const url = `${reactServer}/activate-account?token=${token}`;
+    const url = `${reactServer}/activate-account?email=${email}&token=${token}`;
     // TODO: D.R.Y. Same as the sendMail in register API
     sendMail(
         email,
