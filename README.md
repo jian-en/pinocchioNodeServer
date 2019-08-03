@@ -12,7 +12,9 @@ Pinocchio server in node.js. This server will handle backend requests and serve 
 
 The development environment is using a dynamoDB local instance. 
 
-1. Configure `config.js` for the node server to use. Be sure to point dynamodb to the correct endpoint and set to use `dev`. **Note:** `mailAuth` requires using less secure access for gmail accounts (https://myaccount.google.com/lesssecureapps). Please ask Brian for email credentials.
+1. Configure `config.js` for the node server to use. 
+Be sure to point dynamodb to the correct endpoint and set to use `dev`. 
+**Note:** `mailAuth` requires using less secure access for gmail accounts (https://myaccount.google.com/lesssecureapps). Please ask Brian for email credentials.
 2. Set up `aws-cli` with the following configuration:
     - aws configure
         - Access Key ID: foo
