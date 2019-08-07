@@ -1,7 +1,7 @@
-email,password,id,status
-bwan2@andrew.cmu.edu,password,0.586753295452144,200
-red@pallet.com,password,0.586753295452001,200
-blue@pallet.com,password,0.586753295452002,422
-bwan2@andrew.cmu.edu,null,0.586753295452144,422
-red@pallet.com,null,0.586753295452001,422
-null,password,0.586753295452144,422
+description,email,password,id,status
+valid - successful login test,bwan2@andrew.cmu.edu,password,0.586753295452144,200
+valid - successful login test 2,red@pallet.com,password,0.586753295452001,200
+invalid - account not verified test,blue@pallet.com,password,0.586753295452002,422
+invalid - invalid password test,bwan2@andrew.cmu.edu,null,0.586753295452144,422
+invalid - invalid password test 2,red@pallet.com,null,0.586753295452001,422
+invalid - invalid email test,null,password,0.586753295452144,422

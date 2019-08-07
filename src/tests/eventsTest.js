@@ -4,12 +4,15 @@
  * Testing all /api/events endpoints
  */
 
+if (!global.Promise) {
+  global.Promise = require('q');
+}
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../../server');
-const jquerycsv = require('jquery-csv');
-const fs = require('fs');
-const async = require('async');
+const auth = require('../utils/auth');
+const csv = require('../utils/csv');
 
 // debug print statements
 const DEBUG = process.env.DEBUG || false;
@@ -20,282 +23,250 @@ chai.use(chaiHttp);
 // extends objects with should for easier assertions
 chai.should();
 
-describe('Events', () => {
-  /**
+/**
    * events tests
    * a very basic test to test an invalid token.
    */
-  function getEventsInvalidTokenTest() {
-    describe('GET /api/events', () =>{
-      it('invalid token - input string', (done) => {
-        // send the request
-        chai.request(app)
-            .get('/api/events')
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .type('form')
-            .send('token=')
-            .end(function(err, res, body) {
-              if (err) done(err);
-              else {
-                if (DEBUG) {
-                  // current test response; console logs for debugging
-                  console.log('GET /api/events response: ' + res.text);
-                  console.log(res.status);
-                  console.log(res.body);
-                }
-
-                // assertions
-                res.should.have.status(401);
-                res.body.should.be.a('object');
-                res.body['success'].should.be.false;
+function getEventsInvalidTokenTest() {
+  describe('GET /api/events', () =>{
+    it('invalid token - input string', (done) => {
+      // send the request
+      chai.request(app)
+          .get('/api/events')
+          .set('content-type', 'application/x-www-form-urlencoded')
+          .type('form')
+          .send('token=')
+          .end(function(err, res, body) {
+            if (err) done(err);
+            else {
+              if (DEBUG) {
+                // current test response; console logs for debugging
+                console.log('GET /api/events response: ' + res.text);
+                console.log(res.status);
+                console.log(res.body);
               }
-              done();
-            });
-      }); // it
-    }); // describe
-  }
 
-  /**
-   * login unit tests
+              // assertions
+              res.should.have.status(401);
+              res.body.should.be.a('object');
+              res.body['success'].should.be.false;
+            }
+            done();
+          });
+    }); // it
+  }); // describe
+}
+
+/**
    * loads login-unit.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    * this is repeated to get a valid token for events tests
    */
-  function createEventsAndGetEventsTest() {
-    fs.readFile('./src/tests/testData/csvs/login-unit.csv', 'UTF-8', function(err, csv) {
-      if (err) console.log(err);
-      jquerycsv.toObjects(csv, {}, function(err, csvData) {
-        if (err) {
-          console.log(err);
-        }
-        // async to get each csvRow and reuse the describe/it
-        async.each(csvData, function(csvRow, callback) {
-          describe('POST /api/accounts/login', () =>{
-            it('login unit tests', (done) => {
-              // current test request body
-              if (DEBUG) console.log(csvRow);
-              const status = parseInt(csvRow.status);
+function createEventsAndGetEventsTest() {
+  describe('createEventsAndGetEventsTest', function() {
+    const loginCsvContent = csv.loads('./src/tests/testData/csvs/login-unit.csv');
+    for (let i=0; i<loginCsvContent.length; i++) {
+      const userRow = loginCsvContent[i];
 
-              // send the request
-              chai.request(app)
-                  .post('/api/accounts/login')
-                  .set('content-type', 'application/x-www-form-urlencoded')
-                  .type('form')
-                  .send('email=' + csvRow.email)
-                  .send('password=' + csvRow.password)
-                  .end(function(err, res, body) {
-                    if (err) done(err);
-                    else {
-                      if (DEBUG) {
-                        // current test response; console logs for debugging
-                        console.log('POST /api/accounts/login response: ' + res.text);
-                        console.log(res.status + ' ' + status);
-                        console.log(res.body);
-                      }
+      // get only valid users
+      if (userRow.status != 200) continue;
 
-                      // assertions
-                      res.should.have.status(status);
-                      res.body.should.be.a('object');
-                      if (status == 200) {
-                        res.body['success'].should.be.true;
-                        res.body['id'].should.equal(csvRow.id);
-                        res.body['email'].should.equal(csvRow.email);
-                        createEventsTests(res.body['token']);
-                        getEventsTests(res.body['token'], res.body['id']);
-                      } else {
-                        res.body['success'].should.be.false;
-                      }
-                    }
-                    done();
-                  });
-            }); // it
-          }); // describe
-        });
+      // generate valid token
+      const validToken = auth.generateToken({
+        usersId: userRow.id,
+        email: userRow.email,
       });
-    }); // fs
-  }
 
-  /**
-   * create event unit tests
+      createEventsTests(validToken);
+      getEventsTests(validToken, userRow.id);
+    }
+  });
+}
+
+/**
+   * create event tests
    * loads eventsCreate-unit.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    * @param {string} validToken
    */
-  function createEventsTests(validToken) {
-    describe('events unit tests', function() {
-      fs.readFile('./src/tests/testData/csvs/eventsCreate-unit.csv', 'UTF-8', function(err, csv) {
-        if (err) console.log(err);
-        jquerycsv.toObjects(csv, {}, function(err, csvData) {
-          if (err) {
+function createEventsTests(validToken) {
+  describe('create events tests', () => {
+    const createEventsCsvContent = csv.loads('./src/tests/testData/csvs/eventsCreate-unit.csv');
+
+    // run events tests
+    for (let j=0; j<createEventsCsvContent.length; j++) {
+      const csvRow = createEventsCsvContent[j];
+      createEventsTestsRequest(csvRow, validToken);
+    }
+  });
+}
+
+/**
+   * This helper runs each createEvents test
+   * @param {dictionary} csvRow req body information
+   * @param {string} validToken req body valid token
+   */
+function createEventsTestsRequest(csvRow, validToken) {
+  describe('POST /api/events', () =>{
+    it(csvRow.description, async () => {
+      // current test request body
+      if (DEBUG) console.log(csvRow);
+      const status = parseInt(csvRow.status);
+      let token = validToken;
+      if (!csvRow.token) {
+        token = '';
+      }
+
+      // send the request
+      return await chai.request(app)
+          .post('/api/events')
+          .set('content-type', 'application/x-www-form-urlencoded')
+          .type('form')
+          .send(`name=${csvRow.name}`)
+          .send(`attendees=${csvRow.attendees}`)
+          .send(`type=${csvRow.type}`)
+          .send(`address=${csvRow.address}`)
+          .send(`city=${csvRow.city}`)
+          .send(`zipcode=${csvRow.zipcode}`)
+          .send(`state=${csvRow.state}`)
+          .send(`promotionUrl=${csvRow.promotionUrl}`)
+          .send(`token=${token}`)
+          .then(function(res) {
+            if (DEBUG) {
+              // current test response; console logs for debugging
+              console.log('POST /api/events response: ' + res.text);
+              console.log(res.status + ' ' + status);
+              console.log(res.body);
+            }
+
+            // assertions
+            res.should.have.status(status);
+            res.body.should.be.a('object');
+            if (status == 200) {
+              res.body['success'].should.be.true;
+            } else {
+              res.body['success'].should.be.false;
+            }
+          })
+          .catch(function(err) {
+            console.log('caught create events error');
             console.log(err);
-          }
-          // async to get each csvRow and reuse the describe/it
-          async.each(csvData, function(csvRow, callback) {
-            describe('POST /api/events', () =>{
-              it('create event unit tests', (done) => {
-                // current test request body
-                if (DEBUG) console.log(csvRow);
-                const status = parseInt(csvRow.status);
-                let token = validToken;
-                if (!csvRow.token) {
-                  token = '';
-                }
-
-                // send the request
-                chai.request(app)
-                    .post('/api/events')
-                    .set('content-type', 'application/x-www-form-urlencoded')
-                    .type('form')
-                    .send('name=' + csvRow.name)
-                    .send('attendees=' + csvRow.attendees)
-                    .send('type=' + csvRow.type)
-                    .send('address=' + csvRow.address)
-                    .send('city=' + csvRow.city)
-                    .send('zipcode=' + csvRow.zipcode)
-                    .send('state=' + csvRow.state)
-                    .send('promotionUrl=' + csvRow.promotionUrl)
-                    .send('token=' + token)
-                    .end(function(err, res, body) {
-                      if (err) done(err);
-                      else {
-                        if (DEBUG) {
-                          // current test response; console logs for debugging
-                          console.log('POST /api/events response: ' + res.text);
-                          console.log(res.status + ' ' + status);
-                          console.log(res.body);
-                        }
-
-                        // assertions
-                        res.should.have.status(status);
-                        res.body.should.be.a('object');
-                        if (status == 200) {
-                          res.body['success'].should.be.true;
-                        } else {
-                          res.body['success'].should.be.false;
-                        }
-                      }
-                      done();
-                    });
-              }); // it
-            }); // describe
+            throw err;
           });
-        });
-      }); // fs
-    });
-  }
+    }); // it
+  }); // describe
+}
 
 
-  /**
+/**
    * get event tests
    * loads eventTestData.csv to get valid events
    * @param {string} validToken
    * @param {string} organizerId
    */
-  function getEventsTests(validToken, organizerId) {
-    describe('get event tests', function() {
-      const getEventsData = require('./testData/jsons/getEventsTestData.json')[organizerId];
-      it('GET /api/events', (done) => {
-        chai.request(app)
-            .get('/api/events')
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .type('form')
-            .send('token=' + validToken)
-            .end(function(err, res, body) {
-              if (err) done(err);
-              else {
-                if (DEBUG) {
-                // current test response; console logs for debugging
-                  console.log('GET /api/events response: ' + res.text);
-                  console.log(res.status);
-                  console.log(res.body);
-                }
+function getEventsTests(validToken, organizerId) {
+  describe('GET /api/events', function() {
+    const getEventsData = require('./testData/jsons/getEventsTestData.json')[organizerId];
+    it(`${organizerId} get events tests`, async () => {
+      return await chai.request(app)
+          .get('/api/events')
+          .set('content-type', 'application/x-www-form-urlencoded')
+          .type('form')
+          .send(`token=${validToken}`)
+          .then(function(res) {
+            if (DEBUG) {
+            // current test response; console logs for debugging
+              console.log('GET /api/events response: ' + res.text);
+              console.log(res.status);
+              console.log(res.body);
+            }
 
-                // assertions
-                res.should.have.status(200);
-                res.body['success'].should.be.true;
-                const eventsList = res.body['data'];
-                for (let i = 0; i < eventsList.length; i++) {
-                  const eventId = eventsList[i]['eventsId'];
-                  eventsList[i]['eventsId'].should.equal(getEventsData[eventId]['eventsId']);
-                  eventsList[i]['zipcode'].should.equal(getEventsData[eventId]['zipcode']);
-                  eventsList[i]['promotionUrl'].should.equal(
-                      getEventsData[eventId]['promotionUrl']);
-                  eventsList[i]['organizerId'].should.equal(getEventsData[eventId]['organizerId']);
-                  eventsList[i]['address'].should.equal(getEventsData[eventId]['address']);
-                  eventsList[i]['city'].should.equal(getEventsData[eventId]['city']);
-                  eventsList[i]['attendees'].should.equal(getEventsData[eventId]['attendees']);
-                  eventsList[i]['name'].should.equal(getEventsData[eventId]['name']);
-                  eventsList[i]['state'].should.equal(getEventsData[eventId]['state']);
-                  eventsList[i]['type'].should.equal(getEventsData[eventId]['type']);
-                  eventsList[i]['status'].should.equal(getEventsData[eventId]['status']);
+            // assertions
+            res.should.have.status(200);
+            res.body['success'].should.be.true;
+            const eventsList = res.body['data'];
+            for (let i = 0; i < eventsList.length; i++) {
+              const requestResult = eventsList[i];
+              const expectedResult = getEventsData[requestResult['eventsId']];
+              for (const key in expectedResult) {
+                if (expectedResult.hasOwnProperty(key)) {
+                  requestResult[key].should.equal(expectedResult[key]);
                 }
               }
-              done();
-            });
-      });
-    }); // describe
-  }
+            }
+          })
+          .catch(function(err) {
+            console.log('caught getEvents error');
+            console.log(err);
+            throw err;
+          });
+    });
+  }); // describe
+}
 
-  /**
-   * verify event location unit tests
+/**
+   * verify location tests
    * loads verifyLocation-unit.csv that has combinations of valid/invalid tests
    * this csv file was created using ACTS.
    */
-  function verifyEventLocationTests() {
-    describe('events verify location unit tests', function() {
-      fs.readFile('./src/tests/testData/csvs/verifyLocation-unit.csv', 'UTF-8', function(err, csv) {
-        if (err) console.log(err);
-        jquerycsv.toObjects(csv, {}, function(err, csvData) {
-          if (err) {
+function verifyEventLocationTests() {
+  describe('events verify location tests', () => {
+    const verifyLocationCsvContent = csv.loads('./src/tests/testData/csvs/verifyLocation-unit.csv');
+
+    // run verify location tests
+    for (let i=0; i<verifyLocationCsvContent.length; i++) {
+      const csvRow = verifyLocationCsvContent[i];
+      verifyEventLocationTestsRequest(csvRow);
+    }
+  });
+}
+
+/**
+   * This helper runs each verifyEventLocation test
+   * @param {dictionary} csvRow each test from the csv file
+   */
+function verifyEventLocationTestsRequest(csvRow) {
+  describe('POST /api/events/verifyLocation', () =>{
+    it(csvRow.description, async () => {
+      // current test request body
+      if (DEBUG) console.log(csvRow);
+      const status = parseInt(csvRow.status);
+
+      // send the request
+      return await chai.request(app)
+          .post('/api/events/verifyLocation')
+          .set('content-type', 'application/x-www-form-urlencoded')
+          .type('form')
+          .send(`eventsId=${csvRow.eventsId}`)
+          .send(`latitude=${csvRow.latitude}`)
+          .send(`longitude=${csvRow.longitude}`)
+          .then(function(res) {
+            if (DEBUG) {
+              // current test response; console logs for debugging
+              console.log('POST /api/events/verifyLocation response: ' + res.text);
+              console.log(res.status + ' ' + status);
+              console.log(res.body);
+            }
+
+            // assertions
+            res.should.have.status(status);
+            res.body.should.be.a('object');
+            if (status == 200) {
+              res.body['success'].should.be.true;
+            } else {
+              res.body['success'].should.be.false;
+            }
+          })
+          .catch(function(err) {
+            console.log('caught verifyEventLocation error');
             console.log(err);
-          }
-          // async to get each csvRow and reuse the describe/it
-          async.each(csvData, function(csvRow, callback) {
-            describe('POST /api/events/verifyLocation', () =>{
-              it('verify event location unit tests', (done) => {
-                // current test request body
-                if (DEBUG) console.log(csvRow);
-                const status = parseInt(csvRow.status);
-
-                // send the request
-                chai.request(app)
-                    .post('/api/events/verifyLocation')
-                    .set('content-type', 'application/x-www-form-urlencoded')
-                    .type('form')
-                    .send(`eventsId=${csvRow.eventsId}`)
-                    .send(`latitude=${csvRow.latitude}`)
-                    .send(`longitude=${csvRow.longitude}`)
-                    .end(function(err, res, body) {
-                      if (err) done(err);
-                      else {
-                        if (DEBUG) {
-                          // current test response; console logs for debugging
-                          console.log('POST /api/events/verifyLocation response: ' + res.text);
-                          console.log(res.status + ' ' + status);
-                          console.log(res.body);
-                        }
-
-                        // assertions
-                        res.should.have.status(status);
-                        res.body.should.be.a('object');
-                        if (status == 200) {
-                          res.body['success'].should.be.true;
-                        } else {
-                          res.body['success'].should.be.false;
-                        }
-                      }
-                      done();
-                    });
-              }); // it
-            }); // describe
+            throw err;
           });
-        });
-      }); // fs
-    });
-  }
+    }); // it
+  }); // describe
+}
 
-  // run tests
-  getEventsInvalidTokenTest();
-  createEventsAndGetEventsTest();
-  verifyEventLocationTests();
-}); // events
+// run tests
+getEventsInvalidTokenTest();
+createEventsAndGetEventsTest();
+verifyEventLocationTests();

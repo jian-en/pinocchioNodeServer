@@ -1,46 +1,43 @@
-name,attendees,type,address,city,zipcode,state,token,promotionUrl,status
-Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,100000,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,10,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
-Bass speech,10,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,9,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,9,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,9,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,0,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,0,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,0,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,-1,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,-1,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,-1,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100001,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100001,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100001,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,lecture,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,speech,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,conference,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,lecture,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,speech,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,conference,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
-Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
-Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
-Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
-Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
-Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
-Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
-FTB conference,10,conference,323 S Mission Dr,San Gabriel,91776,PA,valid,https://factoryteabar.com,422
-FTB conference,10,conference,123 Fake Street,San Gabriel,91776,CA,valid,https://factoryteabar.com,422
-FTB conference,10,conference,323 S Mission Dr,Arcadia,91776,CA,valid,https://factoryteabar.com,422
-FTB conference,10,conference,323 S Mission Dr,San Gabriel,91006,CA,valid,https://factoryteabar.com,422
+description,name,attendees,type,address,city,zipcode,state,token,promotionUrl,status
+valid - lecture 10 attendees test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+valid - speech 100000 attendees test,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+valid - conference 10 attendees test,Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),200
+invalid - empty type test,Bass speech,10,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty type test 2,Bass speech,100000,,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 9 attendees test,Bass speech,9,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 9 attendees test 2,Bass speech,9,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 9 attendees test 3,Bass speech,9,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 0 attendees test,Bass speech,0,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 0 attendees test 2,Bass speech,0,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 0 attendees test 3,Bass speech,0,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - -1 attendees test,Bass speech,-1,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - -1 attendees test 2,Bass speech,-1,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - -1 attendees test 3,Bass speech,-1,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 100001 attendees test,Bass speech,100001,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 100001 attendees test 2,Bass speech,100001,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - 100001 attendees test 3,Bass speech,100001,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty name test,,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty name test 2,,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty name test 3,,100000,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty address test,Bass speech,10,lecture,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty address test 2,Bass speech,100000,speech,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty address test 3,Bass speech,10,conference,,Pittsburgh,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty city test,Bass speech,10,lecture,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty city test 2,Bass speech,100000,speech,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty city test 3,Bass speech,100000,conference,5000 Forbes Ave,,15213,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty zipcode test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty zipcode test 2,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty zipcode test 3,Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,,PA,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty state test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty state test 2,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty state test 3,Bass speech,100000,conference,5000 Forbes Ave,Pittsburgh,15213,,valid,https://en.wikipedia.org/wiki/Bass_(fish),422
+invalid - empty token test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+invalid - empty token test 2,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+invalid - empty token test 3,Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,,https://en.wikipedia.org/wiki/Bass_(fish),401
+invalid - empty promotionurl test,Bass speech,10,lecture,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+invalid - empty promotionurl test 2,Bass speech,100000,speech,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+invalid - empty promotionurl test 3,Bass speech,10,conference,5000 Forbes Ave,Pittsburgh,15213,PA,valid,,422
+invalid - incorrect state test,FTB conference,10,conference,323 S Mission Dr,San Gabriel,91776,PA,valid,https://factoryteabar.com,422
+invalid - incorrect address test,FTB conference,10,conference,123 Fake Street,San Gabriel,91776,CA,valid,https://factoryteabar.com,422
+invalid - incorrect city test,FTB conference,10,conference,323 S Mission Dr,Arcadia,91776,CA,valid,https://factoryteabar.com,422
+invalid - incorrect zipcode test,FTB conference,10,conference,323 S Mission Dr,San Gabriel,91006,CA,valid,https://factoryteabar.com,422

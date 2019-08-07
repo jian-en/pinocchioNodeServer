@@ -61,6 +61,10 @@ const awstest = {
   },
   reactServer: 'http://3.92.34.83:3000',
   swaggerURL: '3.92.34.83:3010',
+  geocoder: {
+    provider: 'opencage',
+    apiKey: ''
+  },
   secretName: 'test/pinocchioNodeServer/aws',
   // SmartContract Related
   providerURI: 'http://3.92.34.83:8545',
