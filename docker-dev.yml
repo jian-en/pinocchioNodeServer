@@ -6,8 +6,8 @@ services:
       - "dynamodb-dev-container"
     command: npm run dev-env
     volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+      - .:/app/
+      - /app/node_modules
     ports:
       - "3010:3010"
   dynamodb-dev-container:
