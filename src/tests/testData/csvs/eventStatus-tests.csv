@@ -1,0 +1,12 @@
+description,eventsId,eventStatus,status
+valid - event approved test,0.1442598822772001,approved,200
+valid - event rejected test,0.1442598822772001,rejected,200
+valid - event pending test,0.1442598822772001,pending,200
+invalid - empty eventsId test,,approved,422
+invalid - eventsId does not exist test,0.144259823822772001,approved,422
+invalid - empty eventStatus test,,rejected,422
+invalid - eventsId does not exist test 2,0.144259823822772001,rejected,422
+invalid - empty eventsId test 2,,pending,422
+invalid - eventsId does not exist test 2,0.144259823822772001,pending,422
+invalid - empty eventStatus test 2,0.1442598822772001,,422
+invalid - status does not exist test,0.1442598822772001,invalid,422

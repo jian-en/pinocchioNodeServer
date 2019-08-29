@@ -13,7 +13,8 @@ const geo = require('../utils/geocoder.js');
 
 const responseMsg = require('../utils/responseMsg');
 const errorMsg = require('../utils/errorMsg');
-const {constants} = require('../utils/constants');
+const {constants, eventStatuses} = require('../utils/constants');
+const {sendEventStatusEmail} = require('./emailHelper');
 
 // validate POST body contents
 exports.validate = (method) => {
@@ -40,6 +41,12 @@ exports.validate = (method) => {
         check('latitude').trim().isLength({min: 1}),
         check('longitude').trim().isLength({min: 1}),
       ];
+    }
+    case 'status': {
+      return [
+        check('eventsId').trim().isLength({min: 1}),
+        check('eventStatus').trim().isLength({min: 1}),
+       ];
     }
     case 'get': {
       // TODO: check whether it's attendable
@@ -77,11 +84,18 @@ exports.create = async (req, res, next) => {
     eventsId: dynamoDb.generateID(),
     date: req.body.date,
     organizerId: req.usersId,
-    status: 'pending', // TODO: constanize
+    eventStatus: eventStatuses.PENDING,
   };
 
-  // build address
-  const gpsResults = await geo.getGPS(req.body.address);
+  // build address; retry 3 times since gps can be undefined in API
+  let retries = 0;
+  let gpsResults = await geo.getGPS(req.body.address);
+  while (!gpsResults.success || gpsResults.data == 0) {
+    if (retries == 2) break;
+    gpsResults = await geo.getGPS(req.body.address);
+    retries += 1;
+  }
+
   if (!gpsResults.success) {
     // error has occurred in getting geocoder GPS
     return res.status(500).json(gpsResults);
@@ -173,22 +187,69 @@ exports.verifyLocation = async (req, res, next) => {
 };
 
 exports.get = async (req, res) => {
+    // check whether inputs are valid
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      return res.status(422).json(responseMsg.validationError422(validation.errors));
+    }
+    const {eventsId} = req.query;
+    const eventExists = await dynamoDb.getEvents(eventsId);
+    if (!eventExists.success) {
+      return res.status(500).json(eventExists);
+    } else if (eventExists.data.length > 0) {
+      const event = eventExists.data[0];
+      const ret = {
+        id: event.eventsId, name: event.name,
+        status: event.status, address: event.address,
+      };
+      return res.json(responseMsg.success({event: ret}));
+    } else {
+      // event doesnt exist
+      return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+          errorMsg.messages.EVENT_NOT_FOUND));
+    }
+  };
+
+// update event status
+exports.status = async (req, res, next) => {
   // check whether inputs are valid
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
-  const {eventsId} = req.query;
+  
+  const {eventsId, eventStatus} = req.body;
+  const validStatuses = Object.values(eventStatuses);
+  if (validStatuses.indexOf(eventStatus) == -1) {
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTSTATUS,
+        errorMsg.messages.EVENTSTATUS_INVALID));
+  }
+
+  // check if event exists
   const eventExists = await dynamoDb.getEvents(eventsId);
-  if (!eventExists.success) {
-    return res.status(500).json(eventExists);
-  } else if (eventExists.data.length > 0) {
-    const event = eventExists.data[0];
-    const ret = {
-      id: event.eventsId, name: event.name,
-      status: event.status, address: event.address,
-    };
-    return res.json(responseMsg.success({event: ret}));
+  if (!eventExists.success) return res.status(500).json(eventExists);
+  else if (eventExists.data.length > 0) {
+    // event exists and check if user exists
+    const organizerId = eventExists.data[0].organizerId;
+    const eventName = eventExists.data[0].name;
+    const userExists = await dynamoDb.getUser(organizerId);
+    if (!userExists.success) return res.status(500).json(userExists);
+    else if (userExists.data.length > 0) {
+      // user exists
+      const userEmail = userExists.data[0].email;
+
+      // update event status
+      const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, eventStatus);
+      if (!updateEvent.success) return res.status(500).json(updateEvent);
+
+      // send email to organizer
+      sendEventStatusEmail(userEmail, eventName, eventStatus);
+      return res.json(responseMsg.success({}));
+    } else {
+      // user doesnt exist
+      return res.status(422).json(responseMsg.error(errorMsg.params.ORGANIZERID,
+          errorMsg.messages.ORGANIZERID_NOT_FOUND));
+    }
   } else {
     // event doesnt exist
     return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,

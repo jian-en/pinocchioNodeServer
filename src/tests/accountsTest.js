@@ -20,12 +20,12 @@ chai.should();
 
 /**
  * account register tests
- * loads register-unit.csv that has combinations of valid/invalid tests
+ * loads register-tests.csv that has combinations of valid/invalid tests
  * this csv file was created using ACTS.
  */
 function accountRegistrationTest() {
   describe('account registration tests', () => {
-    const accountRegCsvContent = csv.loads('./src/tests/testData/csvs/register-unit.csv');
+    const accountRegCsvContent = csv.loads('./src/tests/testData/csvs/register-tests.csv');
 
     // run account registration tests
     for (let i=0; i<accountRegCsvContent.length; i++) {
@@ -120,12 +120,12 @@ function accountActivationTest() {
 
 /**
  * account register tests
- * loads register-unit.csv that has combinations of valid/invalid tests
+ * loads register-tests.csv that has combinations of valid/invalid tests
  * this csv file was created using ACTS.
  */
 function accountLoginTest() {
   describe('account login tests', () => {
-    const accountLoginCsvContent = csv.loads('./src/tests/testData/csvs/login-unit.csv');
+    const accountLoginCsvContent = csv.loads('./src/tests/testData/csvs/login-tests.csv');
 
     // run account login tests
     for (let i=0; i<accountLoginCsvContent.length; i++) {

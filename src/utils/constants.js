@@ -66,3 +66,18 @@ exports.constants = {
     'wy': 'Wyoming',
   },
 };
+
+exports.eventStatuses = {
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+};
+
+exports.eventMessage = {
+  'pending': `Your event is currently being reviewed. Pinocchio will review your event and notify\
+  you within 24 hours.`,
+  'approved': `Your event has been approved! Please login to Pinocchio and select your event for\
+  next steps.`,
+  'rejected': `Your event has been rejected. Please login to Pinocchio and select your event for\
+  more details.`,
+};

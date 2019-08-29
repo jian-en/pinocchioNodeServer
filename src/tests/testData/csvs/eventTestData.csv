@@ -1,4 +1,4 @@
-name,eventsId,organizerId,attendees,type,address,city,zipcode,state,promotionUrl,latitude,longitude,status
+name,eventsId,organizerId,attendees,type,address,city,zipcode,state,promotionUrl,latitude,longitude,eventStatus
 Brock Battle,0.5472598822772001,0.586753295452001,12,speech,Pewter Gym,Pewter City,07474,Kanto,https://bulbapedia.bulbagarden.net/wiki/Pewter_Gym,34.1397,118.0353,pending
 Misty Battle,0.5472598822772002,0.586753295452001,15,speech,Cerulean Gym,Cerulean City,121121,Kanto,https://bulbapedia.bulbagarden.net/wiki/Cerulean_Gym,34.1397,118.0353,pending
 Lt. Surge Battle,0.5472598822772003,0.586753295452001,20,speech,Vermilion Gym,Vermilion City,02626,Kanto,https://bulbapedia.bulbagarden.net/wiki/Vermilion_Gym,34.1397,118.0353,pending

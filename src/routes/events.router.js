@@ -87,7 +87,7 @@ module.exports = (app) => {
   /**
      * @swagger
      * /api/events/verifyLocation:
-     *  get:
+     *  post:
      *      tags:
      *          - Events
      *      name: verify location
@@ -145,5 +145,36 @@ module.exports = (app) => {
      *
      */
 
-  app.get('/api/event', events.validate('get'), events.get);
+    app.get('/api/event', events.validate('get'), events.get);
+
+  /**
+     * @swagger
+     * /api/events/status:
+     *  post:
+     *      tags:
+     *          - Events
+     *      name: update event status
+     *      summary: Updates event status
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventsId
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *          - name: status
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: The event has been updated to given status
+     *          '422':
+     *              description: invalid parameters or eventsId does not exist
+     *
+     */
+
+  app.post('/api/events/status', events.validate('status'), events.status);
 };

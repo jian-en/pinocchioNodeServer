@@ -11,7 +11,7 @@
             "name": "Lt. Surge Battle",
             "state": "Kanto",
             "type": "speech",
-            "status": "pending"
+            "eventStatus": "pending"
         },
         "0.5472598822772002": {
             "zipcode": "121121",
@@ -24,7 +24,7 @@
             "name": "Misty Battle",
             "state": "Kanto",
             "type": "speech",
-            "status": "pending"
+            "eventStatus": "pending"
         },
         "0.5472598822772001": {
             "zipcode": "07474",
@@ -37,7 +37,7 @@
             "name": "Brock Battle",
             "state": "Kanto",
             "type": "speech",
-            "status": "pending"
+            "eventStatus": "pending"
         }
     },
     "0.586753295452144": {
@@ -52,7 +52,7 @@
             "name": "MSELi Event",
             "state": "Pennsylvania",
             "type": "speech",
-            "status": "pending"
+            "eventStatus": "pending"
         }
     }
 }

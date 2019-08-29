@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System name="eventStatus">
+  <Parameters>
+    <Parameter id="0" name="eventsId" type="1">
+      <values>
+        <value>0.1442598822772001</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+        <invalidValue>0.144259823822772001</invalidValue>
+      </invalidValues>
+    </Parameter>
+    <Parameter id="1" name="status" type="1">
+      <values>
+        <value>accepted</value>
+        <value>rejected</value>
+        <value>pending</value>
+      </values>
+      <basechoices />
+      <invalidValues>
+        <invalidValue>null</invalidValue>
+        <invalidValue>invalid</invalidValue>
+      </invalidValues>
+    </Parameter>
+  </Parameters>
+  <OutputParameters />
+  <Relations />
+  <Constraints />
+  <Testset doi="2">
+    <Testcase TCNo="0">
+      <Value>1</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>accepted</Value>
+    </Testcase>
+    <Testcase TCNo="1">
+      <Value>2</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>rejected</Value>
+    </Testcase>
+    <Testcase TCNo="2">
+      <Value>3</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>pending</Value>
+    </Testcase>
+    <Testcase TCNo="3">
+      <Value>4</Value>
+      <Value>null</Value>
+      <Value>accepted</Value>
+    </Testcase>
+    <Testcase TCNo="4">
+      <Value>5</Value>
+      <Value>0.144259823822772001</Value>
+      <Value>accepted</Value>
+    </Testcase>
+    <Testcase TCNo="5">
+      <Value>6</Value>
+      <Value>null</Value>
+      <Value>rejected</Value>
+    </Testcase>
+    <Testcase TCNo="6">
+      <Value>7</Value>
+      <Value>0.144259823822772001</Value>
+      <Value>rejected</Value>
+    </Testcase>
+    <Testcase TCNo="7">
+      <Value>8</Value>
+      <Value>null</Value>
+      <Value>pending</Value>
+    </Testcase>
+    <Testcase TCNo="8">
+      <Value>9</Value>
+      <Value>0.144259823822772001</Value>
+      <Value>pending</Value>
+    </Testcase>
+    <Testcase TCNo="9">
+      <Value>10</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>null</Value>
+    </Testcase>
+    <Testcase TCNo="10">
+      <Value>11</Value>
+      <Value>0.1442598822772001</Value>
+      <Value>invalid</Value>
+    </Testcase>
+  </Testset>
+  <Header>
+    <Value />
+    <Value>EVENTSID</Value>
+    <Value>STATUS</Value>
+  </Header>
+  <Stat-Data>
+    <ExecutionTime>0.026</ExecutionTime>
+    <MaxDomainSize>3</MaxDomainSize>
+    <MinDomainSize>1</MinDomainSize>
+    <TotalNoOfCombination>11</TotalNoOfCombination>
+    <TotalNoOfTests>11</TotalNoOfTests>
+    <Algorithm>IPOG</Algorithm>
+  </Stat-Data>
+</System>
+

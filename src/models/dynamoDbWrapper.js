@@ -5,6 +5,7 @@ Model to communicate with database
 */
 
 const config = require('../../config.js');
+const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
 AWS.config.update(config.dynamodb);
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -55,9 +56,9 @@ module.exports.updateData = async (tableName, args) => {
   }
 };
 
-// TODO ID should be unique ...
+// generate unique ID based on UUID4
 module.exports.generateID = () => {
-  return Math.random().toString();
+  return uuidv4();
 };
 
 module.exports.getUserReferralCode = async (usersId) => {
@@ -104,10 +105,10 @@ module.exports.getUserEmails = async (email) => {
   return await this.queryData('usersTable', args);
 };
 
-module.exports.getValidDomains = async () => {
+module.exports.getUser = async (usersId) => {
   const args = {
     KeyConditionExpression: 'usersId = :usersid',
-    ExpressionAttributeValues: {':usersid': 'validDomains'},
+    ExpressionAttributeValues: {':usersid': usersId},
     ProjectionExpression: 'email',
   };
   return await this.queryData('usersTable', args);
@@ -157,4 +158,14 @@ module.exports.updateVerified = async (usersId, email, datetime) => {
     ReturnValues: 'UPDATED_NEW',
   };
   return await this.updateData('usersTable', args);
+};
+
+module.exports.updateEventStatus = async (eventsId, organizerId, eventStatus) => {
+  const args = {
+    Key: {eventsId, organizerId},
+    UpdateExpression: 'set eventStatus = :s',
+    ExpressionAttributeValues: {':s': eventStatus},
+    ReturnValues: 'UPDATED_NEW',
+  };
+  return await this.updateData('eventsTable', args);
 };
