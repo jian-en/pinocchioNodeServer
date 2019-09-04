@@ -5,6 +5,7 @@ starts server on port 3010
 */
 
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -57,6 +58,9 @@ app.use(bodyParser.json());
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
+
+// handle file uploads
+app.use(fileUpload());
 
 // allow cross origin requests (CORS)
 app.use(function(req, res, next) {

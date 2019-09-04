@@ -6,7 +6,9 @@ Handles AWS transcribe start transcription services
 
 const config = require('../../config.js');
 const AWS = require('aws-sdk');
-AWS.config.update(config.awsTranscribeConfig);
+const transcribeConfig = config.awsConfig;
+transcribeConfig['endpoint'] = config.awsTranscribeConfig.endpoint;
+AWS.config.update(transcribeConfig);
 const transcribeService = new AWS.TranscribeService();
 
 
