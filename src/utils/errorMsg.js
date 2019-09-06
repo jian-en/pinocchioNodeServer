@@ -21,7 +21,8 @@ exports.params = {
   LONGITUDE: 'longitude',
   ORGANIZERID: 'organizerId',
   EVENTSTATUS: 'eventStatus',
-  AWSSERVER: 'backendServer',
+  S3SERVICE: 's3Service',
+  TRANSCRIBESERVICE: 'transcriptionService',
 };
 
 // error messages

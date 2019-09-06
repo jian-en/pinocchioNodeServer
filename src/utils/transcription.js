@@ -17,9 +17,15 @@ module.exports.startTranscription = async (mediaFileLoaction) => {
   transcribeConfig['Media']['MediaFileUri'] = mediaFileLoaction;
   transcribeConfig['TranscriptionJobName'] = filename;
 
-  transcribeService.startTranscriptionJob(transcribeConfig, function(err, data) {
-    // TODO: Add error/success responses
-    if (err) console.log(err, err.stack);
-    else console.log(data);
+  return new Promise((resolve, reject) => {
+    transcribeService.startTranscriptionJob(transcribeConfig, function(err, data) {
+      if (err) {
+        console.log(err, err.stack);
+        return reject(err);
+      } else {
+        console.log(data);
+        return resolve(data);
+      }
+    });
   });
 };

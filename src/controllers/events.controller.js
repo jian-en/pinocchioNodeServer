@@ -273,16 +273,22 @@ exports.upload = async (req, res, next) => {
 
   s3.s3Upload(filename, eventsId, fileData)
       .then((data) => {
-      // upload successful and start transcription
+        // upload successful and start transcription
         const fileLoaction = data['Location'];
-        transcribe.startTranscription(fileLoaction);
-        return res.json(responseMsg.success({}));
+        transcribe.startTranscription(fileLoaction)
+            .then((_) => {
+              // transcription job started successfully
+              return res.json(responseMsg.success({}));
+            })
+            .catch((_) => {
+              // transcription service error
+              return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
+                  errorMsg.messages.AWS_SERVICE_ERROR));
+            });
       })
       .catch((_) => {
-        return res.status(500).json(responseMsg.error(errorMsg.params.AWSSERVER,
+      // s3 service error
+        return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
             errorMsg.messages.AWS_SERVICE_ERROR));
       });
-  // console.log(s3UploadResult);
-
-  // return res.json(responseMsg.success({}));
 };
