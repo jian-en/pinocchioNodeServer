@@ -3,7 +3,6 @@ controller for events
 */
 
 const dynamoDb = require('../models/dynamoDbWrapper.js');
-// const transcribe = require('../utils/transcription.js');
 const s3 = require('../utils/s3.js');
 
 // validators
@@ -267,13 +266,12 @@ exports.status = async (req, res, next) => {
 
 // upload event audio to s3
 exports.upload = async (req, res, next) => {
-  // const {eventsId, file} = req.body;
-  console.log(req.body);
-  console.log(req.files);
+  const filename = req.files.file.name;
+  const fileData = req.files.file.data;
+  const {eventsId} = req.body;
 
-  s3.s3Upload(req.files.file.name, req.body.eventsId, req.files.file.data);
+  const s3UploadResult = await s3.s3Upload(filename, eventsId, fileData);
+  console.log(s3UploadResult);
 
-  // const {file} = req.body;
-  // transcribe.startTranscription(file);
   return res.json(responseMsg.success({}));
 };

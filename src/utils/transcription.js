@@ -11,9 +11,7 @@ transcribeConfig['endpoint'] = config.awsTranscribeConfig.endpoint;
 AWS.config.update(transcribeConfig);
 const transcribeService = new AWS.TranscribeService();
 
-
 module.exports.startTranscription = async (mediaFileLoaction) => {
-  console.log('transcription started');
   const filename = mediaFileLoaction.split('/').pop();
   const transcribeConfig = config.awsTranscriptionJob;
   transcribeConfig['Media']['MediaFileUri'] = mediaFileLoaction;
