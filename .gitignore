@@ -5,3 +5,6 @@ package-lock.json
 config.js
 .idea/
 debug
+
+// for generating test coverage output
+.nyc_output
