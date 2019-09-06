@@ -4,6 +4,7 @@ controller for events
 
 const dynamoDb = require('../models/dynamoDbWrapper.js');
 const s3 = require('../utils/s3.js');
+const transcribe = require('../utils/transcription.js');
 
 // validators
 const {check, validationResult} = require('express-validator');
@@ -270,8 +271,18 @@ exports.upload = async (req, res, next) => {
   const fileData = req.files.file.data;
   const {eventsId} = req.body;
 
-  const s3UploadResult = await s3.s3Upload(filename, eventsId, fileData);
-  console.log(s3UploadResult);
+  s3.s3Upload(filename, eventsId, fileData)
+      .then((data) => {
+      // upload successful and start transcription
+        const fileLoaction = data['Location'];
+        transcribe.startTranscription(fileLoaction);
+        return res.json(responseMsg.success({}));
+      })
+      .catch((_) => {
+        return res.status(500).json(responseMsg.error(errorMsg.params.AWSSERVER,
+            errorMsg.messages.AWS_SERVICE_ERROR));
+      });
+  // console.log(s3UploadResult);
 
-  return res.json(responseMsg.success({}));
+  // return res.json(responseMsg.success({}));
 };
