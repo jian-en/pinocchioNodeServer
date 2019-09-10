@@ -7,7 +7,9 @@ Handles AWS S3 services
 const config = require('../../config.js');
 const AWS = require('aws-sdk');
 const s3Config = config.awsConfig;
-s3Config['endpoint'] = config.awsS3.endpoint;
+const protocol = config.awsS3.protocol;
+const domain = config.awsS3.domain;
+s3Config['endpoint'] = `${protocol}://${domain}`;
 AWS.config.update(s3Config);
 const s3 = new AWS.S3();
 

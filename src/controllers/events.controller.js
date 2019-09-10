@@ -247,7 +247,8 @@ exports.status = async (req, res, next) => {
       const userEmail = userExists.data[0].email;
 
       // update event status
-      const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, eventStatus);
+      const updateEvent = await dynamoDb.updateEvent(eventsId,
+          organizerId, 'eventStatus', eventStatus);
       if (!updateEvent.success) return res.status(500).json(updateEvent);
 
       // send email to organizer
@@ -271,24 +272,40 @@ exports.upload = async (req, res, next) => {
   const fileData = req.files.file.data;
   const {eventsId} = req.body;
 
-  s3.s3Upload(filename, eventsId, fileData)
-      .then((data) => {
+  // check if event exists
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) return res.status(500).json(eventExists);
+  else if (eventExists.data.length > 0) {
+    // get organizer ID
+    const organizerId = eventExists.data[0].organizerId;
+
+    // upload file to s3
+    s3.s3Upload(filename, eventsId, fileData)
+        .then((data) => {
         // upload successful and start transcription
-        const fileLoaction = data['Location'];
-        transcribe.startTranscription(fileLoaction)
-            .then((_) => {
+          const fileLoaction = data['Location'];
+          transcribe.startTranscription(fileLoaction)
+              .then((transcriptLocation) => {
               // transcription job started successfully
-              return res.json(responseMsg.success({}));
-            })
-            .catch((_) => {
+              // update event status
+                dynamoDb.updateEvent(eventsId,
+                    organizerId, 'eventTranscription', transcriptLocation);
+                return res.json(responseMsg.success({}));
+              })
+              .catch((_) => {
               // transcription service error
-              return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
-                  errorMsg.messages.AWS_SERVICE_ERROR));
-            });
-      })
-      .catch((_) => {
-      // s3 service error
-        return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
-            errorMsg.messages.AWS_SERVICE_ERROR));
-      });
+                return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
+                    errorMsg.messages.AWS_SERVICE_ERROR));
+              });
+        })
+        .catch((_) => {
+          // s3 service error
+          return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
+              errorMsg.messages.AWS_SERVICE_ERROR));
+        });
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
 };

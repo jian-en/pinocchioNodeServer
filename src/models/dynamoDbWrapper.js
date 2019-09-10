@@ -160,11 +160,11 @@ module.exports.updateVerified = async (usersId, email, datetime) => {
   return await this.updateData('usersTable', args);
 };
 
-module.exports.updateEventStatus = async (eventsId, organizerId, eventStatus) => {
+module.exports.updateEvent = async (eventsId, organizerId, key, value) => {
   const args = {
     Key: {eventsId, organizerId},
-    UpdateExpression: 'set eventStatus = :s',
-    ExpressionAttributeValues: {':s': eventStatus},
+    UpdateExpression: `set ${key} = :s`,
+    ExpressionAttributeValues: {':s': value},
     ReturnValues: 'UPDATED_NEW',
   };
   return await this.updateData('eventsTable', args);

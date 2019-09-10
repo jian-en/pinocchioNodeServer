@@ -7,7 +7,9 @@ Handles AWS transcribe start transcription services
 const config = require('../../config.js');
 const AWS = require('aws-sdk');
 const transcribeConfig = config.awsConfig;
-transcribeConfig['endpoint'] = config.awsTranscribeConfig.endpoint;
+const protocol = config.awsTranscribeConfig.protocol;
+const domain = config.awsTranscribeConfig.domain;
+transcribeConfig['endpoint'] = `${protocol}://${domain}`;
 AWS.config.update(transcribeConfig);
 const transcribeService = new AWS.TranscribeService();
 
@@ -24,7 +26,10 @@ module.exports.startTranscription = async (mediaFileLoaction) => {
         return reject(err);
       } else {
         console.log(data);
-        return resolve(data);
+        // transcriptLocation
+        const transcriptLocation =
+          `${protocol}://${transcribeConfig['OutputBucketName']}.${domain}/${filename}`;
+        return resolve(transcriptLocation);
       }
     });
   });
