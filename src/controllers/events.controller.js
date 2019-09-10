@@ -58,8 +58,8 @@ exports.validate = (method) => {
     }
     case 'upload': {
       return [
+        auth.checkAuth,
         check('eventsId').trim().isLength({min: 1}),
-        check('file').trim().isLength({min: 1}),
       ];
     }
   }
@@ -268,6 +268,12 @@ exports.status = async (req, res, next) => {
 
 // upload event audio to s3
 exports.upload = async (req, res, next) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+
   const filename = req.files.file.name;
   const fileData = req.files.file.data;
   const {eventsId} = req.body;
@@ -278,6 +284,10 @@ exports.upload = async (req, res, next) => {
   else if (eventExists.data.length > 0) {
     // get organizer ID
     const organizerId = eventExists.data[0].organizerId;
+    if (req.usersId != organizerId) {
+      return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+          errorMsg.messages.EVENT_ORGANIZER_ERROR));
+    }
 
     // upload file to s3
     s3.s3Upload(filename, eventsId, fileData)
