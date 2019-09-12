@@ -295,6 +295,8 @@ exports.upload = async (req, res, next) => {
     const fileList = req.files.file;
 
     // upload all files in request
+    // this design will upload all files that are not
+    // duplicate transcript filenames (regardless of order)
     const duplicateFiles = [];
     const uploadedFiles = [];
     for (const file of fileList) {
