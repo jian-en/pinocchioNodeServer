@@ -93,6 +93,7 @@ exports.create = async (req, res, next) => {
     date: req.body.date,
     organizerId: req.usersId,
     eventStatus: eventStatuses.PENDING,
+    transcripts: {},
   };
 
   // build address; retry 3 times since gps can be undefined in API
@@ -274,45 +275,79 @@ exports.upload = async (req, res, next) => {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
 
-  const filename = req.files.file.name;
-  const fileData = req.files.file.data;
   const {eventsId} = req.body;
 
   // check if event exists
   const eventExists = await dynamoDb.getEvents(eventsId);
   if (!eventExists.success) return res.status(500).json(eventExists);
   else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
     // get organizer ID
-    const organizerId = eventExists.data[0].organizerId;
+    const organizerId = event.organizerId;
     if (req.usersId != organizerId) {
       return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
           errorMsg.messages.EVENT_ORGANIZER_ERROR));
     }
 
-    // upload file to s3
-    s3.s3Upload(filename, eventsId, fileData)
-        .then((data) => {
-        // upload successful and start transcription
-          const fileLoaction = data['Location'];
-          transcribe.startTranscription(fileLoaction)
-              .then((transcriptLocation) => {
-              // transcription job started successfully
-              // update event status
-                dynamoDb.updateEvent(eventsId,
-                    organizerId, 'eventTranscription', transcriptLocation);
-                return res.json(responseMsg.success({}));
-              })
-              .catch((_) => {
-              // transcription service error
-                return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
-                    errorMsg.messages.AWS_SERVICE_ERROR));
-              });
-        })
-        .catch((_) => {
-          // s3 service error
-          return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
-              errorMsg.messages.AWS_SERVICE_ERROR));
-        });
+    // get event transcripts
+    const eventTranscripts = event.transcripts;
+
+    const fileList = req.files.file;
+
+    // upload all files in request
+    const duplicateFiles = [];
+    const uploadedFiles = [];
+    for (const file of fileList) {
+      const filename = file.name;
+      const fileData = file.data;
+
+      // check for duplicate filenames
+      if (filename in eventTranscripts) {
+        duplicateFiles.push(filename);
+        continue;
+      }
+
+      // upload files to s3
+      s3.s3Upload(filename, eventsId, fileData)
+          .then((data) => {
+          // upload successful and start transcription
+            const fileLoaction = data['Location'];
+            transcribe.startTranscription(fileLoaction)
+                .then((transcriptLocation) => {
+                // transcription job started successfully
+
+                  // update event transcripts
+                  eventTranscripts[filename] = {
+                    location: transcriptLocation,
+                  };
+                  dynamoDb.updateEvent(eventsId,
+                      organizerId, 'transcripts', eventTranscripts);
+
+                  uploadedFiles.push(filename);
+
+                  // all files successfully uploaded
+                  if (uploadedFiles.length == fileList.length) {
+                    return res.json(responseMsg.success({}));
+                  }
+                })
+                .catch((_) => {
+                // transcription service error
+                  return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
+                      errorMsg.messages.AWS_SERVICE_ERROR));
+                });
+          })
+          .catch((_) => {
+            // s3 service error
+            return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
+                errorMsg.messages.AWS_SERVICE_ERROR));
+          });
+    }
+
+    // duplicate filenames found
+    if (duplicateFiles.length > 0) {
+      return res.status(422).json(responseMsg.error(duplicateFiles.toString(),
+          errorMsg.messages.EVENT_FILENAME_UNIQUE));
+    }
   } else {
     // event doesnt exist
     return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
