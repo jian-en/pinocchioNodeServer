@@ -81,3 +81,9 @@ exports.eventMessage = {
   'rejected': `Your event has been rejected. Please login to Pinocchio and select your event for\
   more details.`,
 };
+
+exports.transcriptionStatuses = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  FAILED: 'FAILED',
+  COMPLETED: 'COMPLETED',
+};

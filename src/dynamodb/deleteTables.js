@@ -34,3 +34,6 @@ deleteTable({
 deleteTable({
   TableName: require('./jsons/eventsTable.json').TableName,
 });
+deleteTable({
+  TableName: require('./jsons/transcriptsTable.json').TableName,
+});

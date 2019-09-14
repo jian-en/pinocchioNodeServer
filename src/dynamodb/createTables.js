@@ -30,3 +30,4 @@ function createTable(tableJson) {
 // create all dynamo tables
 createTable(require('./jsons/usersTable.json'));
 createTable(require('./jsons/eventsTable.json'));
+createTable(require('./jsons/transcriptsTable.json'));

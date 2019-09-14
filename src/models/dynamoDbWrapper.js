@@ -56,6 +56,18 @@ module.exports.updateData = async (tableName, args) => {
   }
 };
 
+module.exports.deleteData = async (tableName, args) => {
+  try {
+    const params = {TableName: tableName, ...args};
+    await dynamoDb.delete(params).promise();
+    return {success: true};
+  } catch (err) {
+    console.error('error when deleting data - ', args);
+    console.error(err);
+    return {success: false, ...err};
+  }
+};
+
 // generate unique ID based on UUID4
 module.exports.generateID = () => {
   return uuidv4();
@@ -168,4 +180,26 @@ module.exports.updateEvent = async (eventsId, organizerId, key, value) => {
     ReturnValues: 'UPDATED_NEW',
   };
   return await this.updateData('eventsTable', args);
+};
+
+module.exports.getTranscripts = async () => {
+  return await this.scanData('transcriptsTable', {});
+};
+
+module.exports.putTranscripts = async (jobName, eventsId, filename) => {
+  const item = {
+    transcriptJobName: jobName,
+    eventsId: eventsId,
+    filename: filename,
+  };
+  return await this.putData('transcriptsTable', item);
+};
+
+module.exports.deleteTranscripts = async (jobName) => {
+  const args = {
+    Key: {
+      transcriptJobName: jobName,
+    },
+  };
+  return await this.deleteData('transcriptsTable', args);
 };

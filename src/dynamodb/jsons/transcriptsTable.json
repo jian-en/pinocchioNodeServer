@@ -1,0 +1,19 @@
+{
+  "TableName": "transcriptsTable",
+  "KeySchema": [
+    {
+      "AttributeName": "transcriptJobName",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "transcriptJobName",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
