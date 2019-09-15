@@ -24,6 +24,7 @@ exports.params = {
   S3SERVICE: 's3Service',
   TRANSCRIBESERVICE: 'transcriptionService',
   FILE: 'file',
+  TRANSCRIPTS: 'transcripts',
 };
 
 // error messages
@@ -50,4 +51,5 @@ exports.messages = {
   AWS_SERVICE_ERROR: 'AWS service error has occurred',
   EVENT_ORGANIZER_ERROR: 'Must be logged in as event organizer to upload',
   EVENT_FILENAME_UNIQUE: 'Event filenames must be unique',
+  EVENT_TRANSCRIPTS_NOT_FOUND: 'There are no transcripts for this event',
 };
