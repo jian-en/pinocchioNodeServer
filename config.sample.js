@@ -26,24 +26,24 @@ const dev = {
     secretAccessKey: '',
     region: 'us-east-1'
    },
-   awsS3: {
+  awsS3: {
     uploadBucket: 'pinocchio-data61-audio',
     domain: 's3.us-east-1.amazonaws.com',
     protocol: 'https'
-   },
-   awsTranscribeConfig: {
-     domain: 'transcribe.us-east-1.amazonaws.com',
-     protocol: 'https'
-   },
-   awsTranscriptionJob: {
-     LanguageCode: 'en-US',
-     MediaFormat: 'mp3',
-     TranscriptionJobName: '',
-     Media: {
-       MediaFileUri: ''
-     },
-     OutputBucketName: 'pinocchio-data61-transcriptions'
-   },
+  },
+  awsTranscribeConfig: {
+    domain: 'transcribe.us-east-1.amazonaws.com',
+    protocol: 'https'
+  },
+  awsTranscriptionJob: {
+    LanguageCode: 'en-US',
+    MediaFormat: 'mp3',
+    TranscriptionJobName: '',
+    Media: {
+      MediaFileUri: ''
+    },
+    OutputBucketName: 'pinocchio-data61-transcriptions'
+  },
   // SmartContract related
   providerURI: 'http://127.0.0.1:7545',
   publicKey: '0x976bcD111D081c50E70D8e51f27E1E08782E73cD',
