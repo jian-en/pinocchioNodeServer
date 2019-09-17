@@ -314,15 +314,16 @@ exports.upload = async (req, res, next) => {
           // upload successful and start transcription
             const fileLoaction = data['Location'];
             transcribe.startTranscription(fileLoaction)
-                .then((transcriptLocation) => {
+                .then((transcriptInfo) => {
                 // transcription job started successfully
-
                   // update event transcripts
-                  eventTranscripts[filename] = {
-                    location: transcriptLocation,
-                  };
+                  eventTranscripts[filename] = transcriptInfo;
                   dynamoDb.updateEvent(eventsId,
                       organizerId, 'transcripts', eventTranscripts);
+
+                  // update transcripts table
+                  dynamoDb.putTranscripts(transcriptInfo['TranscriptionJobName'],
+                      eventsId, filename);
 
                   uploadedFiles.push(filename);
 
