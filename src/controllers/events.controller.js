@@ -56,6 +56,11 @@ exports.validate = (method) => {
         check('eventsId').trim().isLength({min: 1}),
       ];
     }
+    case 'transcripts': {
+      return [
+        check('eventsId').trim().isLength({min: 1}),
+      ];
+    }
     case 'upload': {
       return [
         auth.checkAuth,
@@ -314,15 +319,16 @@ exports.upload = async (req, res, next) => {
           // upload successful and start transcription
             const fileLoaction = data['Location'];
             transcribe.startTranscription(fileLoaction)
-                .then((transcriptLocation) => {
+                .then((transcriptInfo) => {
                 // transcription job started successfully
-
                   // update event transcripts
-                  eventTranscripts[filename] = {
-                    location: transcriptLocation,
-                  };
+                  eventTranscripts[filename] = transcriptInfo;
                   dynamoDb.updateEvent(eventsId,
                       organizerId, 'transcripts', eventTranscripts);
+
+                  // update transcripts table
+                  dynamoDb.putTranscripts(transcriptInfo['TranscriptionJobName'],
+                      eventsId, filename);
 
                   uploadedFiles.push(filename);
 
@@ -348,6 +354,40 @@ exports.upload = async (req, res, next) => {
     if (duplicateFiles.length > 0) {
       return res.status(422).json(responseMsg.error(duplicateFiles.toString(),
           errorMsg.messages.EVENT_FILENAME_UNIQUE));
+    }
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
+};
+
+// get event transcripts
+exports.transcripts = async (req, res, next) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+
+  const {eventsId} = req.body;
+
+  // check if event exists
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) return res.status(500).json(eventExists);
+  else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
+
+    // get event transcripts
+    const eventTranscripts = event.transcripts;
+    const filenames = Object.keys(eventTranscripts);
+
+    if (filenames.length == 0) {
+      // no event transcripts found
+      return res.status(404).json(responseMsg.error(errorMsg.params.TRANSCRIPTS,
+          errorMsg.messages.EVENT_TRANSCRIPTS_NOT_FOUND));
+    } else {
+      res.json(responseMsg.success({transcripts: eventTranscripts}));
     }
   } else {
     // event doesnt exist

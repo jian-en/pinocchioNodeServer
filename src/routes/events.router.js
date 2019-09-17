@@ -208,4 +208,31 @@ module.exports = (app) => {
      */
 
   app.post('/api/events/upload', events.validate('upload'), events.upload);
+
+  /**
+     * @swagger
+     * /api/events/transcripts:
+     *  post:
+     *      tags:
+     *          - Events
+     *      name: event transcripts
+     *      summary: get event trascripts
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventsId
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: list of event transcripts
+     *          '422':
+     *              description: invalid parameters or eventsId does not exist
+     *
+     */
+
+  app.post('/api/events/transcripts', events.validate('transcripts'), events.transcripts);
 };

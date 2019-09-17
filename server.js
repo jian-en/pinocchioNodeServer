@@ -72,6 +72,7 @@ app.use(function(req, res, next) {
 require('./src/routes/index.js')(app);
 require('./src/routes/accounts.router.js')(app);
 require('./src/routes/events.router.js')(app);
+require('./src/routes/transcripts.router.js')(app);
 
 // listen for requests
 app.listen(port, () => {

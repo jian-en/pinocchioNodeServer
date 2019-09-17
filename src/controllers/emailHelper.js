@@ -28,3 +28,12 @@ module.exports.sendEventStatusEmail = (email, name, status) => {
        \n Best,\nPinocchio`
   );
 };
+
+module.exports.sendTranscriptCompleteEmail = (email, filename) => {
+  sendMail(
+      email,
+      `Pinocchio - Your transcript for ${filename} is ready!`,
+      `Please log into Pinocchio to view your transcript online!
+       \n Best,\nPinocchio`
+  );
+};

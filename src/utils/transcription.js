@@ -26,10 +26,26 @@ module.exports.startTranscription = async (mediaFileLoaction) => {
         return reject(err);
       } else {
         console.log(data);
-        // transcriptLocation
-        const transcriptLocation =
-          `${protocol}://${transcribeConfig['OutputBucketName']}.${domain}/${filename}`;
-        return resolve(transcriptLocation);
+        const transcriptInfo = data['TranscriptionJob'];
+        return resolve(transcriptInfo);
+      }
+    });
+  });
+};
+
+module.exports.getTranscriptionJob = async (transcriptionJob) => {
+  const params = {
+    TranscriptionJobName: transcriptionJob,
+  };
+
+  return new Promise((resolve, reject) => {
+    transcribeService.getTranscriptionJob(params, function(err, data) {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      } else {
+        console.log(data);
+        return resolve(data.TranscriptionJob);
       }
     });
   });
