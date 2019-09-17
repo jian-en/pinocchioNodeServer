@@ -6,7 +6,7 @@ services:
       - "dynamodb-test-container"
     command: npm run test-env
     volumes:
-      - .:/app/
+      - .:/app
       - /app/node_modules
     ports:
       - "3020:3010"

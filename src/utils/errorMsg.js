@@ -21,6 +21,9 @@ exports.params = {
   LONGITUDE: 'longitude',
   ORGANIZERID: 'organizerId',
   EVENTSTATUS: 'eventStatus',
+  S3SERVICE: 's3Service',
+  TRANSCRIBESERVICE: 'transcriptionService',
+  FILE: 'file',
 };
 
 // error messages
@@ -44,4 +47,7 @@ exports.messages = {
   EVENT_NOT_AT_LOCATION: 'User is too far away from event location',
   ORGANIZERID_NOT_FOUND: 'Organizer Id given cannot be found',
   EVENTSTATUS_INVALID: 'Event status must be approved, rejected, or pending',
+  AWS_SERVICE_ERROR: 'AWS service error has occurred',
+  EVENT_ORGANIZER_ERROR: 'Must be logged in as event organizer to upload',
+  EVENT_FILENAME_UNIQUE: 'Event filenames must be unique',
 };

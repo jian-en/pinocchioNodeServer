@@ -3,6 +3,8 @@ controller for events
 */
 
 const dynamoDb = require('../models/dynamoDbWrapper.js');
+const s3 = require('../utils/s3.js');
+const transcribe = require('../utils/transcription.js');
 
 // validators
 const {check, validationResult} = require('express-validator');
@@ -46,11 +48,17 @@ exports.validate = (method) => {
       return [
         check('eventsId').trim().isLength({min: 1}),
         check('eventStatus').trim().isLength({min: 1}),
-       ];
+      ];
     }
     case 'get': {
       // TODO: check whether it's attendable
       return [
+        check('eventsId').trim().isLength({min: 1}),
+      ];
+    }
+    case 'upload': {
+      return [
+        auth.checkAuth,
         check('eventsId').trim().isLength({min: 1}),
       ];
     }
@@ -85,6 +93,7 @@ exports.create = async (req, res, next) => {
     date: req.body.date,
     organizerId: req.usersId,
     eventStatus: eventStatuses.PENDING,
+    transcripts: {},
   };
 
   // build address; retry 3 times since gps can be undefined in API
@@ -187,28 +196,28 @@ exports.verifyLocation = async (req, res, next) => {
 };
 
 exports.get = async (req, res) => {
-    // check whether inputs are valid
-    const validation = validationResult(req);
-    if (!validation.isEmpty()) {
-      return res.status(422).json(responseMsg.validationError422(validation.errors));
-    }
-    const {eventsId} = req.query;
-    const eventExists = await dynamoDb.getEvents(eventsId);
-    if (!eventExists.success) {
-      return res.status(500).json(eventExists);
-    } else if (eventExists.data.length > 0) {
-      const event = eventExists.data[0];
-      const ret = {
-        id: event.eventsId, name: event.name,
-        status: event.status, address: event.address,
-      };
-      return res.json(responseMsg.success({event: ret}));
-    } else {
-      // event doesnt exist
-      return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
-          errorMsg.messages.EVENT_NOT_FOUND));
-    }
-  };
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+  const {eventsId} = req.query;
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) {
+    return res.status(500).json(eventExists);
+  } else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
+    const ret = {
+      id: event.eventsId, name: event.name,
+      status: event.eventStatus, address: event.address,
+    };
+    return res.json(responseMsg.success({event: ret}));
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
+};
 
 // update event status
 exports.status = async (req, res, next) => {
@@ -217,7 +226,7 @@ exports.status = async (req, res, next) => {
   if (!validation.isEmpty()) {
     return res.status(422).json(responseMsg.validationError422(validation.errors));
   }
-  
+
   const {eventsId, eventStatus} = req.body;
   const validStatuses = Object.values(eventStatuses);
   if (validStatuses.indexOf(eventStatus) == -1) {
@@ -239,7 +248,8 @@ exports.status = async (req, res, next) => {
       const userEmail = userExists.data[0].email;
 
       // update event status
-      const updateEvent = await dynamoDb.updateEventStatus(eventsId, organizerId, eventStatus);
+      const updateEvent = await dynamoDb.updateEvent(eventsId,
+          organizerId, 'eventStatus', eventStatus);
       if (!updateEvent.success) return res.status(500).json(updateEvent);
 
       // send email to organizer
@@ -249,6 +259,95 @@ exports.status = async (req, res, next) => {
       // user doesnt exist
       return res.status(422).json(responseMsg.error(errorMsg.params.ORGANIZERID,
           errorMsg.messages.ORGANIZERID_NOT_FOUND));
+    }
+  } else {
+    // event doesnt exist
+    return res.status(422).json(responseMsg.error(errorMsg.params.EVENTID,
+        errorMsg.messages.EVENT_NOT_FOUND));
+  }
+};
+
+// upload event audio to s3
+exports.upload = async (req, res, next) => {
+  // check whether inputs are valid
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return res.status(422).json(responseMsg.validationError422(validation.errors));
+  }
+
+  const {eventsId} = req.body;
+
+  // check if event exists
+  const eventExists = await dynamoDb.getEvents(eventsId);
+  if (!eventExists.success) return res.status(500).json(eventExists);
+  else if (eventExists.data.length > 0) {
+    const event = eventExists.data[0];
+    // get organizer ID
+    const organizerId = event.organizerId;
+    if (req.usersId != organizerId) {
+      return res.status(422).json(responseMsg.error(errorMsg.params.TOKEN,
+          errorMsg.messages.EVENT_ORGANIZER_ERROR));
+    }
+
+    // get event transcripts
+    const eventTranscripts = event.transcripts;
+    const fileList = Array.isArray(req.files.file) ? req.files.file : [req.files.file];
+
+    // upload all files in request
+    // this design will upload all files that are not
+    // duplicate transcript filenames (regardless of order)
+    const duplicateFiles = [];
+    const uploadedFiles = [];
+    for (const file of fileList) {
+      const filename = file.name;
+      const fileData = file.data;
+
+      // check for duplicate filenames
+      if (filename in eventTranscripts) {
+        duplicateFiles.push(filename);
+        continue;
+      }
+
+      // upload files to s3
+      s3.s3Upload(filename, eventsId, fileData)
+          .then((data) => {
+          // upload successful and start transcription
+            const fileLoaction = data['Location'];
+            transcribe.startTranscription(fileLoaction)
+                .then((transcriptLocation) => {
+                // transcription job started successfully
+
+                  // update event transcripts
+                  eventTranscripts[filename] = {
+                    location: transcriptLocation,
+                  };
+                  dynamoDb.updateEvent(eventsId,
+                      organizerId, 'transcripts', eventTranscripts);
+
+                  uploadedFiles.push(filename);
+
+                  // all files successfully uploaded
+                  if (uploadedFiles.length == fileList.length) {
+                    return res.json(responseMsg.success({}));
+                  }
+                })
+                .catch((_) => {
+                // transcription service error
+                  return res.status(500).json(responseMsg.error(errorMsg.params.TRANSCRIBESERVICE,
+                      errorMsg.messages.AWS_SERVICE_ERROR));
+                });
+          })
+          .catch((_) => {
+            // s3 service error
+            return res.status(500).json(responseMsg.error(errorMsg.params.S3SERVICE,
+                errorMsg.messages.AWS_SERVICE_ERROR));
+          });
+    }
+
+    // duplicate filenames found
+    if (duplicateFiles.length > 0) {
+      return res.status(422).json(responseMsg.error(duplicateFiles.toString(),
+          errorMsg.messages.EVENT_FILENAME_UNIQUE));
     }
   } else {
     // event doesnt exist

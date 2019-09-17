@@ -35,7 +35,8 @@ function loadTestData(filepath, tableName) {
 
         for (const key in csvData[i]) {
           if (csvData[i][key] === '') continue;
-          params.Item[key] = {S: csvData[i][key]};
+          if (csvData[i][key] == '{}') params.Item[key] = {M: {}};
+          else params.Item[key] = {S: csvData[i][key]};
         }
 
         dynamoDb.putItem(params, function(err, data) {

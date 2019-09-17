@@ -145,7 +145,7 @@ module.exports = (app) => {
      *
      */
 
-    app.get('/api/event', events.validate('get'), events.get);
+  app.get('/api/event', events.validate('get'), events.get);
 
   /**
      * @swagger
@@ -177,4 +177,35 @@ module.exports = (app) => {
      */
 
   app.post('/api/events/status', events.validate('status'), events.status);
+
+  /**
+     * @swagger
+     * /api/events/upload:
+     *  post:
+     *      tags:
+     *          - Events
+     *      name: upload mp3 file
+     *      summary: upload event audio
+     *      produces:
+     *          - application/json
+     *      consumes:
+     *          - application/x-www-form-urlencoded
+     *      parameters:
+     *          - name: eventsId
+     *            type: string
+     *            minLength: 1
+     *            in: formData
+     *          - name: file
+     *            type: object
+     *            minLength: 1
+     *            in: formData
+     *      responses:
+     *          '200':
+     *              description: The event audio was successfully uploaded
+     *          '422':
+     *              description: invalid parameters or eventsId does not exist
+     *
+     */
+
+  app.post('/api/events/upload', events.validate('upload'), events.upload);
 };
