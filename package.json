@@ -11,6 +11,7 @@
     "load-test-data": "node src/tests/testData/loadData.js",
     "delete-tables": "node src/dynamodb/deleteTables.js",
     "test": "NODE_ENV=test source run_tests.sh",
+    "coverage": "nyc --reporter text npm test",
     "awstest": "NODE_ENV=awstest node ./server.js"
   },
   "repository": {
@@ -48,6 +49,7 @@
     "moment": "^2.24.0",
     "node-geocoder": "^3.23.0",
     "nodemailer": "^6.2.1",
+    "nyc": "^14.1.1",
     "swagger-jsdoc": "^3.3.0",
     "swagger-ui-express": "^4.0.7",
     "uuid": "^3.3.2",

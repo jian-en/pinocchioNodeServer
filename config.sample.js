@@ -25,13 +25,15 @@ const dev = {
     accessKeyId: '',
     secretAccessKey: '',
     region: 'us-east-1'
-  },
+   },
   awsS3: {
     uploadBucket: 'pinocchio-data61-audio',
-    endpoint: 'https://s3.us-east-1.amazonaws.com'
+    domain: 's3.us-east-1.amazonaws.com',
+    protocol: 'https'
   },
   awsTranscribeConfig: {
-    endpoint: 'https://transcribe.us-east-1.amazonaws.com'
+    domain: 'transcribe.us-east-1.amazonaws.com',
+    protocol: 'https'
   },
   awsTranscriptionJob: {
     LanguageCode: 'en-US',
