@@ -209,7 +209,7 @@ exports.get = async (req, res) => {
     const event = eventExists.data[0];
     const ret = {
       id: event.eventsId, name: event.name,
-      status: event.status, address: event.address,
+      status: event.eventStatus, address: event.address,
     };
     return res.json(responseMsg.success({event: ret}));
   } else {
@@ -291,8 +291,7 @@ exports.upload = async (req, res, next) => {
 
     // get event transcripts
     const eventTranscripts = event.transcripts;
-
-    const fileList = req.files.file;
+    const fileList = Array.isArray(req.files.file) ? req.files.file : [req.files.file];
 
     // upload all files in request
     // this design will upload all files that are not
